@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>2026학년도 2학기 부산동고등학교 시간표 종합 시스템</title>
+  
+  <!-- Pretendard Korean Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <!-- Application CSS -->
+  <link rel="stylesheet" href="app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-section" onclick="switchTab('teacher')">
+        <div class="brand-icon">📅</div>
+        <div class="brand-info">
+          <h1>
+            <span>부산동고등학교 시간표 시스템</span>
+            <span class="brand-badge">2026 2학기</span>
+          </h1>
+          <p>교사별 · 학반별 반응형 시간표 & 공강/회의 추천</p>
+        </div>
+      </div>
+
+      <!-- Header Search & Tools -->
+      <div class="header-actions">
+        <div class="search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="globalSearchInput" class="search-input" placeholder="교사, 학반, 과목 검색..." autocomplete="off">
+        </div>
+
+        <button class="icon-btn" id="printBtn" title="시간표 인쇄 / PDF 출력">
+          🖨️
+        </button>
+
+        <button class="icon-btn" id="themeToggleBtn" title="다크 모드 / 라이트 모드 전환">
+          🌙
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Desktop Navigation Tabs -->
+  <div class="nav-tabs-wrapper">
+    <nav class="nav-tabs">
+      <button class="nav-tab-btn active" data-tab="teacher">
+        <span>👨‍🏫</span>
+        <span>교사별 시간표</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="class">
+        <span>🏫</span>
+        <span>학반별 시간표</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="meeting">
+        <span>🤝</span>
+        <span>공강 교집합 · 회의 추천</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="free">
+        <span>🔍</span>
+        <span>공강 교사 검색 (보강)</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="matrix">
+        <span>📊</span>
+        <span>전체 종합 현황판</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="live">
+        <span>⏰</span>
+        <span>실시간 일과</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="upload">
+        <span>🔄</span>
+        <span>파일 업로드</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Main Content Viewport -->
+  <main class="app-container" id="mainContentArea">
+    <!-- Dynamic views rendered via app.js -->
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-nav-bar">
+    <button class="mobile-nav-item active" data-tab="teacher">
+      <span>👨‍🏫</span>
+      <span>교사별</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="class">
+      <span>🏫</span>
+      <span>학반별</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="meeting">
+      <span>🤝</span>
+      <span>회의추천</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="free">
+      <span>🔍</span>
+      <span>보강도우미</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="matrix">
+      <span>📊</span>
+      <span>종합</span>
+    </button>
+  </nav>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>2026학년도 2학기 부산동고등학교 시간표 시스템 &copy; 모바일 & 데스크톱 반응형 웹앱</p>
+    <p style="font-size: 0.75rem; margin-top: 0.25rem;">교사 공강 교집합 분석 · HML 파서 내장 · 오프라인 단독 구동</p>
+  </footer>
+
+  <!-- Timetable Data Script (Rapid standalone load) -->
+  <script src="timetable_data.js"></script>
+  <!-- Application Core Script -->
+  <script src="app.js"></script>
+</body>
+</html>
