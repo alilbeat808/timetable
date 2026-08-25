@@ -202,7 +202,7 @@ public class AppDataBuilder {
         }
 
         var deptMap = new Dictionary<string, string[]>() {
-            { "\uAD6D\uC5B4\uACFC", new string[] { "\uCD5C\uD638\uC131", "\uD669\uC601\uC560", "\uC804\uC21C\uC625", "\uC774\uB3D9\uD6C8", "\uC774\uC0C1\uADE0", "\uAE40\uC9C0\uC6D0", "\uC774\uD61C\uB098" } },
+            { "\uAD6D\uC5B4\uACFC", new string[] { "\uCD5C\uD638\uC131", "\uD669\uC601\uC560", "\uC804\uC21C\uC625", "\uC774\uB3D9\uD6C8", "\uC804\uC544\uB9B0", "\uAE40\uC9C0\uC6D0", "\uC774\uD61C\uB098" } },
             { "\uC678\uAD6D\uC5B4\uACFC", new string[] { "\uC815\uB3D9\uAC78", "\uC2E0\uC778\uCCA0", "\uC7A5\uCDA9\uAC78", "\uC815\uC6A9", "\uAE40\uD615\uB3C4", "\uAE40\uC815\uC740", "\uC774\uC0C1\uD658" } },
             { "\uC218\uD559\uACFC", new string[] { "\uCD5C\uC9C4\uD654", "\uC774\uC6B0\uC11D", "\uAE40\uC8FC\uC601", "\uD669\uC815\uD658", "\uAE40\uD61C\uC815", "\uAC15\uC815\uC544", "\uBC15\uC0C1\uC728" } },
             { "\uC0AC\uD68C\uACFC", new string[] { "\uD558\uC815\uC6B0", "\uAC15\uC5F0\uC120", "\uC815\uD658\uC6C5", "\uC548\uACBD\uCCA0", "\uBC15\uD0DC\uC5B8", "\uC815\uC11D\uC6D0", "\uC784\uC885\uC625", "\uC815\uC885\uD601" } },
@@ -224,12 +224,31 @@ public class AppDataBuilder {
             { "\uC0DD\uD65C\uC548\uC804\uBD80", new string[] { "\uC774\uC0C1\uD658", "\uC774\uC7A5\uD6C8", "\uAE40\uB3D9\uBBFC", "\uAC15\uBD09\uC218", "\uC815\uBCF5\uC21C", "\uC774\uC625\uC784" } },
             { "\uC9C4\uB85C\uC0C1\uB2F4\uBD80", new string[] { "\uC815\uC885\uD601", "\uAE40\uC9C0\uC6D0", "\uBC15\uD0DC\uC5B8" } },
             { "\uACE0\uAD50\uD559\uC810\uC81C\uBD80", new string[] { "\uC548\uACBD\uCCA0", "\uC815\uC11D\uC6D0", "\uAE40\uD615\uB3C4" } },
-            { "\uAD50\uC721\uD3C9\uAC00\uBD80", new string[] { "\uBC15\uC131\uD6C8", "\uC774\uD61C\uB098", "\uAE40\uC815\uC740", "\uAE40\uC8FC\uC601" } },
+            { "\uAD50\uC721\uD3C9\uAC00\uBD80", new string[] { "\uBC15\uC131\uD6C8", "\uC774\uD61C\uB098", "\uAE40\uC815\uC740", "\uAE40\uC8FC\uC601", "\uC804\uC544\uB9B0" } },
             { "\uC778\uBB38\uC0AC\uD68C\uBD80", new string[] { "\uD558\uC815\uC6B0", "\uC804\uC21C\uC625", "\uD669\uC601\uC560" } },
             { "\uACFC\uD559\uC911\uC810\uBD80", new string[] { "\uC591\uC6B0\uC11D", "\uAC15\uC815\uC544", "\uC131\uACBD\uC9C4", "\uBC15\uC0C1\uC728", "\uCD5C\uC9C4\uD654" } },
             { "1\uD559\uB144\uBD80", new string[] { "\uC2E0\uC778\uCCA0", "\uBC30\uC218\uACBD" } },
             { "2\uD559\uB144\uBD80", new string[] { "\uC7A5\uCDA9\uAC78", "\uAE40\uC815\uC5F4" } },
             { "3\uD559\uB144\uBD80", new string[] { "\uC815\uC6A9", "\uCD5C\uD638\uC131" } }
+        };
+
+        var dutyMap = new Dictionary<string, string>() {
+            { "\uAC15\uC5F0\uC120", "NEIS/\uC0DD\uAE30\uBD801" },
+            { "\uD669\uC815\uD658", "\uC77C\uACFC" },
+            { "\uBC15\uC8FC\uD604", "\uD559\uC801/\uC0DD\uAE30\uBD802" },
+            { "\uC720\uC5F0\uC815", "\uCD9C\uACB0/\uC2DC\uC0C1" },
+            { "\uAE40\uB3D9\uBBFC", "\uC120\uB3C4/\uC548\uC804" },
+            { "\uAC15\uBD09\uC218", "\uC0DD\uD65C/\uC548\uC804" },
+            { "\uBC15\uD0DC\uC5B8", "\uC9C4\uB85C" },
+            { "\uC774\uC6B0\uC11D", "\uCD94\uC218" },
+            { "\uAE40\uD615\uB3C4", "\uD559\uC810\uC81C" },
+            { "\uC804\uC544\uB9B0", "\uD3C9\uAC002" },
+            { "\uAE40\uC815\uC740", "\uC131\uC8011" },
+            { "\uAE40\uC8FC\uC601", "\uC131\uC8012" },
+            { "\uD669\uC601\uC560", "\uC5F0\uC218" },
+            { "\uC131\uACBD\uC9C4", "\uBA54\uC774\uCEE4" },
+            { "\uBC15\uC0C1\uC728", "\uACFC\uC911" },
+            { "\uCD5C\uC9C4\uD654", "\uC218\uD559" }
         };
 
         foreach (var t in allTeachers) {
@@ -239,9 +258,13 @@ public class AppDataBuilder {
                     t.adminDept = kvp.Key;
                     if (idx == 0) t.position = "\uBD80\uC7A5";
                     else if (idx == 1) t.position = "\uAE30\uD68D";
+                    else if (dutyMap.ContainsKey(t.name)) t.position = dutyMap[t.name];
                     else t.position = "\uBD80\uC6D0";
                     break;
                 }
+            }
+            if (string.IsNullOrEmpty(t.position) && dutyMap.ContainsKey(t.name)) {
+                t.position = dutyMap[t.name];
             }
         }
 
@@ -316,6 +339,7 @@ public class AppDataBuilder {
             }
 
             if (string.IsNullOrEmpty(teacherName)) continue;
+            if (teacherName == "\uC774\uC0C1\uADE0") teacherName = "\uC804\uC544\uB9B0";
 
             var entity = new TimetableEntity {
                 id = "T_" + teacherName,
@@ -394,13 +418,14 @@ public class AppDataBuilder {
                 className = grade + "-" + classNum;
                 if (match.Groups[3].Success) {
                     homeroom = match.Groups[3].Value.Trim();
+                    if (homeroom == "\uC774\uC0C1\uADE0") homeroom = "\uC804\uC544\uB9B0";
                 }
             }
 
             var entity = new TimetableEntity {
                 id = "C_" + className,
                 name = className,
-                rawTitle = titleText,
+                rawTitle = titleText.Replace("\uC774\uC0C1\uADE0", "\uC804\uC544\uB9B0"),
                 homeroom = homeroom,
                 grade = grade,
                 classNum = classNum,
@@ -450,7 +475,7 @@ public class AppDataBuilder {
             var chars = pn.SelectNodes(".//CHAR");
             StringBuilder sb = new StringBuilder();
             foreach (XmlNode ch in pn.SelectNodes(".//CHAR")) sb.Append(ch.InnerText);
-            string line = sb.ToString().Trim();
+            string line = sb.ToString().Trim().Replace("\uC774\uC0C1\uADE0", "\uC804\uC544\uB9B0");
             if (!string.IsNullOrEmpty(line)) lines.Add(line);
         }
 
@@ -485,7 +510,7 @@ public class AppDataBuilder {
             var chars = pn.SelectNodes(".//CHAR");
             StringBuilder sb = new StringBuilder();
             foreach (XmlNode ch in pn.SelectNodes(".//CHAR")) sb.Append(ch.InnerText);
-            string line = sb.ToString().Trim();
+            string line = sb.ToString().Trim().Replace("\uC774\uC0C1\uADE0", "\uC804\uC544\uB9B0");
             if (!string.IsNullOrEmpty(line)) lines.Add(line);
         }
 
@@ -500,7 +525,7 @@ public class AppDataBuilder {
         result.isFree = false;
         if (lines.Count >= 2) {
             result.subject = lines[0];
-            result.target = lines[1]; // teacher name
+            result.target = lines[1] == "\uC774\uC0C1\uADE0" ? "\uC804\uC544\uB9B0" : lines[1]; // teacher name
         } else if (lines.Count == 1) {
             result.subject = lines[0];
         }
