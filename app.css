@@ -1138,6 +1138,8 @@ body {
 .badge-admin-교무기획부 { background: #f8fafc !important; color: #1e40af !important; border: 1px solid #bfdbfe !important; border-left: 3.5px solid #2563eb !important; }
 .badge-admin-생활안전부 { background: #f8fafc !important; color: #991b1b !important; border: 1px solid #fca5a5 !important; border-left: 3.5px solid #dc2626 !important; }
 .badge-admin-진로상담부 { background: #f8fafc !important; color: #6b21a8 !important; border: 1px solid #d8b4fe !important; border-left: 3.5px solid #9333ea !important; }
+.badge-admin-진학지도부 { background: #f8fafc !important; color: #3730a3 !important; border: 1px solid #c7d2fe !important; border-left: 3.5px solid #4f46e5 !important; }
+.badge-admin-교육정보부 { background: #f8fafc !important; color: #0e7490 !important; border: 1px solid #a5f3fc !important; border-left: 3.5px solid #06b6d4 !important; }
 .badge-admin-고교학점제부 { background: #f8fafc !important; color: #0f766e !important; border: 1px solid #99f6e4 !important; border-left: 3.5px solid #0d9488 !important; }
 .badge-admin-교육평가부 { background: #f8fafc !important; color: #86198f !important; border: 1px solid #f5d0fe !important; border-left: 3.5px solid #c026d3 !important; }
 .badge-admin-인문사회부 { background: #f8fafc !important; color: #166534 !important; border: 1px solid #bbf7d0 !important; border-left: 3.5px solid #16a34a !important; }
@@ -1149,6 +1151,8 @@ body {
 [data-theme="dark"] .badge-admin-교무기획부 { background: #0f172a !important; color: #93c5fd !important; border: 1px solid rgba(59, 130, 246, 0.4) !important; border-left: 3.5px solid #3b82f6 !important; }
 [data-theme="dark"] .badge-admin-생활안전부 { background: #0f172a !important; color: #fca5a5 !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; border-left: 3.5px solid #ef4444 !important; }
 [data-theme="dark"] .badge-admin-진로상담부 { background: #0f172a !important; color: #d8b4fe !important; border: 1px solid rgba(168, 85, 247, 0.4) !important; border-left: 3.5px solid #a855f7 !important; }
+[data-theme="dark"] .badge-admin-진학지도부 { background: #0f172a !important; color: #a5b4fc !important; border: 1px solid rgba(99, 102, 241, 0.4) !important; border-left: 3.5px solid #6366f1 !important; }
+[data-theme="dark"] .badge-admin-교육정보부 { background: #0f172a !important; color: #67e8f9 !important; border: 1px solid rgba(6, 182, 212, 0.4) !important; border-left: 3.5px solid #06b6d4 !important; }
 [data-theme="dark"] .badge-admin-고교학점제부 { background: #0f172a !important; color: #5eead4 !important; border: 1px solid rgba(20, 184, 166, 0.4) !important; border-left: 3.5px solid #14b8a6 !important; }
 [data-theme="dark"] .badge-admin-교육평가부 { background: #0f172a !important; color: #f5d0fe !important; border: 1px solid rgba(217, 70, 239, 0.4) !important; border-left: 3.5px solid #d946ef !important; }
 [data-theme="dark"] .badge-admin-인문사회부 { background: #0f172a !important; color: #86efac !important; border: 1px solid rgba(34, 197, 94, 0.4) !important; border-left: 3.5px solid #22c55e !important; }

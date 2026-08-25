@@ -27,6 +27,8 @@ const OFFICIAL_ADMIN_DEPTS = {
   '교무기획부': ['김정현', '정동걸', '강연선', '황정환', '유연정', '박주현'],
   '생활안전부': ['이상환', '이장훈', '김동민', '강봉수', '정복순', '이옥임'],
   '진로상담부': ['정종혁', '김지원', '박태언'],
+  '진학지도부': ['이동훈', '김혜정', '이우석'],
+  '교육정보부': ['오정훈', '정환웅'],
   '고교학점제부': ['안경철', '정석원', '김형도'],
   '교육평가부': ['박성훈', '이혜나', '김정은', '김주영', '전아린'],
   '인문사회부': ['하정우', '전순옥', '황영애'],
@@ -70,6 +72,8 @@ const ADMIN_DEPT_ICONS = {
   '교무기획부': '📋',
   '생활안전부': '🛡️',
   '진로상담부': '🎯',
+  '진학지도부': '🧭',
+  '교육정보부': '💻',
   '고교학점제부': '🎓',
   '교육평가부': '📊',
   '인문사회부': '📖',
@@ -457,10 +461,10 @@ function renderTeacherView(container) {
           전체 교사
         </button>
         <button class="grade-tab-btn ${AppState.teacherFilterType === 'head' ? 'active' : ''}" onclick="setTeacherFilter('head', 'head')">
-          👑 부장단 (10명)
+          👑 부장단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
         </button>
         <button class="grade-tab-btn ${AppState.teacherFilterType === 'plan' ? 'active' : ''}" onclick="setTeacherFilter('plan', 'plan')">
-          📝 기획단 (10명)
+          📝 기획단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
         </button>
         <button class="grade-tab-btn ${AppState.teacherFilterType === 'homeroom' ? 'active' : ''}" onclick="setTeacherFilter('homeroom', 'homeroom')">
           🏫 담임교사 (20명)
@@ -1090,7 +1094,7 @@ function renderMeetingView(container) {
           🏛️ 위원회 회의
         </button>
         <button class="preset-category-btn ${AppState.meetingPresetCategory === 'admin' ? 'active' : ''}" onclick="setMeetingPresetCategory('admin')">
-          🏢 업무 부서별 (10개 부서)
+          🏢 업무 부서별 (12개 부서)
         </button>
         <button class="preset-category-btn ${AppState.meetingPresetCategory === 'role' ? 'active' : ''}" onclick="setMeetingPresetCategory('role')">
           👑 부장단 / 기획단 / 교과부장

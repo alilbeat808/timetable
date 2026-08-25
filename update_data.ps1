@@ -10,6 +10,8 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+namespace SchoolTimetableV5 {
+
 public class PeriodCell {
     public string subject = "";
     public string target = "";
@@ -49,7 +51,7 @@ public class SchoolData {
     public List<TimetableEntity> classes = new List<TimetableEntity>();
 }
 
-public class AppDataBuilder {
+public class TimetableDataBuilder {
     private static readonly string[] Days = new string[] { "\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08" };
 
     public static string EscapeJson(string s) {
@@ -182,7 +184,7 @@ public class AppDataBuilder {
 
             Console.WriteLine("File: " + Path.GetFileName(f) + " Title: [" + title + "] Tables: " + tables.Count);
 
-            if (title.Contains("\uD559\uBC18")) {
+            if (f.Contains("\uD559\uBC18") || f.Contains("\uD559\uAE09") || title.Contains("\uD559\uBC18") || title.Contains("\uD559\uAE09")) {
                 allClasses = ParseClasses(tables);
             } else {
                 allTeachers = ParseTeachers(tables);
@@ -210,6 +212,28 @@ public class AppDataBuilder {
             { "\uC608\uCCB4\uB2A5\uACFC", new string[] { "\uAE40\uB3D9\uBBFC", "\uAC15\uBD09\uC218", "\uC774\uC7A5\uD6C8", "\uBC30\uC218\uACBD", "\uAE40\uC815\uC5F4", "\uC774\uC625\uC784", "\uC815\uBCF5\uC21C" } }
         };
 
+        if (!allTeachers.Exists(t => t.name == "\uC624\uC815\uD6C8")) {
+            var ojh = new TimetableEntity {
+                id = "T_\uC624\uC815\uD6C8",
+                name = "\uC624\uC815\uD6C8",
+                rawTitle = "\uC624\uC815\uD6C8",
+                department = "",
+                adminDept = "\uAD50\uC721\uC815\uBCF4\uBD80",
+                position = "\uBD80\uC7A5",
+                gradeYear = allTeachers.Count > 0 ? allTeachers[0].gradeYear : "2026 \uD559\uB144\uB3C4",
+                type = "teacher",
+                totalHours = 0
+            };
+            foreach (var d in Days) {
+                ojh.schedule[d] = new Dictionary<string, PeriodCell>();
+                ojh.hoursByDay[d] = 0;
+                for (int p = 1; p <= 7; p++) {
+                    ojh.schedule[d][p.ToString()] = new PeriodCell { isFree = true, raw = "" };
+                }
+            }
+            allTeachers.Add(ojh);
+        }
+
         foreach (var t in allTeachers) {
             foreach (var kvp in deptMap) {
                 if (Array.IndexOf(kvp.Value, t.name) >= 0) {
@@ -223,6 +247,8 @@ public class AppDataBuilder {
             { "\uAD50\uBB34\uAE30\uD68D\uBD80", new string[] { "\uAE40\uC815\uD604", "\uC815\uB3D9\uAC78", "\uAC15\uC5F0\uC120", "\uD669\uC815\uD658", "\uC720\uC5F0\uC815", "\uBC15\uC8FC\uD604" } },
             { "\uC0DD\uD65C\uC548\uC804\uBD80", new string[] { "\uC774\uC0C1\uD658", "\uC774\uC7A5\uD6C8", "\uAE40\uB3D9\uBBFC", "\uAC15\uBD09\uC218", "\uC815\uBCF5\uC21C", "\uC774\uC625\uC784" } },
             { "\uC9C4\uB85C\uC0C1\uB2F4\uBD80", new string[] { "\uC815\uC885\uD601", "\uAE40\uC9C0\uC6D0", "\uBC15\uD0DC\uC5B8" } },
+            { "\uC9C4\uD559\uC9C0\uB3C4\uBD80", new string[] { "\uC774\uB3D9\uD6C8", "\uAE40\uD61C\uC815", "\uC774\uC6B0\uC11D" } },
+            { "\uAD50\uC721\uC815\uBCF4\uBD80", new string[] { "\uC624\uC815\uD6C8", "\uC815\uD658\uC6C5" } },
             { "\uACE0\uAD50\uD559\uC810\uC81C\uBD80", new string[] { "\uC548\uACBD\uCCA0", "\uC815\uC11D\uC6D0", "\uAE40\uD615\uB3C4" } },
             { "\uAD50\uC721\uD3C9\uAC00\uBD80", new string[] { "\uBC15\uC131\uD6C8", "\uC774\uD61C\uB098", "\uAE40\uC815\uC740", "\uAE40\uC8FC\uC601", "\uC804\uC544\uB9B0" } },
             { "\uC778\uBB38\uC0AC\uD68C\uBD80", new string[] { "\uD558\uC815\uC6B0", "\uC804\uC21C\uC625", "\uD669\uC601\uC560" } },
@@ -379,6 +405,7 @@ public class AppDataBuilder {
             entity.totalHours = totalHours;
             list.Add(entity);
         }
+
         return list;
     }
 
@@ -532,6 +559,7 @@ public class AppDataBuilder {
         return result;
     }
 }
+}
 "@
 
 Add-Type -TypeDefinition $csharpCode -ReferencedAssemblies "System.Xml" -Language CSharp
@@ -539,7 +567,7 @@ Add-Type -TypeDefinition $csharpCode -ReferencedAssemblies "System.Xml" -Languag
 $currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $currentDir) { $currentDir = Get-Location }
 
-[AppDataBuilder]::Run($currentDir)
+[SchoolTimetableV5.TimetableDataBuilder]::Run($currentDir)
 
 Write-Host "`n[DONE] Timetable data successfully updated from HML files!" -ForegroundColor Green
 Write-Host "[INFO] Open index.html in your browser to view the web app.`n" -ForegroundColor Cyan
