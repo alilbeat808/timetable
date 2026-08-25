@@ -1159,7 +1159,7 @@ function renderMeetingView(container) {
           🏢 업무 부서별 (12개 부서)
         </button>
         <button class="preset-category-btn ${AppState.meetingPresetCategory === 'role' ? 'active' : ''}" onclick="setMeetingPresetCategory('role')">
-          👑 부장단 / 기획단 / 교과부장
+          👑 부장단 회의 (12명)
         </button>
         <button class="preset-category-btn ${AppState.meetingPresetCategory === 'subject' ? 'active' : ''}" onclick="setMeetingPresetCategory('subject')">
           📚 교과 부서별 (6개 교과)
@@ -1168,7 +1168,7 @@ function renderMeetingView(container) {
           🏫 학년 담임 (1~3학년)
         </button>
         <button class="preset-category-btn ${AppState.meetingPresetCategory === 'all' ? 'active' : ''}" onclick="setMeetingPresetCategory('all')">
-          👥 전체
+          👥 전체 교사
         </button>
       </div>
 
@@ -1188,7 +1188,7 @@ function renderMeetingView(container) {
           }
           return `
             <button class="preset-btn ${extraClass} ${AppState.meetingActivePreset === p.name ? 'active' : ''}" onclick="applyMeetingPreset('${p.name}', '${p.label}')">
-              ${p.icon || ''} ${p.label} <span class="chip-badge">${p.teacherIds.length}명</span>
+              ${p.icon ? `${p.icon} ` : ''}${p.label} <span class="chip-badge">${p.teacherIds.length}명</span>
             </button>
           `;
         }).join('')}
@@ -1410,16 +1410,9 @@ function getCategorizedPresets(category) {
     const commIds = sortTeachersList(teachers.filter(t => commNames.includes(t.name))).map(t => t.id);
     presets.push({
       name: 'comm_academic',
-      label: '📝 학업성적관리위원회',
+      label: '학업성적관리위원회',
       icon: '📝',
       teacherIds: commIds
-    });
-    // 교과부장 회의 (6명)
-    presets.push({
-      name: 'role_subj_heads',
-      label: '📚 교과부장 회의',
-      icon: '📚',
-      teacherIds: subjHeadIds
     });
   } else if (category === 'admin') {
     for (const [dept, members] of Object.entries(OFFICIAL_ADMIN_DEPTS)) {
@@ -1433,38 +1426,20 @@ function getCategorizedPresets(category) {
       });
     }
   } else if (category === 'role') {
-    // Heads meeting (부장단 10명)
+    // Heads meeting (부장단 12명)
     const headNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[0]);
     const headIds = sortTeachersList(teachers.filter(t => headNames.includes(t.name))).map(t => t.id);
     presets.push({
       name: 'role_heads',
-      label: '👑 부장단 회의',
+      label: '부장단 회의',
       icon: '👑',
       teacherIds: headIds
     });
-
-    // Planning meeting (기획단 10명)
-    const planNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[1]);
-    const planIds = sortTeachersList(teachers.filter(t => planNames.includes(t.name))).map(t => t.id);
-    presets.push({
-      name: 'role_plans',
-      label: '📝 기획단 회의',
-      icon: '📝',
-      teacherIds: planIds
-    });
-
-    // Subject Heads meeting (교과부장 6명)
-    presets.push({
-      name: 'role_subj_heads',
-      label: '📚 교과부장 회의',
-      icon: '📚',
-      teacherIds: subjHeadIds
-    });
   } else if (category === 'subject') {
-    // 교과부장 회의 preset
+    // 교과부장 회의 preset (6명)
     presets.push({
       name: 'role_subj_heads',
-      label: '📚 교과부장 회의 (6명)',
+      label: '교과부장 회의 (6명)',
       icon: '📚',
       teacherIds: subjHeadIds
     });
@@ -1480,13 +1455,13 @@ function getCategorizedPresets(category) {
     }
   } else if (category === 'grade') {
     const g1 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('1-'))).map(t => t.id);
-    if (g1.length > 0) presets.push({ name: 'grade1', label: '1학년 담임', icon: '🏫', teacherIds: g1 });
+    if (g1.length > 0) presets.push({ name: 'grade1', label: '1학년 담임', icon: '🌱', teacherIds: g1 });
 
     const g2 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('2-'))).map(t => t.id);
-    if (g2.length > 0) presets.push({ name: 'grade2', label: '2학년 담임', icon: '🏫', teacherIds: g2 });
+    if (g2.length > 0) presets.push({ name: 'grade2', label: '2학년 담임', icon: '🌿', teacherIds: g2 });
 
     const g3 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('3-'))).map(t => t.id);
-    if (g3.length > 0) presets.push({ name: 'grade3', label: '3학년 담임', icon: '🏫', teacherIds: g3 });
+    if (g3.length > 0) presets.push({ name: 'grade3', label: '3학년 담임', icon: '🌳', teacherIds: g3 });
   } else {
     // All (가나다순)
     presets.push({ name: 'all_teachers', label: '전체 교사', icon: '👥', teacherIds: sortTeachersList(teachers).map(t => t.id) });

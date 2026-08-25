@@ -2,7 +2,7 @@
   "schoolName": "부산동고등학교",
   "schoolYear": "2026 학년도",
   "semester": "2학기",
-  "generatedAt": "2026-08-25 14:45:00",
+  "generatedAt": "2026-08-25 16:00:52",
   "teacherCount": 44,
   "classCount": 20,
   "days": ["월", "화", "수", "목", "금"],
