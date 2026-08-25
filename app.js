@@ -6,11 +6,11 @@
 // 1. Official Subject Departments (학교 공식 교과별 교사 명단 44명)
 const OFFICIAL_DEPARTMENTS = {
   '국어과': ['최호성', '황영애', '전순옥', '이동훈', '전아린', '김지원', '이혜나'],
-  '외국어과': ['정동걸', '신인철', '장충걸', '정용', '김형도', '김정은', '이상환'],
+  '외국어과': ['정동걸', '신인철', '정용', '김형도', '김정은', '이상환'],
   '수학과': ['최진화', '이우석', '김주영', '황정환', '김혜정', '강정아', '박상율'],
   '사회과': ['하정우', '강연선', '정환웅', '안경철', '박태언', '정석원', '임종옥', '정종혁'],
   '과학과': ['양우석', '성경진', '김정현', '박성훈', '유연정', '박주현', '김은영', '박지영'],
-  '예체능과': ['김동민', '강봉수', '이장훈', '배수경', '김정열', '이옥임', '정복순']
+  '예체능과': ['김동민', '강봉수', '이장훈', '배수경', '김정열', '이옥임', '정복순', '장충걸', '장성호']
 };
 
 const DEPT_ICONS = {
@@ -20,6 +20,43 @@ const DEPT_ICONS = {
   '사회과': '🏛️',
   '과학과': '🧪',
   '예체능과': '🎨'
+};
+
+// 1-1. Detailed Subject Names per Teacher (교사별 세부 담당 과목)
+const OFFICIAL_TEACHER_SUBJECTS = {
+  // 외국어과: 이상환 = 일본어, 나머지 = 영어
+  '이상환': '일본어',
+  '정동걸': '영어',
+  '신인철': '영어',
+  '정용': '영어',
+  '김형도': '영어',
+  '김정은': '영어',
+  // 예체능과: 장성호/장충걸 = 체육, 배수경 = 음악, 김정열 = 미술, 나머지 = 체육
+  '장성호': '체육',
+  '장충걸': '체육',
+  '김동민': '체육',
+  '강봉수': '체육',
+  '이장훈': '체육',
+  '이옥임': '체육',
+  '정복순': '체육',
+  '배수경': '음악',
+  '김정열': '미술',
+  // 교육정보부
+  '오정훈': '정보'
+};
+
+const SUBJ_ICONS = {
+  '국어': '📚',
+  '영어': '🌐',
+  '일본어': '🗾',
+  '수학': '📐',
+  '사회': '🏛️',
+  '과학': '🧪',
+  '체육': '⚽',
+  '음악': '🎵',
+  '미술': '🎨',
+  '예체능': '🎨',
+  '정보': '💻'
 };
 
 // 2. Official Administrative Departments & Positions (업무 부서별 교사 명단 - 1번째: 부장, 2번째: 기획)
@@ -91,6 +128,15 @@ function getTeacherDepartment(teacherName) {
   return '';
 }
 
+function getTeacherSubject(teacherName) {
+  if (!teacherName) return '';
+  if (OFFICIAL_TEACHER_SUBJECTS[teacherName]) {
+    return OFFICIAL_TEACHER_SUBJECTS[teacherName];
+  }
+  const dept = getTeacherDepartment(teacherName);
+  return formatSubjShort(dept);
+}
+
 function getTeacherAdminInfo(teacherName) {
   if (!teacherName) return null;
   const duty = OFFICIAL_TEACHER_DUTIES[teacherName];
@@ -107,6 +153,16 @@ function getTeacherAdminInfo(teacherName) {
     return { dept: '', position: duty, isHead: false, isPlan: false, isDuty: true, duty: duty, label: duty };
   }
   return null;
+}
+
+function formatSubjShort(dept) {
+  if (!dept) return '';
+  return dept.replace(/과$/, '');
+}
+
+function formatAdminShort(dept) {
+  if (!dept) return '';
+  return dept.replace(/부$/, '');
 }
 
 // Universal Teacher Sorting Helper
@@ -476,7 +532,7 @@ function renderTeacherView(container) {
         <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">🏢 업무부서:</span>
         ${Object.keys(OFFICIAL_ADMIN_DEPTS).map(dept => `
           <button class="preset-category-btn badge-admin-${dept} ${AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('admin', '${dept}')">
-            ${ADMIN_DEPT_ICONS[dept] || ''} ${dept.replace('부','')}
+            ${ADMIN_DEPT_ICONS[dept] || ''} ${formatAdminShort(dept)}
           </button>
         `).join('')}
       </div>
@@ -485,7 +541,7 @@ function renderTeacherView(container) {
         <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">📚 교과부서:</span>
         ${Object.keys(OFFICIAL_DEPARTMENTS).map(dept => `
           <button class="preset-category-btn badge-subj-${dept} ${AppState.teacherFilterType === 'subject' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('subject', '${dept}')">
-            ${DEPT_ICONS[dept] || ''} ${dept.replace('과','')}
+            ${DEPT_ICONS[dept] || ''} ${formatSubjShort(dept)}
           </button>
         `).join('')}
       </div>
@@ -503,6 +559,7 @@ function renderTeacherView(container) {
       <div class="chips-group ${AppState.teacherChipsExpanded ? 'expanded' : ''}">
         ${filteredTeachers.map(t => {
           const dept = getTeacherDepartment(t.name);
+          const subj = getTeacherSubject(t.name);
           const admin = getTeacherAdminInfo(t.name);
           return `
             <button class="chip-btn ${t.id === AppState.selectedTeacherId ? 'active' : ''}" onclick="selectTeacher('${t.id}')">
@@ -510,7 +567,7 @@ function renderTeacherView(container) {
               ${admin && admin.isHead ? `<span class="role-badge-head">부장</span>` : ''}
               ${admin && admin.isPlan ? `<span class="role-badge-plan">기획</span>` : ''}
               ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
-              ${dept ? `<span class="chip-badge badge-subj-${dept}" style="font-size:0.7rem;">${dept.replace('과','')}</span>` : ''}
+              ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
               ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
             </button>
           `;
@@ -528,6 +585,7 @@ function renderTeacherView(container) {
   `;
 
   if (currentTeacher) {
+    const currentSubj = getTeacherSubject(currentTeacher.name);
     html += `
       <!-- Teacher Info Banner -->
       <div class="entity-info-bar">
@@ -551,11 +609,15 @@ function renderTeacherView(container) {
               ` : ''}
 
               <!-- Subject Dept Badge -->
-              ${currentDept ? `
+              ${currentSubj ? `
+                <span class="entity-tag badge-subj-${currentSubj}" style="font-weight: 700;">
+                  ${SUBJ_ICONS[currentSubj] || currentDeptIcon || '📚'} ${currentSubj}${currentDept && currentDept !== currentSubj + '과' && currentDept !== currentSubj ? ` (${currentDept})` : ''}
+                </span>
+              ` : (currentDept ? `
                 <span class="entity-tag badge-subj-${currentDept}" style="font-weight: 700;">
                   ${currentDeptIcon} ${currentDept}
                 </span>
-              ` : ''}
+              ` : '')}
 
               <!-- Homeroom Badge -->
               ${currentTeacher.homeroom ? `
@@ -1141,14 +1203,14 @@ function renderMeetingView(container) {
           <div class="selected-tags-list">
             ${selectedTeacherObjs.map(t => {
               const admin = getTeacherAdminInfo(t.name);
-              const dept = getTeacherDepartment(t.name);
+              const subj = getTeacherSubject(t.name);
               return `
                 <span class="selected-tag-item">
                   <span>${t.name}</span>
                   ${admin && admin.isHead ? `<span class="role-badge-head" style="margin-left:0.15rem;">부장</span>` : ''}
                   ${admin && admin.isPlan ? `<span class="role-badge-plan" style="margin-left:0.15rem;">기획</span>` : ''}
                   ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="margin-left:0.15rem;">${admin.duty}</span>` : ''}
-                  ${dept ? `<span class="chip-badge badge-subj-${dept}" style="font-size:0.68rem; margin-left:0.2rem;">${dept.replace('과','')}</span>` : ''}
+                  ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.68rem; margin-left:0.2rem;">${subj}</span>` : ''}
                   ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.68rem; margin-left:0.2rem;">${t.homeroom}</span>` : ''}
                   <button class="selected-tag-remove" onclick="removeMeetingTeacher('${t.id}')">✕</button>
                 </span>
@@ -1170,7 +1232,7 @@ function renderMeetingView(container) {
         ${allTeachers.map(t => {
           const isSelected = AppState.meetingSelectedTeachers.includes(t.id);
           const admin = getTeacherAdminInfo(t.name);
-          const dept = getTeacherDepartment(t.name);
+          const subj = getTeacherSubject(t.name);
           return `
             <button class="chip-btn ${isSelected ? 'active' : ''}" onclick="toggleMeetingTeacher('${t.id}')">
               <span>${isSelected ? '✓' : '+'}</span>
@@ -1178,7 +1240,7 @@ function renderMeetingView(container) {
               ${admin && admin.isHead ? `<span class="role-badge-head">부장</span>` : ''}
               ${admin && admin.isPlan ? `<span class="role-badge-plan">기획</span>` : ''}
               ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
-              ${dept ? `<span class="chip-badge badge-subj-${dept}" style="font-size:0.7rem;">${dept.replace('과','')}</span>` : ''}
+              ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
               ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
             </button>
           `;
@@ -1553,14 +1615,14 @@ function renderSlotDetailBox(slot, analysisResult, selectedTeachers) {
           <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
             ${sortTeachersList(slotData.freeTeachers).map(t => {
               const admin = getTeacherAdminInfo(t.name);
-              const dept = getTeacherDepartment(t.name);
+              const subj = getTeacherSubject(t.name);
               return `
                 <span class="chip-btn" style="background: var(--success-light); color: var(--success-text); border: none; cursor: default;">
                   ${t.name}
                   ${admin && admin.isHead ? `<span class="role-badge-head" style="margin-left:0.15rem;">부장</span>` : ''}
                   ${admin && admin.isPlan ? `<span class="role-badge-plan" style="margin-left:0.15rem;">기획</span>` : ''}
                   ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="margin-left:0.15rem;">${admin.duty}</span>` : ''}
-                  ${dept ? `<span class="chip-badge badge-subj-${dept}" style="font-size:0.68rem; margin-left:0.15rem;">${dept.replace('과','')}</span>` : ''}
+                  ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.68rem; margin-left:0.15rem;">${subj}</span>` : ''}
                 </span>
               `;
             }).join('')}
@@ -1750,6 +1812,7 @@ function renderTeacherMatrixRows() {
   const teachers = sortTeachersList(AppState.data.teachers);
   return teachers.map(t => {
     const dept = getTeacherDepartment(t.name);
+    const subj = getTeacherSubject(t.name);
     const admin = getTeacherAdminInfo(t.name);
     return `
       <tr>
@@ -1758,7 +1821,7 @@ function renderTeacherMatrixRows() {
           ${admin && admin.isHead ? `<span class="role-badge-head" style="font-size:0.65rem;">부장</span>` : ''}
           ${admin && admin.isPlan ? `<span class="role-badge-plan" style="font-size:0.65rem;">기획</span>` : ''}
           ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="font-size:0.65rem;">${admin.duty}</span>` : ''}
-          ${dept ? `<span class="chip-badge badge-subj-${dept}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${dept.replace('과','')}</span>` : ''}
+          ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${subj}</span>` : ''}
           ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${t.homeroom}</span>` : ''}
           <span style="font-size: 0.72rem; color: var(--text-muted);">(${t.hoursByDay[day] || 0}h)</span>
         </td>
@@ -1916,6 +1979,7 @@ function renderFreeTeacherView(container) {
         ${freeTeachers.map(t => {
           const dayHours = t.hoursByDay[day] || 0;
           const dept = getTeacherDepartment(t.name);
+          const subj = getTeacherSubject(t.name);
           const admin = getTeacherAdminInfo(t.name);
           let loadClass = 'load-light';
           let loadText = '여유';
@@ -1933,7 +1997,7 @@ function renderFreeTeacherView(container) {
                 </div>
                 <div class="finder-meta" style="margin-top:0.3rem; display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
                   ${admin ? `<span class="chip-badge badge-admin-${admin.dept}">${admin.dept ? `${admin.dept} ` : ''}${admin.position}</span>` : ''}
-                  ${dept ? `<span class="chip-badge badge-subj-${dept}">${dept}</span>` : ''}
+                  ${subj ? `<span class="chip-badge badge-subj-${subj}">${subj}</span>` : (dept ? `<span class="chip-badge badge-subj-${dept}">${dept}</span>` : '')}
                   ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}">${t.homeroom} 담임</span>` : ''}
                   <span style="font-size:0.75rem; color:var(--text-muted);">주당 ${t.totalHours}시수</span>
                 </div>

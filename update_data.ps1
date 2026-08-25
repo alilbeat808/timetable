@@ -10,7 +10,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace SchoolTimetableV5 {
+namespace SchoolTimetableV6 {
 
 public class PeriodCell {
     public string subject = "";
@@ -205,11 +205,11 @@ public class TimetableDataBuilder {
 
         var deptMap = new Dictionary<string, string[]>() {
             { "\uAD6D\uC5B4\uACFC", new string[] { "\uCD5C\uD638\uC131", "\uD669\uC601\uC560", "\uC804\uC21C\uC625", "\uC774\uB3D9\uD6C8", "\uC804\uC544\uB9B0", "\uAE40\uC9C0\uC6D0", "\uC774\uD61C\uB098" } },
-            { "\uC678\uAD6D\uC5B4\uACFC", new string[] { "\uC815\uB3D9\uAC78", "\uC2E0\uC778\uCCA0", "\uC7A5\uCDA9\uAC78", "\uC815\uC6A9", "\uAE40\uD615\uB3C4", "\uAE40\uC815\uC740", "\uC774\uC0C1\uD658" } },
+            { "\uC678\uAD6D\uC5B4\uACFC", new string[] { "\uC815\uB3D9\uAC78", "\uC2E0\uC778\uCCA0", "\uC815\uC6A9", "\uAE40\uD615\uB3C4", "\uAE40\uC815\uC740", "\uC774\uC0C1\uD658" } },
             { "\uC218\uD559\uACFC", new string[] { "\uCD5C\uC9C4\uD654", "\uC774\uC6B0\uC11D", "\uAE40\uC8FC\uC601", "\uD669\uC815\uD658", "\uAE40\uD61C\uC815", "\uAC15\uC815\uC544", "\uBC15\uC0C1\uC728" } },
             { "\uC0AC\uD68C\uACFC", new string[] { "\uD558\uC815\uC6B0", "\uAC15\uC5F0\uC120", "\uC815\uD658\uC6C5", "\uC548\uACBD\uCCA0", "\uBC15\uD0DC\uC5B8", "\uC815\uC11D\uC6D0", "\uC784\uC885\uC625", "\uC815\uC885\uD601" } },
             { "\uACFC\uD559\uACFC", new string[] { "\uC591\uC6B0\uC11D", "\uC131\uACBD\uC9C4", "\uAE40\uC815\uD604", "\uBC15\uC131\uD6C8", "\uC720\uC5F0\uC815", "\uBC15\uC8FC\uD604", "\uAE40\uC740\uC601", "\uBC15\uC9C0\uC601" } },
-            { "\uC608\uCCB4\uB2A5\uACFC", new string[] { "\uAE40\uB3D9\uBBFC", "\uAC15\uBD09\uC218", "\uC774\uC7A5\uD6C8", "\uBC30\uC218\uACBD", "\uAE40\uC815\uC5F4", "\uC774\uC625\uC784", "\uC815\uBCF5\uC21C" } }
+            { "\uC608\uCCB4\uB2A5\uACFC", new string[] { "\uAE40\uB3D9\uBBFC", "\uAC15\uBD09\uC218", "\uC774\uC7A5\uD6C8", "\uBC30\uC218\uACBD", "\uAE40\uC815\uC5F4", "\uC774\uC625\uC784", "\uC815\uBCF5\uC21C", "\uC7A5\uCDA9\uAC78", "\uC7A5\uC131\uD638" } }
         };
 
         if (!allTeachers.Exists(t => t.name == "\uC624\uC815\uD6C8")) {
@@ -567,7 +567,7 @@ Add-Type -TypeDefinition $csharpCode -ReferencedAssemblies "System.Xml" -Languag
 $currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $currentDir) { $currentDir = Get-Location }
 
-[SchoolTimetableV5.TimetableDataBuilder]::Run($currentDir)
+[SchoolTimetableV6.TimetableDataBuilder]::Run($currentDir)
 
 Write-Host "`n[DONE] Timetable data successfully updated from HML files!" -ForegroundColor Green
 Write-Host "[INFO] Open index.html in your browser to view the web app.`n" -ForegroundColor Cyan
