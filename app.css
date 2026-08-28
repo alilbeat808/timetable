@@ -981,6 +981,134 @@ body {
   50% { transform: scale(1.06); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.55); }
 }
 
+/* Timetable Live Status Banner (시간표 상단 현재 실시간 안내 바) */
+.timetable-live-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1rem;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.85rem;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  flex-wrap: wrap;
+}
+
+.live-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: liveDotPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes liveDotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.55; }
+}
+
+.live-status-pill {
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.live-status-pill.status-active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.live-status-pill.status-lunch {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+.live-status-pill.status-break {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.live-status-pill.status-idle {
+  background: var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* Lunch Divider Row in Timetable (점심시간 행) */
+.lunch-divider-row td {
+  background: var(--bg-surface);
+  padding: 0.55rem 0.75rem !important;
+  border-top: 1px dashed var(--border-color);
+  border-bottom: 1px dashed var(--border-color);
+  text-align: center;
+}
+
+.lunch-divider-row.is-current-lunch td {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 2px solid #f59e0b !important;
+}
+
+.lunch-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.lunch-divider-row.is-current-lunch .lunch-content {
+  color: #b45309;
+}
+
+[data-theme="dark"] .lunch-divider-row.is-current-lunch .lunch-content {
+  color: #fcd34d;
+}
+
+.current-lunch-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-full);
+  animation: currentSlotPulse 2s infinite ease-in-out;
+}
+
+/* Upcoming / Break Time Slot Badges */
+.upcoming-slot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0284c7 !important;
+  background: #e0f2fe;
+  padding: 0.12rem 0.45rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.25rem;
+  border: 1px solid #38bdf8;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .upcoming-slot-badge {
+  background: rgba(2, 132, 199, 0.25);
+  color: #7dd3fc !important;
+  border-color: #0284c7;
+}
+
+.timetable-cell.is-upcoming-slot {
+  background: rgba(2, 132, 199, 0.06) !important;
+  box-shadow: inset 0 0 0 2px #0ea5e9 !important;
+}
+
 .cell-content {
   height: 100%;
   display: flex;

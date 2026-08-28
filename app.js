@@ -896,11 +896,108 @@ function renderTeacherView(container) {
   container.innerHTML = html;
 }
 
+/* ==========================================================================
+   Active Period State Engine (실시간 교시 / 점심시간 / 쉬는시간 종합 판별)
+   ========================================================================== */
+function getActivePeriodState(now = new Date()) {
+  const curTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const todayIdx = now.getDay();
+  const isWeekday = todayIdx >= 1 && todayIdx <= 5;
+  const todayDayName = isWeekday ? DAYS[todayIdx - 1] : null;
+
+  let activePeriod = null;
+  let isLunchTime = false;
+  let isBreakTime = false;
+  let nextPeriod = null;
+  let statusText = '';
+  let statusBadgeClass = 'status-idle';
+
+  if (!isWeekday) {
+    return {
+      todayDayName,
+      activePeriod: null,
+      isLunchTime: false,
+      isBreakTime: false,
+      nextPeriod: null,
+      statusText: '☕ 주말(휴일)입니다.',
+      statusBadgeClass: 'status-idle',
+      isWeekday: false,
+      curTime
+    };
+  }
+
+  // 1. Check if currently inside a bell schedule period
+  for (let b of AppState.bellSchedule) {
+    if (curTime >= b.start && (b.period === 7 ? curTime <= b.end : curTime < b.end)) {
+      if (b.period === 0) {
+        isLunchTime = true;
+        statusText = `🍱 점심시간 (${b.start} ~ ${b.end}) 진행 중 · 다음: 5교시 (13:10 시작)`;
+        statusBadgeClass = 'status-lunch';
+      } else {
+        activePeriod = b.period;
+        statusText = `🔔 ${b.label} (${b.start} ~ ${b.end}) 수업 진행 중`;
+        statusBadgeClass = 'status-active';
+      }
+      break;
+    }
+  }
+
+  // 2. If between periods or before/after school
+  if (!activePeriod && !isLunchTime) {
+    const firstPeriod = AppState.bellSchedule[0];
+    const lastPeriod = AppState.bellSchedule[AppState.bellSchedule.length - 1];
+
+    if (curTime < firstPeriod.start) {
+      nextPeriod = 1;
+      statusText = `🌅 등교 시간 · 1교시 (${firstPeriod.start}) 시작 전`;
+      statusBadgeClass = 'status-break';
+    } else if (curTime > lastPeriod.end) {
+      statusText = `🌙 오늘(${todayDayName}요일) 모든 정규 수업이 종료되었습니다.`;
+      statusBadgeClass = 'status-idle';
+    } else {
+      const next = AppState.bellSchedule.find(b => b.start > curTime);
+      if (next) {
+        isBreakTime = true;
+        nextPeriod = next.period;
+        if (next.period === 0) {
+          statusText = `☕ 쉬는 시간 · 곧 점심시간 (${next.start} 시작)`;
+          statusBadgeClass = 'status-break';
+        } else {
+          statusText = `☕ 쉬는 시간 · 다음: ${next.label} (${next.start} 곧 시작)`;
+          statusBadgeClass = 'status-break';
+        }
+      }
+    }
+  }
+
+  return {
+    todayDayName,
+    activePeriod,
+    isLunchTime,
+    isBreakTime,
+    nextPeriod,
+    statusText,
+    statusBadgeClass,
+    isWeekday,
+    curTime
+  };
+}
+
 function renderTeacherCardView(teacher, todayName) {
   const currentDay = AppState.mobileSelectedDay;
-  const currentPeriodInfo = getCurrentPeriodInfo();
+  const now = new Date();
+  const state = getActivePeriodState(now);
 
   return `
+    <!-- Timetable Live Status Banner -->
+    <div class="timetable-live-status-bar">
+      <span class="live-status-dot"></span>
+      <span>⏰ <strong>실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
+      <span class="live-status-pill ${state.statusBadgeClass}">
+        ${state.statusText}
+      </span>
+    </div>
+
     <div class="mobile-day-tabs">
       ${DAYS.map(day => `
         <button class="mobile-day-tab ${day === currentDay ? 'active' : ''} ${day === todayName ? 'today-marker' : ''}" onclick="setMobileDay('${day}')">
@@ -916,17 +1013,34 @@ function renderTeacherCardView(teacher, todayName) {
         const cell = teacher.schedule[currentDay] ? teacher.schedule[currentDay][period.toString()] : null;
         const isFree = !cell || cell.isFree;
         const cat = !isFree ? getSubjectCategory(cell.subject) : '';
-        const isCurrentSlot = (currentDay === todayName && currentPeriodInfo && currentPeriodInfo.period === period);
+        const isToday = (currentDay === todayName);
+        
+        let isCurrentSlot = false;
+        let isUpcomingSlot = false;
+        let badgeHtml = '';
 
-        return `
-          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''}">
+        if (isToday) {
+          if (state.activePeriod === period) {
+            isCurrentSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">🔔 지금 (${period}교시 진행 중)</span></div>`;
+          } else if (state.isBreakTime && state.nextPeriod === period) {
+            isUpcomingSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="upcoming-slot-badge">☕ 곧 시작 (${period}교시)</span></div>`;
+          } else if (state.isLunchTime && period === 5) {
+            isUpcomingSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="upcoming-slot-badge">다음 수업 (5교시 13:10 시작)</span></div>`;
+          }
+        }
+
+        let itemHtml = `
+          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''} ${isUpcomingSlot ? 'is-upcoming-slot' : ''}">
             <div class="mobile-period-left">
               <div class="mobile-period-badge">
                 <span>${period}</span>
                 <span class="mobile-period-time">${timeInfo ? timeInfo.start : ''}</span>
               </div>
               <div>
-                ${isCurrentSlot ? `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">⏰ 지금 (${period}교시 진행 중)</span></div>` : ''}
+                ${badgeHtml}
                 ${isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
                     <span>🌿</span>
@@ -952,6 +1066,20 @@ function renderTeacherCardView(teacher, todayName) {
             </div>
           </div>
         `;
+
+        if (period === 4) {
+          const isLunchNow = isToday && state.isLunchTime;
+          itemHtml += `
+            <div class="mobile-period-card ${isLunchNow ? 'is-current is-current-lunch' : ''}" style="background: var(--bg-hover); padding: 0.65rem 1rem; border: 1px dashed var(--border-color);">
+              <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                <span style="font-weight:700; font-size:0.88rem;">🍱 점심시간 (12:10 ~ 13:10)</span>
+                ${isLunchNow ? '<span class="current-lunch-badge">🔔 지금 진행 중</span>' : ''}
+              </div>
+            </div>
+          `;
+        }
+
+        return itemHtml;
       }).join('')}
     </div>
   `;
@@ -959,13 +1087,19 @@ function renderTeacherCardView(teacher, todayName) {
 
 function renderTeacherTableView(teacher, todayName) {
   const now = new Date();
-  const currentPeriodInfo = getCurrentPeriodInfo(now);
-  const curPeriodNum = currentPeriodInfo ? currentPeriodInfo.period : null;
-  const todayIdx = now.getDay();
-  const isWeekday = todayIdx >= 1 && todayIdx <= 5;
-  const todayRealDay = isWeekday ? DAYS[todayIdx - 1] : null;
+  const state = getActivePeriodState(now);
+  const curPeriodNum = state.activePeriod;
 
   return `
+    <!-- Timetable Live Status Banner -->
+    <div class="timetable-live-status-bar">
+      <span class="live-status-dot"></span>
+      <span>⏰ <strong>현재 실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
+      <span class="live-status-pill ${state.statusBadgeClass}">
+        ${state.statusText}
+      </span>
+    </div>
+
     <div class="timetable-card">
       <table class="timetable-grid">
         <thead>
@@ -982,7 +1116,8 @@ function renderTeacherTableView(teacher, todayName) {
           ${PERIODS.map(period => {
             const timeInfo = AppState.bellSchedule.find(b => b.period === period);
             const isCurPeriodRow = (curPeriodNum === period);
-            return `
+
+            let rowHtml = `
               <tr>
                 <td class="period-col ${isCurPeriodRow ? 'current-period-head' : ''}">
                   <div class="period-cell-header">
@@ -994,13 +1129,31 @@ function renderTeacherTableView(teacher, todayName) {
                 ${DAYS.map(day => {
                   const cell = teacher.schedule[day] ? teacher.schedule[day][period.toString()] : null;
                   const isToday = day === todayName;
-                  const isCurrentSlot = (day === todayRealDay && curPeriodNum === period);
+                  
+                  let isCurrentSlot = false;
+                  let isUpcomingSlot = false;
+                  let slotBadge = '';
+
+                  if (isToday) {
+                    if (state.activePeriod === period) {
+                      isCurrentSlot = true;
+                      slotBadge = `<span class="current-slot-badge">🔔 지금 (${period}교시)</span>`;
+                    } else if (state.isBreakTime && state.nextPeriod === period) {
+                      isUpcomingSlot = true;
+                      slotBadge = `<span class="upcoming-slot-badge">☕ 곧 시작 (${period}교시)</span>`;
+                    } else if (state.isLunchTime && period === 5) {
+                      isUpcomingSlot = true;
+                      slotBadge = `<span class="upcoming-slot-badge">다음 수업 (13:10)</span>`;
+                    }
+                  }
+
+                  const cellClass = `timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''} ${isUpcomingSlot ? 'is-upcoming-slot' : ''}`;
                   
                   if (!cell || cell.isFree) {
                     return `
-                      <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
+                      <td class="${cellClass}">
                         <div class="cell-content">
-                          ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
+                          ${slotBadge}
                           <span class="free-period">${cell && cell.subject === '여유' ? '여유시간' : '공강'}</span>
                         </div>
                       </td>
@@ -1009,9 +1162,9 @@ function renderTeacherTableView(teacher, todayName) {
 
                   const categoryClass = getSubjectCategory(cell.subject);
                   return `
-                    <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
+                    <td class="${cellClass}">
                       <div class="cell-content">
-                        ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
+                        ${slotBadge}
                         <span class="subject-pill ${categoryClass}">${cell.subject}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToClass('${cell.target}')" title="${cell.target} 학반 시간표로 이동">
@@ -1024,6 +1177,24 @@ function renderTeacherTableView(teacher, todayName) {
                 }).join('')}
               </tr>
             `;
+
+            // Insert Lunch Row between 4교시 and 5교시
+            if (period === 4) {
+              const isLunchNow = state.isLunchTime && state.isWeekday;
+              rowHtml += `
+                <tr class="lunch-divider-row ${isLunchNow ? 'is-current-lunch' : ''}">
+                  <td class="lunch-col-head" style="font-weight: 700;">🍱</td>
+                  <td colspan="5">
+                    <div class="lunch-content">
+                      <span>🍱 점심시간 (12:10 ~ 13:10)</span>
+                      ${isLunchNow ? '<span class="current-lunch-badge">🔔 지금 점심시간 진행 중</span>' : ''}
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
+
+            return rowHtml;
           }).join('')}
         </tbody>
       </table>
@@ -1215,9 +1386,19 @@ function renderClassView(container) {
 
 function renderClassCardView(classObj, todayName) {
   const currentDay = AppState.mobileSelectedDay;
-  const currentPeriodInfo = getCurrentPeriodInfo();
+  const now = new Date();
+  const state = getActivePeriodState(now);
 
   return `
+    <!-- Timetable Live Status Banner -->
+    <div class="timetable-live-status-bar">
+      <span class="live-status-dot"></span>
+      <span>⏰ <strong>실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
+      <span class="live-status-pill ${state.statusBadgeClass}">
+        ${state.statusText}
+      </span>
+    </div>
+
     <div class="mobile-day-tabs">
       ${DAYS.map(day => `
         <button class="mobile-day-tab ${day === currentDay ? 'active' : ''} ${day === todayName ? 'today-marker' : ''}" onclick="setMobileDay('${day}')">
@@ -1233,17 +1414,34 @@ function renderClassCardView(classObj, todayName) {
         const cell = classObj.schedule[currentDay] ? classObj.schedule[currentDay][period.toString()] : null;
         const isFree = !cell || cell.isFree;
         const cat = !isFree ? getSubjectCategory(cell.subject) : '';
-        const isCurrentSlot = (currentDay === todayName && currentPeriodInfo && currentPeriodInfo.period === period);
+        const isToday = (currentDay === todayName);
 
-        return `
-          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''}">
+        let isCurrentSlot = false;
+        let isUpcomingSlot = false;
+        let badgeHtml = '';
+
+        if (isToday) {
+          if (state.activePeriod === period) {
+            isCurrentSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">🔔 지금 (${period}교시 진행 중)</span></div>`;
+          } else if (state.isBreakTime && state.nextPeriod === period) {
+            isUpcomingSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="upcoming-slot-badge">☕ 곧 시작 (${period}교시)</span></div>`;
+          } else if (state.isLunchTime && period === 5) {
+            isUpcomingSlot = true;
+            badgeHtml = `<div style="margin-bottom:0.25rem;"><span class="upcoming-slot-badge">다음 수업 (5교시 13:10 시작)</span></div>`;
+          }
+        }
+
+        let itemHtml = `
+          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''} ${isUpcomingSlot ? 'is-upcoming-slot' : ''}">
             <div class="mobile-period-left">
               <div class="mobile-period-badge">
                 <span>${period}</span>
                 <span class="mobile-period-time">${timeInfo ? timeInfo.start : ''}</span>
               </div>
               <div>
-                ${isCurrentSlot ? `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">⏰ 지금 (${period}교시 진행 중)</span></div>` : ''}
+                ${badgeHtml}
                 ${isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
                     <span>수업 없음</span>
@@ -1268,6 +1466,20 @@ function renderClassCardView(classObj, todayName) {
             </div>
           </div>
         `;
+
+        if (period === 4) {
+          const isLunchNow = isToday && state.isLunchTime;
+          itemHtml += `
+            <div class="mobile-period-card ${isLunchNow ? 'is-current is-current-lunch' : ''}" style="background: var(--bg-hover); padding: 0.65rem 1rem; border: 1px dashed var(--border-color);">
+              <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                <span style="font-weight:700; font-size:0.88rem;">🍱 점심시간 (12:10 ~ 13:10)</span>
+                ${isLunchNow ? '<span class="current-lunch-badge">🔔 지금 진행 중</span>' : ''}
+              </div>
+            </div>
+          `;
+        }
+
+        return itemHtml;
       }).join('')}
     </div>
   `;
@@ -1275,13 +1487,19 @@ function renderClassCardView(classObj, todayName) {
 
 function renderClassTableView(classObj, todayName) {
   const now = new Date();
-  const currentPeriodInfo = getCurrentPeriodInfo(now);
-  const curPeriodNum = currentPeriodInfo ? currentPeriodInfo.period : null;
-  const todayIdx = now.getDay();
-  const isWeekday = todayIdx >= 1 && todayIdx <= 5;
-  const todayRealDay = isWeekday ? DAYS[todayIdx - 1] : null;
+  const state = getActivePeriodState(now);
+  const curPeriodNum = state.activePeriod;
 
   return `
+    <!-- Timetable Live Status Banner -->
+    <div class="timetable-live-status-bar">
+      <span class="live-status-dot"></span>
+      <span>⏰ <strong>현재 실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
+      <span class="live-status-pill ${state.statusBadgeClass}">
+        ${state.statusText}
+      </span>
+    </div>
+
     <div class="timetable-card">
       <table class="timetable-grid">
         <thead>
@@ -1298,7 +1516,8 @@ function renderClassTableView(classObj, todayName) {
           ${PERIODS.map(period => {
             const timeInfo = AppState.bellSchedule.find(b => b.period === period);
             const isCurPeriodRow = (curPeriodNum === period);
-            return `
+
+            let rowHtml = `
               <tr>
                 <td class="period-col ${isCurPeriodRow ? 'current-period-head' : ''}">
                   <div class="period-cell-header">
@@ -1310,13 +1529,31 @@ function renderClassTableView(classObj, todayName) {
                 ${DAYS.map(day => {
                   const cell = classObj.schedule[day] ? classObj.schedule[day][period.toString()] : null;
                   const isToday = day === todayName;
-                  const isCurrentSlot = (day === todayRealDay && curPeriodNum === period);
+
+                  let isCurrentSlot = false;
+                  let isUpcomingSlot = false;
+                  let slotBadge = '';
+
+                  if (isToday) {
+                    if (state.activePeriod === period) {
+                      isCurrentSlot = true;
+                      slotBadge = `<span class="current-slot-badge">🔔 지금 (${period}교시)</span>`;
+                    } else if (state.isBreakTime && state.nextPeriod === period) {
+                      isUpcomingSlot = true;
+                      slotBadge = `<span class="upcoming-slot-badge">☕ 곧 시작 (${period}교시)</span>`;
+                    } else if (state.isLunchTime && period === 5) {
+                      isUpcomingSlot = true;
+                      slotBadge = `<span class="upcoming-slot-badge">다음 수업 (13:10)</span>`;
+                    }
+                  }
+
+                  const cellClass = `timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''} ${isUpcomingSlot ? 'is-upcoming-slot' : ''}`;
 
                   if (!cell || cell.isFree) {
                     return `
-                      <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
+                      <td class="${cellClass}">
                         <div class="cell-content">
-                          ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
+                          ${slotBadge}
                           <span class="free-period">수업 없음</span>
                         </div>
                       </td>
@@ -1325,9 +1562,9 @@ function renderClassTableView(classObj, todayName) {
 
                   const categoryClass = getSubjectCategory(cell.subject);
                   return `
-                    <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
+                    <td class="${cellClass}">
                       <div class="cell-content">
-                        ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
+                        ${slotBadge}
                         <span class="subject-pill ${categoryClass}">${cell.subject}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToTeacher('${cell.target}')" title="${cell.target} 선생님 시간표로 이동">
@@ -1340,6 +1577,24 @@ function renderClassTableView(classObj, todayName) {
                 }).join('')}
               </tr>
             `;
+
+            // Insert Lunch Row between 4교시 and 5교시
+            if (period === 4) {
+              const isLunchNow = state.isLunchTime && state.isWeekday;
+              rowHtml += `
+                <tr class="lunch-divider-row ${isLunchNow ? 'is-current-lunch' : ''}">
+                  <td class="lunch-col-head" style="font-weight: 700;">🍱</td>
+                  <td colspan="5">
+                    <div class="lunch-content">
+                      <span>🍱 점심시간 (12:10 ~ 13:10)</span>
+                      ${isLunchNow ? '<span class="current-lunch-badge">🔔 지금 점심시간 진행 중</span>' : ''}
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
+
+            return rowHtml;
           }).join('')}
         </tbody>
       </table>
@@ -2453,7 +2708,7 @@ function getCurrentPeriodInfo(date = new Date()) {
   const curTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
   
   for (let b of AppState.bellSchedule) {
-    if (curTime >= b.start && curTime <= b.end) {
+    if (curTime >= b.start && (b.period === 7 ? curTime <= b.end : curTime < b.end)) {
       return b;
     }
   }
@@ -2499,6 +2754,18 @@ function updateLiveClock() {
     }
     if (subTextElem) {
       subTextElem.textContent = liveStatus.subText;
+    }
+  }
+
+  // 3. Timetable Real-time Period Transition (시간표 교시/점심시간 바뀔 때 자동 하이라이트 갱신)
+  if ((AppState.currentTab === 'teacher' || AppState.currentTab === 'class') && AppState.data) {
+    const state = getActivePeriodState(now);
+    const timetableKey = `${state.todayDayName}_${state.activePeriod}_${state.isLunchTime}_${state.isBreakTime ? state.nextPeriod : 'none'}`;
+    if (AppState._lastTimetableSlotKey && AppState._lastTimetableSlotKey !== timetableKey) {
+      AppState._lastTimetableSlotKey = timetableKey;
+      renderApp();
+    } else if (!AppState._lastTimetableSlotKey) {
+      AppState._lastTimetableSlotKey = timetableKey;
     }
   }
 }
