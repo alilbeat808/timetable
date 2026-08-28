@@ -2392,7 +2392,7 @@ function renderMatrixView(container) {
             </button>
           </div>
           
-          <select id="matrixDaySelect" class="search-input" style="width: 120px;" onchange="setMatrixDay(this.value)">
+          <select id="matrixDaySelect" class="filter-select" style="min-width: 105px;" onchange="setMatrixDay(this.value)">
             ${DAYS.map(d => `<option value="${d}" ${d === AppState.selectedDay ? 'selected' : ''}>${d}요일</option>`).join('')}
           </select>
 
@@ -2553,34 +2553,42 @@ function renderFreeTeacherView(container) {
           <span>공강 교사 검색 / 보강 배정 도우미</span>
         </div>
         <div class="control-tools">
-          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <label style="font-size: 0.88rem; font-weight: 600;">교과:</label>
-            <select class="search-input" style="width: 110px;" onchange="setFreeDeptFilter(this.value)">
-              <option value="all" ${AppState.freeTeacherDeptFilter === 'all' ? 'selected' : ''}>전체 교과</option>
-              ${Object.keys(OFFICIAL_DEPARTMENTS).map(dept => `
-                <option value="${dept}" ${AppState.freeTeacherDeptFilter === dept ? 'selected' : ''}>${dept}</option>
-              `).join('')}
-            </select>
+          <div class="filter-controls-wrap">
+            <div class="filter-field">
+              <label class="filter-label">교과:</label>
+              <select class="filter-select" style="min-width: 125px;" onchange="setFreeDeptFilter(this.value)">
+                <option value="all" ${AppState.freeTeacherDeptFilter === 'all' ? 'selected' : ''}>전체 교과</option>
+                ${Object.keys(OFFICIAL_DEPARTMENTS).map(dept => `
+                  <option value="${dept}" ${AppState.freeTeacherDeptFilter === dept ? 'selected' : ''}>${dept}</option>
+                `).join('')}
+              </select>
+            </div>
 
-            <label style="font-size: 0.88rem; font-weight: 600; margin-left: 0.25rem;">업무부서:</label>
-            <select class="search-input" style="width: 110px;" onchange="setFreeAdminFilter(this.value)">
-              <option value="all" ${AppState.freeTeacherAdminFilter === 'all' ? 'selected' : ''}>전체 부서</option>
-              ${Object.keys(OFFICIAL_ADMIN_DEPTS).map(dept => `
-                <option value="${dept}" ${AppState.freeTeacherAdminFilter === dept ? 'selected' : ''}>${dept}</option>
-              `).join('')}
-            </select>
+            <div class="filter-field">
+              <label class="filter-label">업무부서:</label>
+              <select class="filter-select" style="min-width: 145px;" onchange="setFreeAdminFilter(this.value)">
+                <option value="all" ${AppState.freeTeacherAdminFilter === 'all' ? 'selected' : ''}>전체 부서</option>
+                ${Object.keys(OFFICIAL_ADMIN_DEPTS).map(dept => `
+                  <option value="${dept}" ${AppState.freeTeacherAdminFilter === dept ? 'selected' : ''}>${dept}</option>
+                `).join('')}
+              </select>
+            </div>
 
-            <label style="font-size: 0.88rem; font-weight: 600; margin-left: 0.25rem;">요일:</label>
-            <select class="search-input" style="width: 90px;" onchange="setFreeSearchDay(this.value)">
-              ${DAYS.map(d => `<option value="${d}" ${d === day ? 'selected' : ''}>${d}요일</option>`).join('')}
-            </select>
+            <div class="filter-field">
+              <label class="filter-label">요일:</label>
+              <select class="filter-select" style="min-width: 95px;" onchange="setFreeSearchDay(this.value)">
+                ${DAYS.map(d => `<option value="${d}" ${d === day ? 'selected' : ''}>${d}요일</option>`).join('')}
+              </select>
+            </div>
             
-            <label style="font-size: 0.88rem; font-weight: 600; margin-left: 0.25rem;">교시:</label>
-            <select class="search-input" style="width: 90px;" onchange="setFreeSearchPeriod(this.value)">
-              ${PERIODS.map(p => `<option value="${p}" ${p.toString() === period ? 'selected' : ''}>${p}교시</option>`).join('')}
-            </select>
+            <div class="filter-field">
+              <label class="filter-label">교시:</label>
+              <select class="filter-select" style="min-width: 92px;" onchange="setFreeSearchPeriod(this.value)">
+                ${PERIODS.map(p => `<option value="${p}" ${p.toString() === period ? 'selected' : ''}>${p}교시</option>`).join('')}
+              </select>
+            </div>
 
-            <button class="btn btn-secondary" onclick="window.print()" title="공강/보강 명단 인쇄" style="margin-left: 0.35rem;">
+            <button class="btn btn-secondary" onclick="window.print()" title="공강/보강 명단 인쇄">
               🖨️ 인쇄
             </button>
           </div>
