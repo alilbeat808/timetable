@@ -1073,6 +1073,19 @@ body {
   flex-wrap: wrap;
 }
 
+.live-seconds-clock {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 0.12rem 0.48rem;
+  border-radius: var(--radius-sm);
+  margin-left: 0.3rem;
+  display: inline-block;
+  letter-spacing: 0.04em;
+}
+
 .live-status-dot {
   width: 9px;
   height: 9px;

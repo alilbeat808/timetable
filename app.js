@@ -1092,8 +1092,8 @@ function renderTeacherCardView(teacher, todayName) {
     <!-- Timetable Live Status Banner -->
     <div class="timetable-live-status-bar">
       <span class="live-status-dot"></span>
-      <span>⏰ <strong>실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
-      <span class="live-status-pill ${state.statusBadgeClass}">
+      <span>⏰ <strong>현재 실시간:</strong> <span id="timetableLiveDateText">${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일)</span> <span id="timetableLiveClock" class="live-seconds-clock">${formatTime(now)}</span></span>
+      <span id="timetableLiveStatusPill" class="live-status-pill ${state.statusBadgeClass}">
         ${state.statusText}
       </span>
     </div>
@@ -1194,8 +1194,8 @@ function renderTeacherTableView(teacher, todayName) {
     <!-- Timetable Live Status Banner -->
     <div class="timetable-live-status-bar">
       <span class="live-status-dot"></span>
-      <span>⏰ <strong>현재 실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
-      <span class="live-status-pill ${state.statusBadgeClass}">
+      <span>⏰ <strong>현재 실시간:</strong> <span id="timetableLiveDateText">${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일)</span> <span id="timetableLiveClock" class="live-seconds-clock">${formatTime(now)}</span></span>
+      <span id="timetableLiveStatusPill" class="live-status-pill ${state.statusBadgeClass}">
         ${state.statusText}
       </span>
     </div>
@@ -1511,8 +1511,8 @@ function renderClassCardView(classObj, todayName) {
     <!-- Timetable Live Status Banner -->
     <div class="timetable-live-status-bar">
       <span class="live-status-dot"></span>
-      <span>⏰ <strong>실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
-      <span class="live-status-pill ${state.statusBadgeClass}">
+      <span>⏰ <strong>현재 실시간:</strong> <span id="timetableLiveDateText">${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일)</span> <span id="timetableLiveClock" class="live-seconds-clock">${formatTime(now)}</span></span>
+      <span id="timetableLiveStatusPill" class="live-status-pill ${state.statusBadgeClass}">
         ${state.statusText}
       </span>
     </div>
@@ -1612,8 +1612,8 @@ function renderClassTableView(classObj, todayName) {
     <!-- Timetable Live Status Banner -->
     <div class="timetable-live-status-bar">
       <span class="live-status-dot"></span>
-      <span>⏰ <strong>현재 실시간:</strong> ${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일) ${state.curTime}</span>
-      <span class="live-status-pill ${state.statusBadgeClass}">
+      <span>⏰ <strong>현재 실시간:</strong> <span id="timetableLiveDateText">${now.getMonth() + 1}월 ${now.getDate()}일 (${todayName}요일)</span> <span id="timetableLiveClock" class="live-seconds-clock">${formatTime(now)}</span></span>
+      <span id="timetableLiveStatusPill" class="live-status-pill ${state.statusBadgeClass}">
         ${state.statusText}
       </span>
     </div>
@@ -2875,9 +2875,24 @@ function updateLiveClock() {
     }
   }
 
-  // 3. Timetable Real-time Period Transition (시간표 교시/점심시간 바뀔 때 자동 하이라이트 갱신)
+  // 3. Timetable Real-time Clock & Period Transition (시간표 교사별/학반별 화면 실시간 시계 및 하이라이트 갱신)
   if ((AppState.currentTab === 'teacher' || AppState.currentTab === 'class') && AppState.data) {
+    // 3-1. 매 초마다 시간표 상단 디지털 시계 실시간 갱신
+    const timetableClockElem = document.getElementById('timetableLiveClock');
+    if (timetableClockElem) {
+      timetableClockElem.textContent = formatTime(now);
+    }
+
     const state = getActivePeriodState(now);
+
+    // 3-2. 일과 상태 뱃지 텍스트 갱신
+    const timetablePillElem = document.getElementById('timetableLiveStatusPill');
+    if (timetablePillElem && timetablePillElem.textContent.trim() !== state.statusText.trim()) {
+      timetablePillElem.textContent = state.statusText;
+      timetablePillElem.className = `live-status-pill ${state.statusBadgeClass}`;
+    }
+
+    // 3-3. 교시 / 점심시간 / 쉬는시간 상태 전환 시 테이블 하이라이트 자동 재렌더링
     const timetableKey = `${state.todayDayName}_${state.activePeriod}_${state.isLunchTime}_${state.isBreakTime ? state.nextPeriod : 'none'}`;
     if (AppState._lastTimetableSlotKey && AppState._lastTimetableSlotKey !== timetableKey) {
       AppState._lastTimetableSlotKey = timetableKey;
