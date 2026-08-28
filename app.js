@@ -372,6 +372,14 @@ function setupEventListeners() {
     });
   }
 
+  const searchClearBtn = document.getElementById('globalSearchClearBtn');
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      resetGlobalSearch();
+    });
+  }
+
   document.addEventListener('click', (e) => {
     const container = document.getElementById('globalSearchContainer');
     if (container && !container.contains(e.target)) {
@@ -439,11 +447,16 @@ function handleSearchInput(e) {
   AppState.searchQuery = query.toLowerCase();
 
   const dropdown = document.getElementById('globalSearchDropdown');
-  if (!dropdown) return;
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) {
+    clearBtn.style.display = query ? 'flex' : 'none';
+  }
 
   if (!query) {
-    dropdown.style.display = 'none';
-    dropdown.innerHTML = '';
+    if (dropdown) {
+      dropdown.style.display = 'none';
+      dropdown.innerHTML = '';
+    }
     renderApp();
     return;
   }
@@ -452,12 +465,14 @@ function handleSearchInput(e) {
   const totalCount = results.teachers.length + results.classes.length + results.subjects.length;
 
   if (totalCount === 0) {
-    dropdown.innerHTML = `
-      <div style="padding: 0.85rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
-        '${escapeHtml(query)}' 검색 결과가 없습니다.
-      </div>
-    `;
-    dropdown.style.display = 'block';
+    if (dropdown) {
+      dropdown.innerHTML = `
+        <div style="padding: 0.85rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+          '${escapeHtml(query)}' 검색 결과가 없습니다.
+        </div>
+      `;
+      dropdown.style.display = 'block';
+    }
     renderApp();
     return;
   }
@@ -509,8 +524,10 @@ function handleSearchInput(e) {
     }).join('');
   }
 
-  dropdown.innerHTML = html;
-  dropdown.style.display = 'block';
+  if (dropdown) {
+    dropdown.innerHTML = html;
+    dropdown.style.display = 'block';
+  }
 
   // In teacher view, auto-select first match so timetable updates in real time!
   if (AppState.currentTab === 'teacher' && results.teachers.length > 0) {
@@ -523,12 +540,25 @@ function handleSearchInput(e) {
 
 function onSelectSearchTeacher(teacherName) {
   closeSearchDropdown();
+  // Clear search query so that the full teacher list is immediately accessible!
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
   navigateToTeacher(teacherName);
   showToast(`👨‍🏫 ${teacherName} 선생님 시간표로 이동했습니다.`);
 }
 
 function onSelectSearchClass(className) {
   closeSearchDropdown();
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
   navigateToClass(className);
   showToast(`🏫 ${className}반 시간표로 이동했습니다.`);
 }
@@ -538,6 +568,33 @@ function closeSearchDropdown() {
   if (dropdown) {
     dropdown.style.display = 'none';
   }
+}
+
+function resetGlobalSearch() {
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) {
+    clearBtn.style.display = 'none';
+  }
+  closeSearchDropdown();
+  renderApp();
+  showToast('검색어가 초기화되어 전체 목록으로 복원되었습니다.');
+}
+
+function resetTeacherFilters() {
+  AppState.teacherFilterType = 'all';
+  AppState.teacherFilterValue = 'all';
+  AppState.teacherChosungFilter = 'all';
+  resetGlobalSearch();
+}
+
+function resetClassFilters() {
+  AppState.selectedGrade = 'all';
+  resetGlobalSearch();
 }
 
 function executeGlobalSearch(query) {
@@ -550,6 +607,12 @@ function executeGlobalSearch(query) {
   // Exact teacher name match
   const exactTeacher = results.teachers.find(t => t.name === q);
   if (exactTeacher) {
+    AppState.searchQuery = '';
+    const searchInput = document.getElementById('globalSearchInput');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
     navigateToTeacher(exactTeacher.name);
     showToast(`👨‍🏫 ${exactTeacher.name} 선생님 시간표로 이동했습니다.`);
     closeSearchDropdown();
@@ -560,6 +623,12 @@ function executeGlobalSearch(query) {
   const normClass = q.replace(/학년\s*/, '-').replace(/반$/, '');
   const exactClass = results.classes.find(c => c.name === q || c.name === normClass);
   if (exactClass) {
+    AppState.searchQuery = '';
+    const searchInput = document.getElementById('globalSearchInput');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
     navigateToClass(exactClass.name);
     showToast(`🏫 ${exactClass.name}반 시간표로 이동했습니다.`);
     closeSearchDropdown();
@@ -569,6 +638,12 @@ function executeGlobalSearch(query) {
   // If query matches class pattern e.g. "1-", "2-", "3-", "1학년 1반":
   if (/^[1-3][\s\-가-힣0-9]*/.test(q) && results.classes.length > 0) {
     const cls = results.classes[0];
+    AppState.searchQuery = '';
+    const searchInput = document.getElementById('globalSearchInput');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
     navigateToClass(cls.name);
     showToast(`🏫 ${cls.name}반 시간표로 이동했습니다.`);
     closeSearchDropdown();
@@ -578,6 +653,10 @@ function executeGlobalSearch(query) {
   // Teacher match
   if (results.teachers.length > 0) {
     const t = results.teachers[0];
+    AppState.searchQuery = q.toLowerCase();
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'flex';
+
     navigateToTeacher(t.name);
     showToast(`👨‍🏫 ${t.name} 선생님 시간표로 이동했습니다.`);
     closeSearchDropdown();
@@ -587,6 +666,10 @@ function executeGlobalSearch(query) {
   // Class match
   if (results.classes.length > 0) {
     const cls = results.classes[0];
+    AppState.searchQuery = q.toLowerCase();
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'flex';
+
     navigateToClass(cls.name);
     showToast(`🏫 ${cls.name}반 시간표로 이동했습니다.`);
     closeSearchDropdown();
@@ -597,9 +680,13 @@ function executeGlobalSearch(query) {
   if (results.subjects.length > 0) {
     const subj = results.subjects[0];
     const subjTeachers = AppState.data.teachers.filter(t => getTeacherSubject(t.name) === subj || getTeacherDepartment(t.name).includes(subj));
+    AppState.searchQuery = subj.toLowerCase();
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'flex';
+
     if (subjTeachers.length > 0) {
       navigateToTeacher(subjTeachers[0].name);
-      showToast(`📚 '${subj}' 과목 ${subjTeachers[0].name} 선생님 시간표로 이동했습니다.`);
+      showToast(`📚 '${subj}' 과목 담당 교사 목록을 표시합니다.`);
       closeSearchDropdown();
       return;
     }
@@ -753,9 +840,22 @@ function renderTeacherView(container) {
         </div>
       </div>
 
+      <!-- Search Active Indicator & Reset Button -->
+      ${AppState.searchQuery ? `
+        <div class="search-result-banner">
+          <div class="search-result-info">
+            <span>🔍</span>
+            <span>'<strong>${escapeHtml(AppState.searchQuery)}</strong>' 검색 결과 (<strong>${filteredTeachers.length}명</strong>)</span>
+          </div>
+          <button class="btn-clear-search" onclick="resetGlobalSearch()" title="검색어 초기화 후 전체 교사 목록 보기">
+            ✕ 검색 초기화 (전체 목록)
+          </button>
+        </div>
+      ` : ''}
+
       <!-- Filter Group Tabs -->
       <div class="grade-tabs" style="margin-bottom: 0.65rem;">
-        <button class="grade-tab-btn ${AppState.teacherFilterType === 'all' ? 'active' : ''}" onclick="setTeacherFilter('all', 'all')">
+        <button class="grade-tab-btn ${AppState.teacherFilterType === 'all' && !AppState.searchQuery && AppState.teacherChosungFilter === 'all' ? 'active' : ''}" onclick="resetTeacherFilters()">
           전체 교사
         </button>
         <button class="grade-tab-btn ${AppState.teacherFilterType === 'head' ? 'active' : ''}" onclick="setTeacherFilter('head', 'head')">
@@ -1276,7 +1376,12 @@ function renderClassView(container) {
     );
   }
 
-  let currentClass = AppState.data.classes.find(c => c.id === AppState.selectedClassId) || filteredClasses[0];
+  let currentClass = null;
+  if (AppState.searchQuery && filteredClasses.length > 0) {
+    currentClass = filteredClasses.find(c => c.id === AppState.selectedClassId) || filteredClasses[0];
+  } else {
+    currentClass = AppState.data.classes.find(c => c.id === AppState.selectedClassId) || filteredClasses[0];
+  }
   if (!currentClass && AppState.data.classes.length > 0) {
     currentClass = AppState.data.classes[0];
   }
@@ -1314,9 +1419,22 @@ function renderClassView(container) {
         </div>
       </div>
 
+      <!-- Search Active Indicator & Reset Button -->
+      ${AppState.searchQuery ? `
+        <div class="search-result-banner">
+          <div class="search-result-info">
+            <span>🔍</span>
+            <span>'<strong>${escapeHtml(AppState.searchQuery)}</strong>' 검색 결과 (<strong>${filteredClasses.length}개 반</strong>)</span>
+          </div>
+          <button class="btn-clear-search" onclick="resetGlobalSearch()" title="검색어 초기화 후 전체 학반 목록 보기">
+            ✕ 검색 초기화 (전체 목록)
+          </button>
+        </div>
+      ` : ''}
+
       <!-- Grade Tabs -->
       <div class="grade-tabs">
-        <button class="grade-tab-btn ${AppState.selectedGrade === 'all' ? 'active' : ''}" onclick="selectGrade('all')">전체 학년</button>
+        <button class="grade-tab-btn ${AppState.selectedGrade === 'all' && !AppState.searchQuery ? 'active' : ''}" onclick="resetClassFilters()">전체 학년</button>
         <button class="grade-tab-btn ${AppState.selectedGrade === '1' ? 'active' : ''}" onclick="selectGrade('1')">1학년</button>
         <button class="grade-tab-btn ${AppState.selectedGrade === '2' ? 'active' : ''}" onclick="selectGrade('2')">2학년</button>
         <button class="grade-tab-btn ${AppState.selectedGrade === '3' ? 'active' : ''}" onclick="selectGrade('3')">3학년</button>
