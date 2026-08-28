@@ -31,9 +31,10 @@
 
       <!-- Header Search & Tools -->
       <div class="header-actions">
-        <div class="search-container">
+        <div class="search-container" id="globalSearchContainer">
           <span class="search-icon">🔍</span>
           <input type="text" id="globalSearchInput" class="search-input" placeholder="교사, 학반, 과목 검색..." autocomplete="off">
+          <div id="globalSearchDropdown" class="search-dropdown" style="display: none;"></div>
         </div>
 
         <button class="icon-btn" id="printBtn" title="시간표 인쇄 / PDF 출력">

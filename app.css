@@ -412,6 +412,59 @@ body {
   pointer-events: none;
 }
 
+/* Global Search Dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 320px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  z-index: 100;
+  padding: 0.4rem;
+  scrollbar-width: thin;
+}
+
+.search-category-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding: 0.35rem 0.6rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.search-item {
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.search-item:hover {
+  background: var(--bg-hover);
+}
+
+.search-item-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.search-item-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 /* Section Header Cards */
 .control-card {
   background: var(--bg-surface);
@@ -887,6 +940,45 @@ body {
 
 .timetable-cell.is-today {
   background: rgba(79, 70, 229, 0.02);
+}
+
+/* Current Period Cell Highlight (현재 교시 눈에 띄는 하이라이트 표시) */
+.timetable-cell.is-current-slot {
+  background: rgba(79, 70, 229, 0.09) !important;
+  box-shadow: inset 0 0 0 2.5px var(--primary), 0 0 12px rgba(79, 70, 229, 0.3) !important;
+  position: relative;
+  z-index: 2;
+}
+
+[data-theme="dark"] .timetable-cell.is-current-slot {
+  background: rgba(99, 102, 241, 0.22) !important;
+  box-shadow: inset 0 0 0 2.5px #818cf8, 0 0 14px rgba(129, 140, 248, 0.45) !important;
+}
+
+.period-col.current-period-head {
+  background: var(--primary-light) !important;
+  border-left: 3.5px solid var(--primary) !important;
+}
+
+.current-slot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.25rem;
+  box-shadow: 0 2px 5px rgba(79, 70, 229, 0.35);
+  animation: currentSlotPulse 2.2s infinite ease-in-out;
+  white-space: nowrap;
+}
+
+@keyframes currentSlotPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 2px 5px rgba(79, 70, 229, 0.35); }
+  50% { transform: scale(1.06); box-shadow: 0 4px 10px rgba(79, 70, 229, 0.55); }
 }
 
 .cell-content {
@@ -1835,7 +1927,23 @@ body {
   }
   
   .search-container {
-    display: none;
+    width: 140px;
+  }
+
+  .search-input {
+    padding: 0.45rem 0.6rem 0.45rem 1.8rem;
+    font-size: 0.8rem;
+  }
+
+  .search-icon {
+    font-size: 0.8rem;
+    left: 0.55rem;
+  }
+
+  .search-dropdown {
+    width: 280px;
+    right: -40px;
+    left: auto;
   }
   
   .mobile-nav-bar {

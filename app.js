@@ -358,11 +358,26 @@ function setupEventListeners() {
 
   const searchInput = document.getElementById('globalSearchInput');
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      AppState.searchQuery = e.target.value.trim().toLowerCase();
-      renderApp();
+    searchInput.addEventListener('input', handleSearchInput);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        executeGlobalSearch(e.target.value);
+      } else if (e.key === 'Escape') {
+        closeSearchDropdown();
+      }
+    });
+    searchInput.addEventListener('focus', (e) => {
+      if (e.target.value.trim()) handleSearchInput(e);
     });
   }
+
+  document.addEventListener('click', (e) => {
+    const container = document.getElementById('globalSearchContainer');
+    if (container && !container.contains(e.target)) {
+      closeSearchDropdown();
+    }
+  });
 
   const themeBtn = document.getElementById('themeToggleBtn');
   if (themeBtn) {
@@ -375,6 +390,227 @@ function setupEventListeners() {
   }
 
   setupDragAndDrop();
+}
+
+/* ==========================================================================
+   Global Search Engine (교사 · 학반 · 과목 검색 및 즉각 반응 / 엔터 이동)
+   ========================================================================== */
+function searchEntities(query) {
+  if (!query || !AppState.data) return { teachers: [], classes: [], subjects: [] };
+  const q = query.trim().toLowerCase();
+  if (!q) return { teachers: [], classes: [], subjects: [] };
+
+  // 1. Teachers Match
+  const matchedTeachers = AppState.data.teachers.filter(t => {
+    const subj = getTeacherSubject(t.name);
+    const dept = getTeacherDepartment(t.name);
+    const admin = getTeacherAdminInfo(t.name);
+    const chosung = getChosung(t.name);
+    return t.name.toLowerCase().includes(q) ||
+           chosung.includes(q) ||
+           (t.homeroom && t.homeroom.toLowerCase().includes(q)) ||
+           (subj && subj.toLowerCase().includes(q)) ||
+           (dept && dept.toLowerCase().includes(q)) ||
+           (admin && admin.label.toLowerCase().includes(q)) ||
+           hasTeacherSubject(t, q);
+  });
+
+  // 2. Classes Match
+  const normalizedClassQuery = q.replace(/학년\s*/, '-').replace(/반$/, '');
+  const matchedClasses = AppState.data.classes.filter(c => {
+    return c.name.toLowerCase().includes(q) ||
+           c.name.toLowerCase().includes(normalizedClassQuery) ||
+           (c.homeroom && c.homeroom.toLowerCase().includes(q));
+  });
+
+  // 3. Subjects Match
+  const subjectList = ['국어', '영어', '일본어', '수학', '사회', '과학', '체육', '음악', '미술', '정보'];
+  const matchedSubjects = subjectList.filter(s => s.toLowerCase().includes(q));
+
+  return {
+    teachers: matchedTeachers,
+    classes: matchedClasses,
+    subjects: matchedSubjects
+  };
+}
+
+function handleSearchInput(e) {
+  const query = e.target.value.trim();
+  AppState.searchQuery = query.toLowerCase();
+
+  const dropdown = document.getElementById('globalSearchDropdown');
+  if (!dropdown) return;
+
+  if (!query) {
+    dropdown.style.display = 'none';
+    dropdown.innerHTML = '';
+    renderApp();
+    return;
+  }
+
+  const results = searchEntities(query);
+  const totalCount = results.teachers.length + results.classes.length + results.subjects.length;
+
+  if (totalCount === 0) {
+    dropdown.innerHTML = `
+      <div style="padding: 0.85rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+        '${escapeHtml(query)}' 검색 결과가 없습니다.
+      </div>
+    `;
+    dropdown.style.display = 'block';
+    renderApp();
+    return;
+  }
+
+  let html = '';
+
+  // Teachers
+  if (results.teachers.length > 0) {
+    html += `<div class="search-category-title">👨‍🏫 교사 (${results.teachers.length})</div>`;
+    html += results.teachers.slice(0, 5).map(t => {
+      const subj = getTeacherSubject(t.name);
+      const admin = getTeacherAdminInfo(t.name);
+      return `
+        <div class="search-item" onclick="onSelectSearchTeacher('${t.name}')">
+          <div style="display: flex; align-items: center; gap: 0.45rem;">
+            <span class="search-item-title">${t.name}</span>
+            <span class="badge-subj-${subj}" style="font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 4px;">${subj}</span>
+            ${admin && admin.position ? `<span class="chip-badge" style="font-size: 0.7rem;">${admin.dept ? admin.dept + ' ' : ''}${admin.position}</span>` : ''}
+          </div>
+          <span class="search-item-desc">${t.homeroom ? `${t.homeroom} 담임` : '시간표 보기'} ➔</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Classes
+  if (results.classes.length > 0) {
+    html += `<div class="search-category-title">🏫 학반 (${results.classes.length})</div>`;
+    html += results.classes.slice(0, 4).map(c => {
+      return `
+        <div class="search-item" onclick="onSelectSearchClass('${c.name}')">
+          <span class="search-item-title">${c.name}반</span>
+          <span class="search-item-desc">담임: ${c.homeroom || '-'} ➔</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Subjects
+  if (results.subjects.length > 0) {
+    html += `<div class="search-category-title">📚 교과/과목</div>`;
+    html += results.subjects.slice(0, 3).map(s => {
+      return `
+        <div class="search-item" onclick="executeGlobalSearch('${s}')">
+          <span class="search-item-title">${s}</span>
+          <span class="search-item-desc">과목 교사 보기 ➔</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  dropdown.innerHTML = html;
+  dropdown.style.display = 'block';
+
+  // In teacher view, auto-select first match so timetable updates in real time!
+  if (AppState.currentTab === 'teacher' && results.teachers.length > 0) {
+    if (!results.teachers.some(t => t.id === AppState.selectedTeacherId)) {
+      AppState.selectedTeacherId = results.teachers[0].id;
+    }
+  }
+  renderApp();
+}
+
+function onSelectSearchTeacher(teacherName) {
+  closeSearchDropdown();
+  navigateToTeacher(teacherName);
+  showToast(`👨‍🏫 ${teacherName} 선생님 시간표로 이동했습니다.`);
+}
+
+function onSelectSearchClass(className) {
+  closeSearchDropdown();
+  navigateToClass(className);
+  showToast(`🏫 ${className}반 시간표로 이동했습니다.`);
+}
+
+function closeSearchDropdown() {
+  const dropdown = document.getElementById('globalSearchDropdown');
+  if (dropdown) {
+    dropdown.style.display = 'none';
+  }
+}
+
+function executeGlobalSearch(query) {
+  if (!query || !AppState.data) return;
+  const q = query.trim();
+  if (!q) return;
+
+  const results = searchEntities(q);
+
+  // Exact teacher name match
+  const exactTeacher = results.teachers.find(t => t.name === q);
+  if (exactTeacher) {
+    navigateToTeacher(exactTeacher.name);
+    showToast(`👨‍🏫 ${exactTeacher.name} 선생님 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // Exact class match
+  const normClass = q.replace(/학년\s*/, '-').replace(/반$/, '');
+  const exactClass = results.classes.find(c => c.name === q || c.name === normClass);
+  if (exactClass) {
+    navigateToClass(exactClass.name);
+    showToast(`🏫 ${exactClass.name}반 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // If query matches class pattern e.g. "1-", "2-", "3-", "1학년 1반":
+  if (/^[1-3][\s\-가-힣0-9]*/.test(q) && results.classes.length > 0) {
+    const cls = results.classes[0];
+    navigateToClass(cls.name);
+    showToast(`🏫 ${cls.name}반 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // Teacher match
+  if (results.teachers.length > 0) {
+    const t = results.teachers[0];
+    navigateToTeacher(t.name);
+    showToast(`👨‍🏫 ${t.name} 선생님 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // Class match
+  if (results.classes.length > 0) {
+    const cls = results.classes[0];
+    navigateToClass(cls.name);
+    showToast(`🏫 ${cls.name}반 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // Subject match
+  if (results.subjects.length > 0) {
+    const subj = results.subjects[0];
+    const subjTeachers = AppState.data.teachers.filter(t => getTeacherSubject(t.name) === subj || getTeacherDepartment(t.name).includes(subj));
+    if (subjTeachers.length > 0) {
+      navigateToTeacher(subjTeachers[0].name);
+      showToast(`📚 '${subj}' 과목 ${subjTeachers[0].name} 선생님 시간표로 이동했습니다.`);
+      closeSearchDropdown();
+      return;
+    }
+  }
+
+  showToast(`'${q}'에 대한 검색 결과를 찾을 수 없습니다.`);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function switchTab(tab) {
@@ -471,7 +707,12 @@ function renderTeacherView(container) {
   const sortAdminDept = (AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue !== 'all') ? AppState.teacherFilterValue : null;
   filteredTeachers = sortTeachersList(filteredTeachers, sortAdminDept);
 
-  let currentTeacher = AppState.data.teachers.find(t => t.id === AppState.selectedTeacherId) || filteredTeachers[0];
+  let currentTeacher = null;
+  if (AppState.searchQuery && filteredTeachers.length > 0) {
+    currentTeacher = filteredTeachers.find(t => t.id === AppState.selectedTeacherId) || filteredTeachers[0];
+  } else {
+    currentTeacher = AppState.data.teachers.find(t => t.id === AppState.selectedTeacherId) || filteredTeachers[0];
+  }
   if (!currentTeacher && AppState.data.teachers.length > 0) {
     currentTeacher = AppState.data.teachers[0];
   }
@@ -678,13 +919,14 @@ function renderTeacherCardView(teacher, todayName) {
         const isCurrentSlot = (currentDay === todayName && currentPeriodInfo && currentPeriodInfo.period === period);
 
         return `
-          <div class="mobile-period-card ${isCurrentSlot ? 'is-current' : ''}">
+          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''}">
             <div class="mobile-period-left">
               <div class="mobile-period-badge">
                 <span>${period}</span>
                 <span class="mobile-period-time">${timeInfo ? timeInfo.start : ''}</span>
               </div>
               <div>
+                ${isCurrentSlot ? `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">⏰ 지금 (${period}교시 진행 중)</span></div>` : ''}
                 ${isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
                     <span>🌿</span>
@@ -716,6 +958,13 @@ function renderTeacherCardView(teacher, todayName) {
 }
 
 function renderTeacherTableView(teacher, todayName) {
+  const now = new Date();
+  const currentPeriodInfo = getCurrentPeriodInfo(now);
+  const curPeriodNum = currentPeriodInfo ? currentPeriodInfo.period : null;
+  const todayIdx = now.getDay();
+  const isWeekday = todayIdx >= 1 && todayIdx <= 5;
+  const todayRealDay = isWeekday ? DAYS[todayIdx - 1] : null;
+
   return `
     <div class="timetable-card">
       <table class="timetable-grid">
@@ -724,7 +973,7 @@ function renderTeacherTableView(teacher, todayName) {
             <th class="period-col">교시</th>
             ${DAYS.map(day => `
               <th class="day-col ${day === todayName ? 'today' : ''}">
-                ${day}요일 ${day === todayName ? '<span style="font-size:0.75rem; color:var(--primary);">(오늘)</span>' : ''}
+                ${day}요일 ${day === todayName ? '<span style="font-size:0.75rem; color:var(--primary); font-weight:800;">(오늘)</span>' : ''}
               </th>
             `).join('')}
           </tr>
@@ -732,22 +981,26 @@ function renderTeacherTableView(teacher, todayName) {
         <tbody>
           ${PERIODS.map(period => {
             const timeInfo = AppState.bellSchedule.find(b => b.period === period);
+            const isCurPeriodRow = (curPeriodNum === period);
             return `
               <tr>
-                <td class="period-col">
+                <td class="period-col ${isCurPeriodRow ? 'current-period-head' : ''}">
                   <div class="period-cell-header">
                     <span class="period-num">${period}</span>
                     <span class="period-time">${timeInfo ? timeInfo.start : ''}</span>
+                    ${isCurPeriodRow ? '<span style="font-size:0.65rem; color:var(--primary); font-weight:800;">지금</span>' : ''}
                   </div>
                 </td>
                 ${DAYS.map(day => {
                   const cell = teacher.schedule[day] ? teacher.schedule[day][period.toString()] : null;
                   const isToday = day === todayName;
+                  const isCurrentSlot = (day === todayRealDay && curPeriodNum === period);
                   
                   if (!cell || cell.isFree) {
                     return `
-                      <td class="timetable-cell ${isToday ? 'is-today' : ''}">
+                      <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
                         <div class="cell-content">
+                          ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
                           <span class="free-period">${cell && cell.subject === '여유' ? '여유시간' : '공강'}</span>
                         </div>
                       </td>
@@ -756,8 +1009,9 @@ function renderTeacherTableView(teacher, todayName) {
 
                   const categoryClass = getSubjectCategory(cell.subject);
                   return `
-                    <td class="timetable-cell ${isToday ? 'is-today' : ''}">
+                    <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
                       <div class="cell-content">
+                        ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
                         <span class="subject-pill ${categoryClass}">${cell.subject}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToClass('${cell.target}')" title="${cell.target} 학반 시간표로 이동">
@@ -982,13 +1236,14 @@ function renderClassCardView(classObj, todayName) {
         const isCurrentSlot = (currentDay === todayName && currentPeriodInfo && currentPeriodInfo.period === period);
 
         return `
-          <div class="mobile-period-card ${isCurrentSlot ? 'is-current' : ''}">
+          <div class="mobile-period-card ${isCurrentSlot ? 'is-current is-current-slot' : ''}">
             <div class="mobile-period-left">
               <div class="mobile-period-badge">
                 <span>${period}</span>
                 <span class="mobile-period-time">${timeInfo ? timeInfo.start : ''}</span>
               </div>
               <div>
+                ${isCurrentSlot ? `<div style="margin-bottom:0.25rem;"><span class="current-slot-badge">⏰ 지금 (${period}교시 진행 중)</span></div>` : ''}
                 ${isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
                     <span>수업 없음</span>
@@ -1019,6 +1274,13 @@ function renderClassCardView(classObj, todayName) {
 }
 
 function renderClassTableView(classObj, todayName) {
+  const now = new Date();
+  const currentPeriodInfo = getCurrentPeriodInfo(now);
+  const curPeriodNum = currentPeriodInfo ? currentPeriodInfo.period : null;
+  const todayIdx = now.getDay();
+  const isWeekday = todayIdx >= 1 && todayIdx <= 5;
+  const todayRealDay = isWeekday ? DAYS[todayIdx - 1] : null;
+
   return `
     <div class="timetable-card">
       <table class="timetable-grid">
@@ -1027,7 +1289,7 @@ function renderClassTableView(classObj, todayName) {
             <th class="period-col">교시</th>
             ${DAYS.map(day => `
               <th class="day-col ${day === todayName ? 'today' : ''}">
-                ${day}요일 ${day === todayName ? '<span style="font-size:0.75rem; color:var(--primary);">(오늘)</span>' : ''}
+                ${day}요일 ${day === todayName ? '<span style="font-size:0.75rem; color:var(--primary); font-weight:800;">(오늘)</span>' : ''}
               </th>
             `).join('')}
           </tr>
@@ -1035,22 +1297,26 @@ function renderClassTableView(classObj, todayName) {
         <tbody>
           ${PERIODS.map(period => {
             const timeInfo = AppState.bellSchedule.find(b => b.period === period);
+            const isCurPeriodRow = (curPeriodNum === period);
             return `
               <tr>
-                <td class="period-col">
+                <td class="period-col ${isCurPeriodRow ? 'current-period-head' : ''}">
                   <div class="period-cell-header">
                     <span class="period-num">${period}</span>
                     <span class="period-time">${timeInfo ? timeInfo.start : ''}</span>
+                    ${isCurPeriodRow ? '<span style="font-size:0.65rem; color:var(--primary); font-weight:800;">지금</span>' : ''}
                   </div>
                 </td>
                 ${DAYS.map(day => {
                   const cell = classObj.schedule[day] ? classObj.schedule[day][period.toString()] : null;
                   const isToday = day === todayName;
+                  const isCurrentSlot = (day === todayRealDay && curPeriodNum === period);
 
                   if (!cell || cell.isFree) {
                     return `
-                      <td class="timetable-cell ${isToday ? 'is-today' : ''}">
+                      <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
                         <div class="cell-content">
+                          ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
                           <span class="free-period">수업 없음</span>
                         </div>
                       </td>
@@ -1059,8 +1325,9 @@ function renderClassTableView(classObj, todayName) {
 
                   const categoryClass = getSubjectCategory(cell.subject);
                   return `
-                    <td class="timetable-cell ${isToday ? 'is-today' : ''}">
+                    <td class="timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''}">
                       <div class="cell-content">
+                        ${isCurrentSlot ? `<span class="current-slot-badge">⏰ 지금 (${period}교시)</span>` : ''}
                         <span class="subject-pill ${categoryClass}">${cell.subject}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToTeacher('${cell.target}')" title="${cell.target} 선생님 시간표로 이동">
