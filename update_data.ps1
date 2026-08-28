@@ -10,7 +10,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace SchoolTimetableV7 {
+namespace SchoolTimetableV8 {
 
 public class PeriodCell {
     public string subject = "";
@@ -250,7 +250,7 @@ public class TimetableDataBuilder {
             { "\uC9C4\uD559\uC9C0\uB3C4\uBD80", new string[] { "\uC774\uB3D9\uD6C8", "\uAE40\uD61C\uC815", "\uC774\uC6B0\uC11D" } },
             { "\uAD50\uC721\uC815\uBCF4\uBD80", new string[] { "\uC624\uC815\uD6C8", "\uC815\uD658\uC6C5" } },
             { "\uACE0\uAD50\uD559\uC810\uC81C\uBD80", new string[] { "\uC548\uACBD\uCCA0", "\uC815\uC11D\uC6D0", "\uAE40\uD615\uB3C4" } },
-            { "\uAD50\uC721\uD3C9\uAC00\uBD80", new string[] { "\uBC15\uC131\uD6C8", "\uC774\uD61C\uB098", "\uAE40\uC815\uC740", "\uAE40\uC8FC\uC601", "\uC804\uC544\uB9B0" } },
+            { "\uAD50\uC721\uD3C9\uAC00\uBD80", new string[] { "\uBC15\uC131\uD6C8", "\uAE40\uC8FC\uC601", "\uC774\uD61C\uB098", "\uAE40\uC815\uC740", "\uC804\uC544\uB9B0" } },
             { "\uC778\uBB38\uC0AC\uD68C\uBD80", new string[] { "\uD558\uC815\uC6B0", "\uC804\uC21C\uC625", "\uD669\uC601\uC560" } },
             { "\uACFC\uD559\uC911\uC810\uBD80", new string[] { "\uC591\uC6B0\uC11D", "\uAC15\uC815\uC544", "\uC131\uACBD\uC9C4", "\uBC15\uC0C1\uC728", "\uCD5C\uC9C4\uD654" } },
             { "1\uD559\uB144\uBD80", new string[] { "\uC2E0\uC778\uCCA0", "\uBC30\uC218\uACBD" } },
@@ -268,9 +268,10 @@ public class TimetableDataBuilder {
             { "\uBC15\uD0DC\uC5B8", "\uC9C4\uB85C" },
             { "\uC774\uC6B0\uC11D", "\uCD94\uC218" },
             { "\uAE40\uD615\uB3C4", "\uD559\uC810\uC81C" },
+            { "\uC774\uD61C\uB098", "\uD3C9\uAC001" },
             { "\uC804\uC544\uB9B0", "\uD3C9\uAC002" },
             { "\uAE40\uC815\uC740", "\uC131\uC8011" },
-            { "\uAE40\uC8FC\uC601", "\uC131\uC8012" },
+            { "\uAE40\uC8FC\uC601", "\uAE30\uD68D" },
             { "\uD669\uC601\uC560", "\uC5F0\uC218" },
             { "\uC131\uACBD\uC9C4", "\uBA54\uC774\uCEE4" },
             { "\uBC15\uC0C1\uC728", "\uACFC\uC911" },
@@ -567,7 +568,7 @@ Add-Type -TypeDefinition $csharpCode -ReferencedAssemblies "System.Xml" -Languag
 $currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $currentDir) { $currentDir = Get-Location }
 
-[SchoolTimetableV7.TimetableDataBuilder]::Run($currentDir)
+[SchoolTimetableV8.TimetableDataBuilder]::Run($currentDir)
 
 Write-Host "`n[DONE] Timetable data successfully updated from HML files!" -ForegroundColor Green
 Write-Host "[INFO] Open index.html in your browser to view the web app.`n" -ForegroundColor Cyan

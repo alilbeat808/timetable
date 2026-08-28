@@ -67,7 +67,7 @@ const OFFICIAL_ADMIN_DEPTS = {
   '진학지도부': ['이동훈', '김혜정', '이우석'],
   '교육정보부': ['오정훈', '정환웅'],
   '고교학점제부': ['안경철', '정석원', '김형도'],
-  '교육평가부': ['박성훈', '이혜나', '김정은', '김주영', '전아린'],
+  '교육평가부': ['박성훈', '김주영', '이혜나', '김정은', '전아린'],
   '인문사회부': ['하정우', '전순옥', '황영애'],
   '과학중점부': ['양우석', '강정아', '성경진', '박상율', '최진화'],
   '1학년부': ['신인철', '배수경'],
@@ -86,9 +86,10 @@ const OFFICIAL_TEACHER_DUTIES = {
   '박태언': '진로',
   '이우석': '추수',
   '김형도': '학점제',
+  '이혜나': '평가1',
   '전아린': '평가2',
   '김정은': '성적1',
-  '김주영': '성적2',
+  '김주영': '기획',
   '황영애': '연수',
   '성경진': '메이커',
   '박상율': '과중',
@@ -2023,7 +2024,8 @@ function renderLiveView(container) {
   const isWeekend = todayIdx === 0 || todayIdx === 6;
   const todayDayName = isWeekend ? '월' : DAYS[todayIdx - 1];
 
-  const currentPeriodInfo = getCurrentPeriodInfo();
+  const currentPeriodInfo = getCurrentPeriodInfo(now);
+  const liveStatus = getLiveStatusInfo(now, currentPeriodInfo);
 
   const html = `
     <!-- Live Clock Banner -->
@@ -2037,11 +2039,11 @@ function renderLiveView(container) {
         </div>
       </div>
       <div style="text-align: right;">
-        <div class="live-period-badge">
-          ${isWeekend ? '주말 (월요일 기준 표시)' : (currentPeriodInfo ? currentPeriodInfo.label : '일과 시간 외')}
+        <div class="live-period-badge" id="livePeriodBadge">
+          ${liveStatus.badgeText}
         </div>
-        <div style="font-size: 0.82rem; opacity: 0.85; margin-top: 0.35rem;">
-          ${currentPeriodInfo ? `${currentPeriodInfo.start} ~ ${currentPeriodInfo.end}` : '학교 일과 시작 전/후'}
+        <div id="livePeriodSubText" style="font-size: 0.82rem; opacity: 0.9; margin-top: 0.35rem;">
+          ${liveStatus.subText}
         </div>
       </div>
     </div>
@@ -2054,12 +2056,12 @@ function renderLiveView(container) {
           <span>부산동고등학교 일과 시간표</span>
         </div>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+      <div id="liveBellScheduleGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
         ${AppState.bellSchedule.map(b => {
           const isCurrent = currentPeriodInfo && currentPeriodInfo.label === b.label;
           const isLunch = b.period === 0;
           return `
-            <div style="padding: 0.6rem 0.75rem; border-radius: var(--radius-md); border: ${isCurrent ? '2px solid var(--primary)' : '1px solid var(--border-color)'}; background: ${isCurrent ? 'var(--primary-light)' : (isLunch ? 'var(--bg-hover)' : 'var(--bg-surface)')}; text-align: center; transition: all 0.2s ease;">
+            <div class="bell-schedule-item" data-period="${b.period}" style="padding: 0.6rem 0.75rem; border-radius: var(--radius-md); border: ${isCurrent ? '2px solid var(--primary)' : '1px solid var(--border-color)'}; background: ${isCurrent ? 'var(--primary-light)' : (isLunch ? 'var(--bg-hover)' : 'var(--bg-surface)')}; text-align: center; transition: all 0.2s ease;">
               <div style="font-size: 0.82rem; font-weight: 700; color: ${isCurrent ? 'var(--primary)' : (isLunch ? 'var(--warning-text)' : 'var(--text-primary)')}; margin-bottom: 0.2rem;">
                 ${isLunch ? '🍱 ' : ''}${b.label}
               </div>
@@ -2077,7 +2079,7 @@ function renderLiveView(container) {
       <div class="control-header">
         <div class="control-title">
           <span>🔔</span>
-          <span>지금 진행 중인 학반별 수업 (${currentPeriodInfo ? currentPeriodInfo.label : '1교시 기준'})</span>
+          <span id="liveClassesTitle">지금 진행 중인 학반별 수업 (${currentPeriodInfo ? currentPeriodInfo.label : (isWeekend ? '월요일 1교시 기준 미리보기' : '1교시 기준')})</span>
         </div>
         <div class="control-tools">
           <button class="btn btn-secondary" onclick="window.print()" title="실시간 일과 현황 인쇄">
@@ -2086,41 +2088,102 @@ function renderLiveView(container) {
         </div>
       </div>
 
-      <div class="finder-grid">
-        ${AppState.data.classes.map(c => {
-          const period = currentPeriodInfo && currentPeriodInfo.period > 0 ? currentPeriodInfo.period.toString() : '1';
-          const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
-          const isFree = !cell || cell.isFree;
-          const cat = !isFree ? getSubjectCategory(cell.subject) : '';
-
-          return `
-            <div class="finder-card" onclick="navigateToClass('${c.name}')">
-              <div>
-                <div class="finder-name">${c.name}</div>
-                <div class="finder-meta">담임: ${c.homeroom || '-'}</div>
-              </div>
-              <div>
-                ${isFree ? `
-                  <span class="free-period">수업 없음</span>
-                ` : `
-                  <span class="subject-pill ${cat}">
-                    ${cell.subject} (${cell.target})
-                  </span>
-                `}
-              </div>
-            </div>
-          `;
-        }).join('')}
+      <div class="finder-grid" id="liveClassesGrid">
+        ${renderLiveClassesCards(todayDayName, currentPeriodInfo)}
       </div>
     </div>
   `;
 
   container.innerHTML = html;
+  AppState._lastLivePeriodKey = `${todayDayName}_${currentPeriodInfo ? currentPeriodInfo.label : 'none'}`;
 }
 
-function getCurrentPeriodInfo() {
-  const now = new Date();
-  const curTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+function renderLiveClassesCards(todayDayName, currentPeriodInfo) {
+  if (!AppState.data || !AppState.data.classes) return '';
+  const period = currentPeriodInfo && currentPeriodInfo.period > 0 ? currentPeriodInfo.period.toString() : '1';
+  return AppState.data.classes.map(c => {
+    const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
+    const isFree = !cell || cell.isFree;
+    const cat = !isFree ? getSubjectCategory(cell.subject) : '';
+
+    return `
+      <div class="finder-card" onclick="navigateToClass('${c.name}')">
+        <div>
+          <div class="finder-name">${c.name}</div>
+          <div class="finder-meta">담임: ${c.homeroom || '-'}</div>
+        </div>
+        <div>
+          ${isFree ? `
+            <span class="free-period">수업 없음</span>
+          ` : `
+            <span class="subject-pill ${cat}">
+              ${cell.subject} (${cell.target})
+            </span>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getLiveStatusInfo(now, currentPeriodInfo) {
+  const todayIdx = now.getDay();
+  const isWeekend = todayIdx === 0 || todayIdx === 6;
+  if (isWeekend) {
+    return {
+      badgeText: '주말 (월요일 기준 표시)',
+      subText: '주말에는 월요일 1교시 시간표가 표시됩니다.'
+    };
+  }
+
+  const curHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const curTotalSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+
+  if (currentPeriodInfo) {
+    const [endH, endM] = currentPeriodInfo.end.split(':').map(Number);
+    const endTotalSec = (endH * 3600) + (endM * 60);
+    const diffSec = Math.max(0, endTotalSec - curTotalSec);
+    const remM = Math.floor(diffSec / 60);
+    const remS = diffSec % 60;
+    const timeStr = `${currentPeriodInfo.start} ~ ${currentPeriodInfo.end}`;
+    const isLunch = currentPeriodInfo.period === 0;
+
+    return {
+      badgeText: isLunch ? '🍱 점심시간 진행 중' : `🔔 ${currentPeriodInfo.label} 진행 중`,
+      subText: `${timeStr} · ⏱️ 종료까지 ${remM}분 ${String(remS).padStart(2, '0')}초`
+    };
+  }
+
+  // Between periods or before/after school
+  const nextPeriod = AppState.bellSchedule.find(b => b.start > curHM);
+  if (nextPeriod) {
+    const [startH, startM] = nextPeriod.start.split(':').map(Number);
+    const startTotalSec = (startH * 3600) + (startM * 60);
+    const diffSec = Math.max(0, startTotalSec - curTotalSec);
+    const remM = Math.floor(diffSec / 60);
+    const remS = diffSec % 60;
+
+    if (curHM < AppState.bellSchedule[0].start) {
+      return {
+        badgeText: '🌅 등교 시간 (일과 시작 전)',
+        subText: `다음: ${nextPeriod.label} (${nextPeriod.start} 시작, ⏱️ ${remM}분 ${String(remS).padStart(2, '0')}초 전)`
+      };
+    } else {
+      return {
+        badgeText: '☕ 쉬는 시간',
+        subText: `다음: ${nextPeriod.label} (${nextPeriod.start} 시작, ⏱️ ${remM}분 ${String(remS).padStart(2, '0')}초 전)`
+      };
+    }
+  }
+
+  return {
+    badgeText: '🌙 일과 시간 외',
+    subText: '오늘 학교 일과가 모두 종료되었습니다.'
+  };
+}
+
+function getCurrentPeriodInfo(date = new Date()) {
+  const curTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
   
   for (let b of AppState.bellSchedule) {
     if (curTime >= b.start && curTime <= b.end) {
@@ -2135,9 +2198,41 @@ function formatTime(date) {
 }
 
 function updateLiveClock() {
+  const now = new Date();
+  
+  // 1. Digital Clock
   const clock = document.getElementById('liveClockDisplay');
   if (clock) {
-    clock.textContent = formatTime(new Date());
+    clock.textContent = formatTime(now);
+  }
+
+  // 2. Real-time Live Tab Update
+  if (AppState.currentTab === 'live' && AppState.data) {
+    const todayIdx = now.getDay();
+    const isWeekend = todayIdx === 0 || todayIdx === 6;
+    const todayDayName = isWeekend ? '월' : DAYS[todayIdx - 1];
+    const currentPeriodInfo = getCurrentPeriodInfo(now);
+    const currentPeriodKey = `${todayDayName}_${currentPeriodInfo ? currentPeriodInfo.label : 'none'}`;
+
+    // Period / Status changed: re-render the live view completely!
+    if (currentPeriodKey !== AppState._lastLivePeriodKey) {
+      const container = document.getElementById('mainContentArea');
+      if (container) {
+        renderLiveView(container);
+        return;
+      }
+    }
+
+    // Within same period: smoothly update countdown and badge
+    const liveStatus = getLiveStatusInfo(now, currentPeriodInfo);
+    const badgeElem = document.getElementById('livePeriodBadge');
+    const subTextElem = document.getElementById('livePeriodSubText');
+    if (badgeElem && badgeElem.textContent.trim() !== liveStatus.badgeText.trim()) {
+      badgeElem.textContent = liveStatus.badgeText;
+    }
+    if (subTextElem) {
+      subTextElem.textContent = liveStatus.subText;
+    }
   }
 }
 
