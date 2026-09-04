@@ -202,11 +202,15 @@ const AppState = {
   theme: localStorage.getItem('timetable_theme') || 'light',
   favorites: JSON.parse(localStorage.getItem('timetable_favorites') || '[]'),
   
-  // Teacher Filters
-  teacherFilterType: 'all', // 'all' | 'admin' | 'subject' | 'homeroom' | 'head' | 'plan'
-  teacherFilterValue: 'all',
-  teacherChosungFilter: 'all',
-  teacherChipsExpanded: false,
+  // Teacher Filters & Submenu
+  teacherSubmenuOpen: false, // Collapsible submenus on click
+  teacherFilterType: 'none', // 'none' | 'all' | 'admin' | 'subject' | 'homeroom' | 'head' | 'plan'
+  teacherFilterValue: 'none',
+  teacherChosungFilter: 'none', // 'none' (names hidden initially) | 'all' | 'ㄱ' | 'ㄴ' ...
+  teacherChipsExpanded: true,
+
+  // Class Submenu
+  classSubmenuOpen: false,
 
   // Free Teacher Filter
   freeTeacherDeptFilter: 'all',
@@ -225,11 +229,12 @@ const AppState = {
   meetingRecDay: 'all', // 'all' | '월' | '화' | '수' | '목' | '금'
 
   // Student Timetable State ('지금 우리 학생은')
+  studentSubmenuOpen: false, // Collapsible student submenus on click
   selectedStudentId: '',
   studentSearchQuery: '',
   studentSelectedGrade: 'all', // 'all' | '1' | '2' | '3'
   studentSelectedClass: 'all', // 'all' | '1' ~ '7'
-  studentChosung: 'all',
+  studentChosung: 'none', // 'none' (names hidden initially) | 'all' | 'ㄱ' | 'ㄴ' ...
   studentSimTime: 'real', // 'real' | '금_6' | '월_1' | '화_2' 등 시뮬레이션
 
   // Standard Bell Schedule (부산동고등학교 공식 일과 시간표)
@@ -366,7 +371,30 @@ function setupEventListeners() {
   document.querySelectorAll('.nav-tab-btn, .mobile-nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      if (tab) switchTab(tab);
+      if (!tab) return;
+      if (tab === 'teacher') {
+        if (AppState.currentTab === 'teacher') {
+          toggleTeacherSubmenu();
+          return;
+        } else {
+          AppState.teacherSubmenuOpen = true;
+        }
+      } else if (tab === 'student') {
+        if (AppState.currentTab === 'student') {
+          toggleStudentSubmenu();
+          return;
+        } else {
+          AppState.studentSubmenuOpen = true;
+        }
+      } else if (tab === 'class') {
+        if (AppState.currentTab === 'class') {
+          toggleClassSubmenu();
+          return;
+        } else {
+          AppState.classSubmenuOpen = true;
+        }
+      }
+      switchTab(tab);
     });
   });
 
@@ -665,12 +693,6 @@ function resetGlobalSearch() {
   showToast('검색어가 초기화되어 전체 목록으로 복원되었습니다.');
 }
 
-function resetTeacherFilters() {
-  AppState.teacherFilterType = 'all';
-  AppState.teacherFilterValue = 'all';
-  AppState.teacherChosungFilter = 'all';
-  resetGlobalSearch();
-}
 
 function resetClassFilters() {
   AppState.selectedGrade = 'all';
@@ -684,25 +706,38 @@ function executeGlobalSearch(query) {
 
   const results = searchEntities(q);
 
-  // Exact student name match
-  if (results.students && results.students.length > 0) {
-    const exactStudent = results.students.find(s => s.name === q);
-    if (exactStudent) {
-      AppState.searchQuery = '';
-      const searchInput = document.getElementById('globalSearchInput');
-      if (searchInput) searchInput.value = '';
-      const clearBtn = document.getElementById('globalSearchClearBtn');
-      if (clearBtn) clearBtn.style.display = 'none';
+  const exactStudent = (results.students && results.students.length > 0) ? results.students.find(s => s.name === q) : null;
+  const exactTeacher = (results.teachers && results.teachers.length > 0) ? results.teachers.find(t => t.name === q) : null;
 
-      navigateToStudent(exactStudent.id);
-      showToast(`🎓 ${exactStudent.className} ${exactStudent.name} 학생 시간표로 이동했습니다.`);
-      closeSearchDropdown();
-      return;
-    }
+  // Prioritize teacher if on teacher tab or if no student match
+  if (exactTeacher && (!exactStudent || AppState.currentTab === 'teacher')) {
+    AppState.searchQuery = '';
+    const searchInput = document.getElementById('globalSearchInput');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    navigateToTeacher(exactTeacher.name);
+    showToast(`👨‍🏫 ${exactTeacher.name} 선생님 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
   }
 
-  // Exact teacher name match
-  const exactTeacher = results.teachers.find(t => t.name === q);
+  // Exact student name match
+  if (exactStudent) {
+    AppState.searchQuery = '';
+    const searchInput = document.getElementById('globalSearchInput');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('globalSearchClearBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    navigateToStudent(exactStudent.id);
+    showToast(`🎓 ${exactStudent.className} ${exactStudent.name} 학생 시간표로 이동했습니다.`);
+    closeSearchDropdown();
+    return;
+  }
+
+  // Exact teacher name match fallback (if student tab was active but user typed a unique teacher name)
   if (exactTeacher) {
     AppState.searchQuery = '';
     const searchInput = document.getElementById('globalSearchInput');
@@ -887,54 +922,52 @@ function renderTeacherView(container) {
     return;
   }
 
-  let filteredTeachers = AppState.data.teachers;
+  const allTeachers = AppState.data.teachers;
+  let filteredTeachers = [];
 
-  // Filter by Type
-  if (AppState.teacherFilterType === 'admin') {
-    const adminMembers = OFFICIAL_ADMIN_DEPTS[AppState.teacherFilterValue] || [];
-    filteredTeachers = filteredTeachers.filter(t => adminMembers.includes(t.name));
-  } else if (AppState.teacherFilterType === 'subject') {
-    const deptNames = OFFICIAL_DEPARTMENTS[AppState.teacherFilterValue] || [];
-    filteredTeachers = filteredTeachers.filter(t => deptNames.includes(t.name));
-  } else if (AppState.teacherFilterType === 'homeroom') {
-    filteredTeachers = filteredTeachers.filter(t => t.homeroom);
-  } else if (AppState.teacherFilterType === 'head') {
-    const headNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[0]);
-    filteredTeachers = filteredTeachers.filter(t => headNames.includes(t.name));
-  } else if (AppState.teacherFilterType === 'plan') {
-    const planNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[1]);
-    filteredTeachers = filteredTeachers.filter(t => planNames.includes(t.name));
-  }
+  const isChosungSelected = AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'none';
+  const isTypeSelected = AppState.teacherFilterType && AppState.teacherFilterType !== 'none';
 
-  // Chosung initial consonant filter
-  if (AppState.teacherChosungFilter !== 'all') {
-    filteredTeachers = filteredTeachers.filter(t => getChosung(t.name) === AppState.teacherChosungFilter);
-  }
-
-  // Global search filter
+  // Filter logic: Only display names if search query is active OR a category/chosung is selected
   if (AppState.searchQuery) {
-    filteredTeachers = filteredTeachers.filter(t => 
+    filteredTeachers = allTeachers.filter(t => 
       t.name.toLowerCase().includes(AppState.searchQuery) ||
       (t.homeroom && t.homeroom.toLowerCase().includes(AppState.searchQuery)) ||
       (getTeacherDepartment(t.name) && getTeacherDepartment(t.name).toLowerCase().includes(AppState.searchQuery)) ||
       (getTeacherAdminInfo(t.name) && getTeacherAdminInfo(t.name).label.toLowerCase().includes(AppState.searchQuery)) ||
       hasTeacherSubject(t, AppState.searchQuery)
     );
+  } else if (isChosungSelected || isTypeSelected) {
+    filteredTeachers = allTeachers;
+    if (AppState.teacherFilterType === 'admin') {
+      const adminMembers = OFFICIAL_ADMIN_DEPTS[AppState.teacherFilterValue] || [];
+      filteredTeachers = filteredTeachers.filter(t => adminMembers.includes(t.name));
+    } else if (AppState.teacherFilterType === 'subject') {
+      const deptNames = OFFICIAL_DEPARTMENTS[AppState.teacherFilterValue] || [];
+      filteredTeachers = filteredTeachers.filter(t => deptNames.includes(t.name));
+    } else if (AppState.teacherFilterType === 'homeroom') {
+      filteredTeachers = filteredTeachers.filter(t => t.homeroom);
+    } else if (AppState.teacherFilterType === 'head') {
+      const headNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[0]);
+      filteredTeachers = filteredTeachers.filter(t => headNames.includes(t.name));
+    } else if (AppState.teacherFilterType === 'plan') {
+      const planNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[1]);
+      filteredTeachers = filteredTeachers.filter(t => planNames.includes(t.name));
+    }
+
+    if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
+      filteredTeachers = filteredTeachers.filter(t => getChosung(t.name) === AppState.teacherChosungFilter);
+    }
+  } else {
+    // Both are 'none' initially: names are hidden to improve readability!
+    filteredTeachers = [];
   }
 
   // Universal Teacher Sorting (가나다순 / 부서별 부장-기획-가나다순)
   const sortAdminDept = (AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue !== 'all') ? AppState.teacherFilterValue : null;
   filteredTeachers = sortTeachersList(filteredTeachers, sortAdminDept);
 
-  let currentTeacher = null;
-  if (AppState.searchQuery && filteredTeachers.length > 0) {
-    currentTeacher = filteredTeachers.find(t => t.id === AppState.selectedTeacherId) || filteredTeachers[0];
-  } else {
-    currentTeacher = AppState.data.teachers.find(t => t.id === AppState.selectedTeacherId) || filteredTeachers[0];
-  }
-  if (!currentTeacher && AppState.data.teachers.length > 0) {
-    currentTeacher = AppState.data.teachers[0];
-  }
+  let currentTeacher = allTeachers.find(t => t.id === AppState.selectedTeacherId) || allTeachers[0];
   if (currentTeacher) {
     AppState.selectedTeacherId = currentTeacher.id;
   }
@@ -955,7 +988,7 @@ function renderTeacherView(container) {
     // 1. Top Controls Bar (Compact Title & Actions)
     html += `
       <div class="control-card" style="margin-bottom: 0.85rem; padding: 0.85rem 1.15rem;">
-        <div class="control-header" style="margin-bottom: 0;">
+        <div class="control-header" style="margin-bottom: 0; flex-wrap: wrap; gap: 0.75rem;">
           <div class="control-title" style="font-size: 1.15rem;">
             <span>👨‍🏫</span>
             <span><strong>${currentTeacher.name}</strong> 선생님 시간표</span>
@@ -965,6 +998,9 @@ function renderTeacherView(container) {
             </button>
           </div>
           <div class="control-tools">
+            <button type="button" class="btn ${AppState.teacherSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleTeacherSubmenu()" title="교사 선택 및 부서/초성 메뉴 펼치기/접기">
+              ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 교사 선택 / 목록 펼치기 ▾'}
+            </button>
             <div class="view-mode-switcher">
               <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
                 📱 요일별 카드
@@ -995,6 +1031,92 @@ function renderTeacherView(container) {
           </div>
         ` : ''}
       </div>
+
+      <!-- Collapsible Teacher Selector & Filter Submenu Drawer -->
+      ${AppState.teacherSubmenuOpen ? `
+        <div class="control-card teacher-submenu-drawer" id="teacherSubmenuDrawer" style="margin-bottom: 1.25rem;">
+          <div class="control-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.65rem; margin-bottom: 0.75rem;">
+            <div class="control-title">
+              <span>👥</span>
+              <span>교사 선택 (부서·초성별 명단)</span>
+              ${filteredTeachers.length > 0 ? `<span class="chip-badge">${filteredTeachers.length}명</span>` : ''}
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="toggleTeacherSubmenu()" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+              ▲ 닫기
+            </button>
+          </div>
+
+          <!-- Filter Group Tabs -->
+          <div class="grade-tabs" style="margin-bottom: 0.65rem;">
+            <button class="grade-tab-btn ${AppState.teacherFilterType === 'all' || AppState.teacherChosungFilter === 'all' ? 'active' : ''}" onclick="resetTeacherFilters()">
+              전체 교사 (${allTeachers.length}명)
+            </button>
+            <button class="grade-tab-btn ${AppState.teacherFilterType === 'head' ? 'active' : ''}" onclick="setTeacherFilter('head', 'head')">
+              👑 부장단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
+            </button>
+            <button class="grade-tab-btn ${AppState.teacherFilterType === 'plan' ? 'active' : ''}" onclick="setTeacherFilter('plan', 'plan')">
+              📝 기획단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
+            </button>
+            <button class="grade-tab-btn ${AppState.teacherFilterType === 'homeroom' ? 'active' : ''}" onclick="setTeacherFilter('homeroom', 'homeroom')">
+              🏫 담임교사 (20명)
+            </button>
+          </div>
+
+          <!-- Administrative & Subject Department Tabs -->
+          <div style="display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.45rem; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">🏢 업무부서:</span>
+            ${Object.keys(OFFICIAL_ADMIN_DEPTS).map(dept => `
+              <button class="preset-category-btn badge-admin-${dept} ${AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('admin', '${dept}')">
+                ${ADMIN_DEPT_ICONS[dept] || ''} ${formatAdminShort(dept)}
+              </button>
+            `).join('')}
+          </div>
+
+          <div style="display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.45rem; margin-bottom: 0.65rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">📚 교과부서:</span>
+            ${Object.keys(OFFICIAL_DEPARTMENTS).map(dept => `
+              <button class="preset-category-btn badge-subj-${dept} ${AppState.teacherFilterType === 'subject' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('subject', '${dept}')">
+                ${DEPT_ICONS[dept] || ''} ${formatSubjShort(dept)}
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Chosung Filter Bar -->
+          <div class="chosung-filter-bar">
+            ${CHOSUNG_LIST.map(ch => `
+              <button class="chosung-btn ${AppState.teacherChosungFilter === ch ? 'active' : ''}" onclick="setTeacherChosung('${ch}')">
+                ${ch === 'all' ? '전체' : ch}
+              </button>
+            `).join('')}
+          </div>
+          
+          <!-- Teacher Chips or Empty State Hint -->
+          ${filteredTeachers.length > 0 ? `
+            <div class="chips-group expanded" style="margin-top: 0.75rem;">
+              ${filteredTeachers.map(t => {
+                const dept = getTeacherDepartment(t.name);
+                const subj = getTeacherSubject(t.name);
+                const admin = getTeacherAdminInfo(t.name);
+                return `
+                  <button class="chip-btn ${t.id === AppState.selectedTeacherId ? 'active' : ''}" onclick="selectTeacher('${t.id}')">
+                    ${t.name}
+                    ${admin && admin.isHead ? `<span class="role-badge-head">부장</span>` : ''}
+                    ${admin && admin.isPlan ? `<span class="role-badge-plan">기획</span>` : ''}
+                    ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
+                    ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
+                    ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          ` : `
+            <div class="chosung-hint-box">
+              <span style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem;">👆</span>
+              <span>위의 <strong>'전체 교사'</strong> 또는 찾으시는 교사의 <strong>'초성(ㄱ, ㄴ, ㄷ...)'</strong>이나 <strong>'부서'</strong>를 누르시면 교사 명단이 나타납니다.</span>
+            </div>
+          `}
+        </div>
+      ` : ''}
 
       <!-- 2. TEACHER LIVE HERO STATUS & CURRENT LOCATION CARD (JEIL SANGDAN!) -->
       ${renderTeacherLiveHeroCard(currentTeacher, todayName, state, now, liveStatus)}
@@ -1057,92 +1179,15 @@ function renderTeacherView(container) {
 
       <!-- 4. Teacher Timetable (Card View or Table View) -->
       ${AppState.viewMode === 'card' ? renderTeacherCardView(currentTeacher, todayName, liveStatus) : renderTeacherTableView(currentTeacher, todayName, liveStatus)}
+
+      <!-- 5. Bottom quick toggle button -->
+      <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
+          ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 다른 교사 찾기 / 부서·초성별 목록 펼치기 ▾'}
+        </button>
+      </div>
     `;
   }
-
-  // 5. Teacher Selector & Filter Card (초성별/부서별 메뉴 - 시간표 아래 배치)
-  html += `
-    <div class="control-card" style="margin-top: 1.5rem;">
-      <div class="control-header">
-        <div class="control-title">
-          <span>👥</span>
-          <span>다른 교사 찾기 / 부서·초성별 전체 교사 목록</span>
-          <span class="chip-badge">${filteredTeachers.length}명</span>
-        </div>
-      </div>
-
-      <!-- Filter Group Tabs -->
-      <div class="grade-tabs" style="margin-bottom: 0.65rem;">
-        <button class="grade-tab-btn ${AppState.teacherFilterType === 'all' && !AppState.searchQuery && AppState.teacherChosungFilter === 'all' ? 'active' : ''}" onclick="resetTeacherFilters()">
-          전체 교사 (${allTeachers.length}명)
-        </button>
-        <button class="grade-tab-btn ${AppState.teacherFilterType === 'head' ? 'active' : ''}" onclick="setTeacherFilter('head', 'head')">
-          👑 부장단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
-        </button>
-        <button class="grade-tab-btn ${AppState.teacherFilterType === 'plan' ? 'active' : ''}" onclick="setTeacherFilter('plan', 'plan')">
-          📝 기획단 (${Object.keys(OFFICIAL_ADMIN_DEPTS).length}명)
-        </button>
-        <button class="grade-tab-btn ${AppState.teacherFilterType === 'homeroom' ? 'active' : ''}" onclick="setTeacherFilter('homeroom', 'homeroom')">
-          🏫 담임교사 (20명)
-        </button>
-      </div>
-
-      <!-- Administrative & Subject Department Tabs -->
-      <div style="display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.45rem; margin-bottom: 0.5rem;">
-        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">🏢 업무부서:</span>
-        ${Object.keys(OFFICIAL_ADMIN_DEPTS).map(dept => `
-          <button class="preset-category-btn badge-admin-${dept} ${AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('admin', '${dept}')">
-            ${ADMIN_DEPT_ICONS[dept] || ''} ${formatAdminShort(dept)}
-          </button>
-        `).join('')}
-      </div>
-
-      <div style="display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.45rem; margin-bottom: 0.65rem;">
-        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; white-space: nowrap;">📚 교과부서:</span>
-        ${Object.keys(OFFICIAL_DEPARTMENTS).map(dept => `
-          <button class="preset-category-btn badge-subj-${dept} ${AppState.teacherFilterType === 'subject' && AppState.teacherFilterValue === dept ? 'active' : ''}" onclick="setTeacherFilter('subject', '${dept}')">
-            ${DEPT_ICONS[dept] || ''} ${formatSubjShort(dept)}
-          </button>
-        `).join('')}
-      </div>
-
-      <!-- Chosung Filter Bar -->
-      <div class="chosung-filter-bar">
-        ${CHOSUNG_LIST.map(ch => `
-          <button class="chosung-btn ${AppState.teacherChosungFilter === ch ? 'active' : ''}" onclick="setTeacherChosung('${ch}')">
-            ${ch === 'all' ? '전체 초성' : ch}
-          </button>
-        `).join('')}
-      </div>
-      
-      <!-- Teacher Chips -->
-      <div class="chips-group ${AppState.teacherChipsExpanded ? 'expanded' : ''}">
-        ${filteredTeachers.map(t => {
-          const dept = getTeacherDepartment(t.name);
-          const subj = getTeacherSubject(t.name);
-          const admin = getTeacherAdminInfo(t.name);
-          return `
-            <button class="chip-btn ${t.id === AppState.selectedTeacherId ? 'active' : ''}" onclick="selectTeacher('${t.id}')">
-              ${t.name}
-              ${admin && admin.isHead ? `<span class="role-badge-head">부장</span>` : ''}
-              ${admin && admin.isPlan ? `<span class="role-badge-plan">기획</span>` : ''}
-              ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
-              ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
-              ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
-            </button>
-          `;
-        }).join('')}
-      </div>
-
-      ${filteredTeachers.length > 18 ? `
-        <div style="text-align: center; margin-top: 0.5rem;">
-          <button class="btn btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.75rem;" onclick="toggleTeacherChipsExpanded()">
-            ${AppState.teacherChipsExpanded ? '▲ 교사 목록 접기' : '▼ 전체 교사 목록 펼쳐보기 (' + filteredTeachers.length + '명)'}
-          </button>
-        </div>
-      ` : ''}
-    </div>
-  `;
 
   container.innerHTML = html;
 }
@@ -1874,14 +1919,52 @@ function setMobileDay(day) {
   renderApp();
 }
 
+function toggleTeacherSubmenu() {
+  AppState.teacherSubmenuOpen = !AppState.teacherSubmenuOpen;
+  renderApp();
+  if (AppState.teacherSubmenuOpen) {
+    const el = document.getElementById('teacherSubmenuDrawer');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
 function setTeacherFilter(type, val) {
-  AppState.teacherFilterType = type;
-  AppState.teacherFilterValue = val;
+  if (AppState.teacherFilterType === type && AppState.teacherFilterValue === val) {
+    AppState.teacherFilterType = 'none';
+    AppState.teacherFilterValue = 'none';
+  } else {
+    AppState.teacherFilterType = type;
+    AppState.teacherFilterValue = val;
+    AppState.teacherChosungFilter = 'none';
+  }
   renderApp();
 }
 
 function setTeacherChosung(ch) {
-  AppState.teacherChosungFilter = ch;
+  if (AppState.teacherChosungFilter === ch) {
+    AppState.teacherChosungFilter = 'none';
+  } else {
+    AppState.teacherChosungFilter = ch;
+    AppState.teacherFilterType = 'none';
+  }
+  renderApp();
+}
+
+function resetTeacherFilters() {
+  if (AppState.teacherFilterType === 'all' || AppState.teacherChosungFilter === 'all') {
+    AppState.teacherFilterType = 'none';
+    AppState.teacherFilterValue = 'none';
+    AppState.teacherChosungFilter = 'none';
+  } else {
+    AppState.teacherFilterType = 'all';
+    AppState.teacherFilterValue = 'all';
+    AppState.teacherChosungFilter = 'all';
+  }
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
   renderApp();
 }
 
@@ -1892,6 +1975,7 @@ function toggleTeacherChipsExpanded() {
 
 function selectTeacher(id) {
   AppState.selectedTeacherId = id;
+  AppState.teacherSubmenuOpen = false; // Close submenu on selection so timetable is right at top!
   renderApp();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1901,6 +1985,7 @@ function navigateToTeacher(teacherName) {
   const teacher = AppState.data.teachers.find(t => t.name === teacherName);
   if (teacher) {
     AppState.selectedTeacherId = teacher.id;
+    AppState.teacherSubmenuOpen = false; // Close submenu on navigation
     switchTab('teacher');
   }
 }
@@ -1956,15 +2041,23 @@ function renderClassView(container) {
   const todayName = getTodayDayName();
 
   let html = `
-    <!-- Class Selector Card -->
-    <div class="control-card">
-      <div class="control-header">
-        <div class="control-title">
+    <!-- Class Top Controls Bar (Compact) -->
+    <div class="control-card" style="margin-bottom: 0.85rem; padding: 0.85rem 1.15rem;">
+      <div class="control-header" style="margin-bottom: 0; flex-wrap: wrap; gap: 0.75rem;">
+        <div class="control-title" style="font-size: 1.15rem;">
           <span>🏫</span>
-          <span>학반 선택</span>
-          <span class="chip-badge">${filteredClasses.length}개 반</span>
+          <span><strong>${currentClass ? currentClass.name : '학반'}</strong> 시간표</span>
+          ${currentClass && currentClass.homeroom ? `<span class="chip-badge">담임: ${currentClass.homeroom} 선생님</span>` : ''}
+          ${currentClass ? `
+            <button class="icon-btn" onclick="toggleFavorite('${currentClass.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
+              ${isFavorite ? '⭐' : '☆'}
+            </button>
+          ` : ''}
         </div>
         <div class="control-tools">
+          <button type="button" class="btn ${AppState.classSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleClassSubmenu()" title="학반 선택 메뉴 펼치기/접기">
+            ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 다른 학반 선택 ▾'}
+          </button>
           <div class="view-mode-switcher">
             <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
               📱 요일별 카드
@@ -1984,7 +2077,7 @@ function renderClassView(container) {
 
       <!-- Search Active Indicator & Reset Button -->
       ${AppState.searchQuery ? `
-        <div class="search-result-banner">
+        <div class="search-result-banner" style="margin-top: 0.75rem;">
           <div class="search-result-info">
             <span>🔍</span>
             <span>'<strong>${escapeHtml(AppState.searchQuery)}</strong>' 검색 결과 (<strong>${filteredClasses.length}개 반</strong>)</span>
@@ -1994,24 +2087,40 @@ function renderClassView(container) {
           </button>
         </div>
       ` : ''}
-
-      <!-- Grade Tabs -->
-      <div class="grade-tabs">
-        <button class="grade-tab-btn ${AppState.selectedGrade === 'all' && !AppState.searchQuery ? 'active' : ''}" onclick="resetClassFilters()">전체 학년</button>
-        <button class="grade-tab-btn ${AppState.selectedGrade === '1' ? 'active' : ''}" onclick="selectGrade('1')">1학년</button>
-        <button class="grade-tab-btn ${AppState.selectedGrade === '2' ? 'active' : ''}" onclick="selectGrade('2')">2학년</button>
-        <button class="grade-tab-btn ${AppState.selectedGrade === '3' ? 'active' : ''}" onclick="selectGrade('3')">3학년</button>
-      </div>
-
-      <div class="chips-group">
-        ${filteredClasses.map(c => `
-          <button class="chip-btn ${c.id === AppState.selectedClassId ? 'active' : ''}" onclick="selectClass('${c.id}')">
-            ${c.name}
-            ${c.homeroom ? `<span class="chip-badge">${c.homeroom}</span>` : ''}
-          </button>
-        `).join('')}
-      </div>
     </div>
+
+    <!-- Collapsible Class Selector Drawer -->
+    ${AppState.classSubmenuOpen ? `
+      <div class="control-card submenu-drawer class-submenu-drawer" id="classSelectorDrawer" style="margin-bottom: 1.25rem;">
+        <div class="control-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.65rem; margin-bottom: 0.75rem;">
+          <div class="control-title">
+            <span>🏫</span>
+            <span>학반 선택</span>
+            <span class="chip-badge">${filteredClasses.length}개 반</span>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="toggleClassSubmenu()" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+            ▲ 닫기
+          </button>
+        </div>
+
+        <!-- Grade Tabs -->
+        <div class="grade-tabs" style="margin-bottom: 0.65rem;">
+          <button class="grade-tab-btn ${AppState.selectedGrade === 'all' && !AppState.searchQuery ? 'active' : ''}" onclick="resetClassFilters()">전체 학년</button>
+          <button class="grade-tab-btn ${AppState.selectedGrade === '1' ? 'active' : ''}" onclick="selectGrade('1')">1학년</button>
+          <button class="grade-tab-btn ${AppState.selectedGrade === '2' ? 'active' : ''}" onclick="selectGrade('2')">2학년</button>
+          <button class="grade-tab-btn ${AppState.selectedGrade === '3' ? 'active' : ''}" onclick="selectGrade('3')">3학년</button>
+        </div>
+
+        <div class="chips-group">
+          ${filteredClasses.map(c => `
+            <button class="chip-btn ${c.id === AppState.selectedClassId ? 'active' : ''}" onclick="selectClass('${c.id}')">
+              ${c.name}
+              ${c.homeroom ? `<span class="chip-badge">${c.homeroom}</span>` : ''}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
   `;
 
   if (currentClass) {
@@ -2060,6 +2169,15 @@ function renderClassView(container) {
     } else {
       html += renderClassTableView(currentClass, todayName);
     }
+
+    html += `
+      <!-- Bottom Quick Navigation Toggle -->
+      <div style="text-align: center; margin: 1.75rem 0 0.5rem 0;">
+        <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleClassSubmenu();" style="font-size: 0.92rem; padding: 0.6rem 1.4rem; border-radius: 9999px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+          ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 다른 학반 선택하기 ▾'}
+        </button>
+      </div>
+    `;
   }
 
   container.innerHTML = html;
@@ -2285,6 +2403,15 @@ function renderClassTableView(classObj, todayName) {
   `;
 }
 
+function toggleClassSubmenu() {
+  AppState.classSubmenuOpen = !AppState.classSubmenuOpen;
+  renderApp();
+  if (AppState.classSubmenuOpen) {
+    const el = document.getElementById('classSelectorDrawer');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
 function selectGrade(grade) {
   AppState.selectedGrade = grade;
   renderApp();
@@ -2292,7 +2419,9 @@ function selectGrade(grade) {
 
 function selectClass(id) {
   AppState.selectedClassId = id;
+  AppState.classSubmenuOpen = false; // Close drawer on selection
   renderApp();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function navigateToClass(className) {
@@ -2300,7 +2429,9 @@ function navigateToClass(className) {
   const cls = AppState.data.classes.find(c => c.name === className);
   if (cls) {
     AppState.selectedClassId = cls.id;
+    AppState.classSubmenuOpen = false; // Close drawer on navigation
     switchTab('class');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
@@ -2324,8 +2455,16 @@ function getFilteredStudentsList() {
   if (!AppState.data || !AppState.data.students) return [];
   const all = AppState.data.students;
 
-  // 1. Grade filter
+  const q = (AppState.studentSearchQuery || '').trim().toLowerCase();
+
+  // If no search query and chosung is 'none' and no grade/class filter selected, return empty list initially!
+  if (!q && (AppState.studentChosung === 'none' || !AppState.studentChosung) && AppState.studentSelectedGrade === 'all' && AppState.studentSelectedClass === 'all') {
+    return [];
+  }
+
   let list = all;
+
+  // 1. Grade filter
   if (AppState.studentSelectedGrade !== 'all') {
     const g = parseInt(AppState.studentSelectedGrade, 10);
     list = list.filter(s => s.grade === g);
@@ -2338,12 +2477,11 @@ function getFilteredStudentsList() {
   }
 
   // 3. Chosung filter
-  if (AppState.studentChosung !== 'all') {
+  if (AppState.studentChosung && AppState.studentChosung !== 'all' && AppState.studentChosung !== 'none') {
     list = list.filter(s => getChosung(s.name) === AppState.studentChosung);
   }
 
   // 4. Search Query filter
-  const q = (AppState.studentSearchQuery || '').trim().toLowerCase();
   if (q) {
     list = list.filter(s => {
       const chosung = getChosung(s.name);
@@ -2363,9 +2501,18 @@ function getFilteredStudentsList() {
 
 function renderStudentChipsHtml(filtered, currentStudent, nameToCount) {
   if (filtered.length === 0) {
+    const q = (AppState.studentSearchQuery || '').trim();
+    if (q) {
+      return `
+        <div style="padding: 1.25rem 1rem; color: var(--text-muted); font-size: 0.88rem; text-align: center; width: 100%;">
+          '${escapeHtml(q)}' 검색 조건에 맞는 학생이 없습니다.
+        </div>
+      `;
+    }
     return `
-      <div style="padding: 0.75rem 1rem; color: var(--text-muted); font-size: 0.85rem; text-align: center; width: 100%;">
-        검색 조건에 맞는 학생이 없습니다.
+      <div class="chosung-hint-box" style="width: 100%; margin: 0.5rem 0;">
+        <span style="font-size: 1.1rem; display: block; margin-bottom: 0.25rem;">👆</span>
+        <span>위의 <strong>'전체'</strong>, 특정 <strong>'학년/학반'</strong> 또는 <strong>'초성(ㄱ, ㄴ, ㄷ...)'</strong>을 클릭하시면 학생 목록이 표시됩니다.</span>
       </div>
     `;
   }
@@ -2559,6 +2706,9 @@ function renderStudentView(container) {
           </div>
 
           <div class="student-sub-toolbar">
+            <button type="button" class="btn ${AppState.studentSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleStudentSubmenu()" title="학생 목록 및 학반/초성 필터 펼치기/접기">
+              ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 / 학반·초성 필터 ▾'}
+            </button>
             <div class="view-mode-toggle">
               <button type="button" class="toggle-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')" title="카드 뷰">
                 📱 카드
@@ -2572,6 +2722,60 @@ function renderStudentView(container) {
       </div>
     </div>
 
+    <!-- Collapsible Student Catalog & Filter Card (펼침/접힘 드로어) -->
+    ${AppState.studentSubmenuOpen ? `
+      <div class="control-card student-control-card student-submenu-drawer" id="studentSelectorCard" style="margin-bottom: 1.25rem;">
+        <div class="control-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.65rem; margin-bottom: 0.75rem;">
+          <div class="control-title">
+            <span>👥</span>
+            <span>학생 선택 (학반·초성별 전체 학생 목록)</span>
+            ${filtered.length > 0 ? `<span id="studentCountBadge" class="chip-badge">${filtered.length}명</span>` : ''}
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="toggleStudentSubmenu()" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+            ▲ 닫기
+          </button>
+        </div>
+
+        <!-- Grade Filter Tabs -->
+        <div class="student-grade-tabs-wrapper">
+          <div class="student-grade-tabs">
+            <button type="button" class="student-grade-btn ${AppState.studentSelectedGrade === 'all' ? 'active' : ''}" onclick="setStudentGradeFilter('all')">
+              <span>전체 (${allStudents.length})</span>
+            </button>
+            <button type="button" class="student-grade-btn grade-1 ${AppState.studentSelectedGrade === '1' ? 'active' : ''}" onclick="setStudentGradeFilter('1')">
+              <span>🌱 1학년 (${g1Count})</span>
+            </button>
+            <button type="button" class="student-grade-btn grade-2 ${AppState.studentSelectedGrade === '2' ? 'active' : ''}" onclick="setStudentGradeFilter('2')">
+              <span>🌿 2학년 (${g2Count})</span>
+            </button>
+            <button type="button" class="student-grade-btn grade-3 ${AppState.studentSelectedGrade === '3' ? 'active' : ''}" onclick="setStudentGradeFilter('3')">
+              <span>🌳 3학년 (${g3Count})</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Class Filter Chips -->
+        <div class="student-class-chips-wrapper">
+          <div class="student-class-chips">
+            ${classButtonsHtml}
+          </div>
+        </div>
+
+        <!-- Chosung Fast Filter Buttons -->
+        <div class="chosung-filter" style="margin-top: 0.5rem;">
+          ${CHOSUNG_LIST.map(ch => `
+            <button type="button" class="chosung-btn ${AppState.studentChosung === ch ? 'active' : ''}" onclick="setStudentChosung('${ch}')">
+              ${ch === 'all' ? '전체' : ch}
+            </button>
+          `).join('')}
+        </div>
+
+        <div id="studentChipsContainer" class="student-chips-container" style="margin-top: 0.75rem;">
+          ${renderStudentChipsHtml(filtered, currentStudent, nameToCount)}
+        </div>
+      </div>
+    ` : ''}
+
     <!-- 1. Duplicate Student Alert Container (동명이인 안내) -->
     <div id="duplicateAlertContainer">
       ${renderDuplicateAlertHtml(filtered, currentStudent, nameToCount, AppState.studentSearchQuery)}
@@ -2582,63 +2786,11 @@ function renderStudentView(container) {
       ${renderStudentDetailAreaHtml(currentStudent, todayName, state, now)}
     </div>
 
-    <!-- 3. Student Catalog & Filter Card (초성/학반별 학생 목록 - 시간표 아래 배치) -->
-    <div class="control-card student-control-card" style="margin-top: 1.5rem;">
-      <div class="control-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-        <div class="control-title">
-          <span>👥</span>
-          <span>다른 학생 찾기 / 학반·초성별 전체 학생 목록</span>
-          <span id="studentCountBadge" class="chip-badge">${filtered.length}명</span>
-        </div>
-      </div>
-
-      <!-- Grade Filter Tabs -->
-      <div class="student-grade-tabs-wrapper">
-        <div class="student-grade-tabs">
-          <button type="button" class="student-grade-btn ${AppState.studentSelectedGrade === 'all' ? 'active' : ''}" onclick="setStudentGradeFilter('all')">
-            <span>전체 (${allStudents.length})</span>
-          </button>
-          <button type="button" class="student-grade-btn grade-1 ${AppState.studentSelectedGrade === '1' ? 'active' : ''}" onclick="setStudentGradeFilter('1')">
-            <span>🌱 1학년 (${g1Count})</span>
-          </button>
-          <button type="button" class="student-grade-btn grade-2 ${AppState.studentSelectedGrade === '2' ? 'active' : ''}" onclick="setStudentGradeFilter('2')">
-            <span>🌿 2학년 (${g2Count})</span>
-          </button>
-          <button type="button" class="student-grade-btn grade-3 ${AppState.studentSelectedGrade === '3' ? 'active' : ''}" onclick="setStudentGradeFilter('3')">
-            <span>🌳 3학년 (${g3Count})</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Class Filter Chips -->
-      <div class="student-class-chips-wrapper">
-        <div class="student-class-chips">
-          ${classButtonsHtml}
-        </div>
-      </div>
-
-      <!-- Chosung Fast Filter Buttons -->
-      <div class="chosung-filter" style="margin-top: 0.5rem;">
-        ${CHOSUNG_LIST.map(ch => `
-          <button type="button" class="chosung-btn ${AppState.studentChosung === ch ? 'active' : ''}" onclick="setStudentChosung('${ch}')">
-            ${ch === 'all' ? '전체' : ch}
-          </button>
-        `).join('')}
-      </div>
-
-      <!-- Search Results Header & Chips Container -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; margin-bottom: 0.35rem;">
-        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">
-          학생 선택:
-        </span>
-        <span style="font-size: 0.75rem; color: var(--text-muted);">
-          학생을 클릭하면 상단에 실시간 위치와 시간표가 표시됩니다.
-        </span>
-      </div>
-
-      <div id="studentChipsContainer" class="student-chips-container">
-        ${renderStudentChipsHtml(filtered, currentStudent, nameToCount)}
-      </div>
+    <!-- 3. Bottom Quick Toggle Button -->
+    <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+      <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
+        ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 다른 학생 찾기 / 학반·초성 목록 펼치기 ▾'}
+      </button>
     </div>
   `;
 
@@ -3287,57 +3439,28 @@ function setStudentClassFilter(classNum) {
   renderApp();
 }
 
+function toggleStudentSubmenu() {
+  AppState.studentSubmenuOpen = !AppState.studentSubmenuOpen;
+  renderApp();
+  if (AppState.studentSubmenuOpen) {
+    const el = document.getElementById('studentSelectorCard');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
 function setStudentChosung(ch) {
-  AppState.studentChosung = ch;
+  if (AppState.studentChosung === ch) {
+    AppState.studentChosung = 'none';
+  } else {
+    AppState.studentChosung = ch;
+  }
   renderApp();
 }
 
 function selectStudent(studentId) {
   AppState.selectedStudentId = studentId;
-  const allStudents = AppState.data.students || [];
-  const currentStudent = allStudents.find(s => s.id === studentId);
-  if (!currentStudent) return;
-
-  // 1. Update chips active state
-  document.querySelectorAll('.student-chip').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(studentId));
-  });
-
-  // 2. Update duplicate alert buttons active state
-  document.querySelectorAll('.duplicate-choice-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(studentId));
-  });
-
-  // 3. Update timetable detail area without touching the search input!
-  const detailArea = document.getElementById('studentTimetableDetailArea');
-  if (detailArea) {
-    const now = new Date();
-    let state = getActivePeriodState(now);
-    let todayName = state.todayDayName;
-
-    if (AppState.studentSimTime && AppState.studentSimTime !== 'real') {
-      const simParts = AppState.studentSimTime.split('_');
-      if (simParts.length === 2) {
-        todayName = simParts[0];
-        const pNum = parseInt(simParts[1], 10);
-        const bInfo = AppState.bellSchedule.find(b => b.period === pNum);
-        state = {
-          todayDayName: todayName,
-          activePeriod: pNum,
-          isLunchTime: false,
-          isBreakTime: false,
-          nextPeriod: pNum < 7 ? pNum + 1 : null,
-          statusText: `[시뮬레이션 모드] ${todayName}요일 ${pNum}교시 (${bInfo ? `${bInfo.start}~${bInfo.end}` : ''})`,
-          statusBadgeClass: 'status-active',
-          isWeekday: true,
-          curTime: bInfo ? bInfo.start : '09:00'
-        };
-      }
-    }
-    detailArea.innerHTML = renderStudentDetailAreaHtml(currentStudent, todayName, state, now);
-  }
-
-  // Smooth scroll to top where the live hero card is!
+  AppState.studentSubmenuOpen = false; // Close submenu on selection so timetable is right at top!
+  renderApp();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -3349,6 +3472,7 @@ function setStudentSimTime(val) {
 function navigateToStudent(studentId) {
   AppState.selectedStudentId = studentId;
   AppState.studentSearchQuery = '';
+  AppState.studentSubmenuOpen = false;
   switchTab('student');
 }
 
