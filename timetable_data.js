@@ -108539,7 +108539,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "학평(1,2,3)\n친목회 회식\n학부모 상담주간",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-03-25",
@@ -108827,7 +108827,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-04-28",
@@ -108839,7 +108839,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-04-29",
@@ -108851,7 +108851,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-04-30",
@@ -108863,7 +108863,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-05-01",
@@ -108923,7 +108923,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "학평(3)\n교과목선택 캠프 사전검사(1학년)(1교시)",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-05-08",
@@ -109163,7 +109163,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "학평(1,2), 모평(3)\n학교홍보회의(3교시, 1층 회의실)<교감>\n방과후 회의 (5교시, 1층 회의실)<인문>",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-06-05",
@@ -109343,7 +109343,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-06-26",
@@ -109355,7 +109355,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-06-29",
@@ -109367,7 +109367,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사\n학업성적관리위원회의(08:30,1층회의실)(평가)",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-06-30",
@@ -109379,7 +109379,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-07-01",
@@ -109391,7 +109391,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사\n학업성적관리위원회의(10:30,1층회의실)(평가)\n방역실시 15시~",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "1학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-07-02",
@@ -109451,7 +109451,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "생활기록부 컨설팅(10시) 컨설턴트 본교방문\n학평(3)\n시교육청 박민섭 장학사 본교 방문(운동부 점검) 10시30분",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-07-09",
@@ -109931,7 +109931,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "학업성적관리위원회회의(08:00,1층회의실,평가계획 심의건)(평가)\n학평(1,2), 모평(3)\n방역(17:30)<행정실>",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-09-03",
@@ -110146,8 +110146,8 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "week": 7,
       "event": "배드민턴 전국체전 출정 인사(임시 교무회의)\n전문적 학습 공동체\n원안마감\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
       "isHoliday": false,
-      "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "isExam": false,
+      "examTitle": ""
     },
     {
       "date": "2026-09-29",
@@ -110279,7 +110279,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-10-14",
@@ -110291,7 +110291,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-10-15",
@@ -110303,7 +110303,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-10-16",
@@ -110315,7 +110315,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-10-19",
@@ -110327,7 +110327,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "1회고사\n방역(15:00)<행정실>",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 1회고사 (중간고사)"
+      "examTitle": "1회고사"
     },
     {
       "date": "2026-10-20",
@@ -110339,7 +110339,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "학평(1,2,3)\n성적이의신청기간(~26일)",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "전국연합학력평가 / 모의평가"
+      "examTitle": "학력평가"
     },
     {
       "date": "2026-10-21",
@@ -110590,8 +110590,8 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "week": 14,
       "event": "수능 예비소집",
       "isHoliday": false,
-      "isExam": true,
-      "examTitle": "대학수학능력시험"
+      "isExam": false,
+      "examTitle": ""
     },
     {
       "date": "2026-11-19",
@@ -110602,8 +110602,8 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "week": 14,
       "event": "대학수학능력시험일",
       "isHoliday": false,
-      "isExam": false,
-      "examTitle": ""
+      "isExam": true,
+      "examTitle": "대학수학능력시험"
     },
     {
       "date": "2026-11-20",
@@ -110747,7 +110747,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-12-08",
@@ -110759,7 +110759,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-12-09",
@@ -110771,7 +110771,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-12-10",
@@ -110783,7 +110783,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "마음챙김의 날\n2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-12-11",
@@ -110795,7 +110795,7 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "event": "2회고사",
       "isHoliday": false,
       "isExam": true,
-      "examTitle": "2학기 2회고사 (기말고사)"
+      "examTitle": "2회고사"
     },
     {
       "date": "2026-12-14",

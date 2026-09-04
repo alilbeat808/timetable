@@ -435,6 +435,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setInterval(updateLiveClock, 1000);
+
+  // Auto-sync Google Sheet in background on startup
+  setTimeout(() => {
+    if (typeof syncGoogleSheetCalendar === 'function') {
+      syncGoogleSheetCalendar(false);
+    }
+  }, 300);
+
+  // Auto-sync on window focus if > 5 minutes passed
+  window.addEventListener('focus', () => {
+    if (AppState.lastCalendarSyncTime && (Date.now() - AppState.lastCalendarSyncTime.getTime() > 5 * 60 * 1000)) {
+      if (typeof syncGoogleSheetCalendar === 'function') {
+        syncGoogleSheetCalendar(false);
+      }
+    }
+  });
+
+  // Auto-sync periodically every 15 minutes
+  setInterval(() => {
+    if (typeof syncGoogleSheetCalendar === 'function') {
+      syncGoogleSheetCalendar(false);
+    }
+  }, 15 * 60 * 1000);
 });
 
 function initTheme() {
@@ -5759,6 +5782,85 @@ function parseCSV(text) {
   return rows;
 }
 
+
+/* Department Color Palette & Badge Formatter */
+const ACADEMIC_KNOWN_DEPTS = {
+  '평가': { bg: '#fee2e2', text: '#b91c1c', border: '#fca5a5' },
+  '진로': { bg: '#dcfce7', text: '#15803d', border: '#86efac' },
+  '진학': { bg: '#ccfbf1', text: '#0f766e', border: '#5eead4' },
+  '진학부': { bg: '#ccfbf1', text: '#0f766e', border: '#5eead4' },
+  '행정실': { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
+  '행정': { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
+  '생활': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
+  '생안': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
+  '생안부': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
+  '정보': { bg: '#e0f2fe', text: '#0369a1', border: '#7dd3fc' },
+  '교무': { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
+  '교무부': { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
+  '연구': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
+  '학점': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
+  '과중': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
+  '영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
+  '과중,영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
+  '보건': { bg: '#fce7f3', text: '#be185d', border: '#f472b6' },
+  '도서관': { bg: '#fef9c3', text: '#854d0e', border: '#fde047' },
+  '방송부': { bg: '#fae8ff', text: '#a21caf', border: '#f0abfc' },
+  '1학년부': { bg: '#dbeafe', text: '#1d4ed8', border: '#93c5fd' },
+  '2학년부': { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
+  '3학년부': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
+  '3학년': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
+  '교장': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
+  '교감': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
+  '인문': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
+  '영어': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' }
+};
+
+const ACADEMIC_DYNAMIC_PALETTES = [
+  { bg: '#fee2e2', text: '#b91c1c', border: '#fca5a5' },
+  { bg: '#dcfce7', text: '#15803d', border: '#86efac' },
+  { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
+  { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
+  { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
+  { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
+  { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
+  { bg: '#fae8ff', text: '#a21caf', border: '#f0abfc' }
+];
+
+function getDepartmentStyleInfo(deptName) {
+  const clean = deptName.replace(/[<>()]/g, '').trim();
+  if (ACADEMIC_KNOWN_DEPTS[clean]) return { ...ACADEMIC_KNOWN_DEPTS[clean], name: clean };
+  let hash = 0;
+  for (let i = 0; i < clean.length; i++) hash = (hash * 31 + clean.charCodeAt(i)) & 0xffffffff;
+  const p = ACADEMIC_DYNAMIC_PALETTES[Math.abs(hash) % ACADEMIC_DYNAMIC_PALETTES.length];
+  return { ...p, name: clean };
+}
+
+function formatEventLineWithDeptBadges(line) {
+  let text = line;
+  const badges = [];
+
+  // Match angle brackets <부서>
+  text = text.replace(/<([^>]+)>/g, (m, g1) => {
+    const parts = g1.split(/[,/]/).map(x => x.trim()).filter(Boolean);
+    parts.forEach(p => badges.push(getDepartmentStyleInfo(p)));
+    return '';
+  });
+
+  // Match parenthesized known department keywords (평가, 행정실, etc.)
+  text = text.replace(/\((평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|연구|정보|도서관|방송부)\)/g, (m, g1) => {
+    badges.push(getDepartmentStyleInfo(g1));
+    return '';
+  });
+
+  text = text.trim();
+  const escapedText = escapeHtml(text);
+  const badgeHtml = badges.map(b => 
+    `<span class="calendar-dept-badge" data-dept="${escapeHtml(b.name)}" style="background:${b.bg}; color:${b.text}; border-color:${b.border};">${escapeHtml(b.name)}</span>`
+  ).join('');
+
+  return escapedText + badgeHtml;
+}
+
 function parseGoogleSheetCalendarCSV(csvText) {
   const rows = parseCSV(csvText);
   const calendarDays = [];
@@ -5833,18 +5935,25 @@ function parseGoogleSheetCalendarCSV(csvText) {
 
         let isExam = false;
         let examTitle = '';
-        if (eventRaw.includes('1회고사')) {
-          isExam = true;
-          examTitle = `${actualMonth <= 7 ? '1학기' : '2학기'} 1회고사 (중간고사)`;
-        } else if (eventRaw.includes('2회고사')) {
-          isExam = true;
-          examTitle = `${actualMonth <= 7 ? '1학기' : '2학기'} 2회고사 (기말고사)`;
-        } else if (eventRaw.includes('학평') || eventRaw.includes('모평')) {
-          isExam = true;
-          examTitle = '전국연합학력평가 / 모의평가';
-        } else if (eventRaw.includes('수능') && !eventRaw.includes('사진') && !eventRaw.includes('원서')) {
-          isExam = true;
-          examTitle = '대학수학능력시험';
+        const eventLines = eventRaw.split('\n').map(l => l.trim()).filter(Boolean);
+        for (const line of eventLines) {
+          if (line === '1회고사' || line.startsWith('1회고사(') || line.startsWith('1회고사 ')) {
+            isExam = true;
+            examTitle = '1회고사';
+            break;
+          } else if (line === '2회고사' || line.startsWith('2회고사(') || line.startsWith('2회고사 ')) {
+            isExam = true;
+            examTitle = '2회고사';
+            break;
+          } else if (line.startsWith('대학수학능력시험') || line === '수능시험') {
+            isExam = true;
+            examTitle = '대학수학능력시험';
+            break;
+          } else if (line.startsWith('학평') || line.startsWith('모평') || line.startsWith('모의평가') || line.startsWith('전국연합학력평가')) {
+            isExam = true;
+            examTitle = '학력평가';
+            break;
+          }
         }
 
         calendarDays.push({
@@ -5909,8 +6018,12 @@ async function syncGoogleSheetCalendar(isManual = false) {
     if (parsed && parsed.calendarDays && parsed.calendarDays.length > 0) {
       AppState.academicCalendar = parsed;
       AppState.lastCalendarSyncTime = new Date();
+      try {
+        localStorage.setItem('timetable_academic_calendar', JSON.stringify(parsed));
+        localStorage.setItem('timetable_calendar_sync_time', AppState.lastCalendarSyncTime.toISOString());
+      } catch (e) {}
       if (isManual) {
-        showToast('✅ 구글 시트 학사일정 동기화 완료! 최신 내용이 반영되었습니다.');
+        showToast('✅ 구글 시트 학사일정 실시간 동기화 완료!');
       }
       renderApp();
       return true;
@@ -6203,8 +6316,13 @@ function renderCalendarView(container) {
             </button>
           </div>
 
-          <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 즉시 가져옵니다">
-            🔄 구글 시트 동기화
+          <div class="sync-status-badge" title="구글 시트의 변경 내용이 자동으로 실시간 감지되어 반영됩니다">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+            실시간 자동 연동
+            <span style="font-size: 0.72rem; opacity: 0.85;">(${AppState.lastCalendarSyncTime ? '최근 ' + String(AppState.lastCalendarSyncTime.getHours()).padStart(2, '0') + ':' + String(AppState.lastCalendarSyncTime.getMinutes()).padStart(2, '0') : '연결됨'})</span>
+          </div>
+          <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 즉시 다시 가져옵니다">
+            🔄 지금 즉시 새로고침
           </button>
           <a class="btn btn-secondary" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
             🔗 시트 원본 열기
@@ -6219,7 +6337,7 @@ function renderCalendarView(container) {
       <div class="exam-dday-banner">
         <div class="exam-dday-card">
           <div class="exam-dday-info">
-            <span class="exam-dday-title">📝 2학기 1회고사 (중간고사)</span>
+            <span class="exam-dday-title">📝 2학기 1회고사</span>
             <span class="exam-dday-date">2026. 10. 13.(화) ~ 10. 19.(월)</span>
           </div>
           <span class="exam-dday-badge">${d1}</span>
@@ -6227,7 +6345,7 @@ function renderCalendarView(container) {
 
         <div class="exam-dday-card">
           <div class="exam-dday-info">
-            <span class="exam-dday-title">📝 2학기 2회고사 (기말고사)</span>
+            <span class="exam-dday-title">📝 2학기 2회고사</span>
             <span class="exam-dday-date">2026. 12. 07.(월) ~ 12. 11.(금)</span>
           </div>
           <span class="exam-dday-badge">${d2}</span>
@@ -6235,8 +6353,8 @@ function renderCalendarView(container) {
 
         <div class="exam-dday-card">
           <div class="exam-dday-info">
-            <span class="exam-dday-title">🎓 2027 대입 수능시험</span>
-            <span class="exam-dday-date">2026. 11. 19.(목) (예비소집 18일)</span>
+            <span class="exam-dday-title">🎓 2027 대학수학능력시험</span>
+            <span class="exam-dday-date">2026. 11. 19.(목) (예비소집 11. 18.)</span>
           </div>
           <span class="exam-dday-badge" style="background: #0ea5e9;">${dSuneung}</span>
         </div>
@@ -6334,13 +6452,12 @@ function renderCalendarYearView(cal) {
                 const dateStr = `${item.y}-${String(item.m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayEvent = monthEvents.find(d => d.date === dateStr);
                 const isHoliday = dayEvent && dayEvent.isHoliday;
-                const isExam = dayEvent && dayEvent.isExam;
                 const isToday = isCurMonth && (day === now.getDate());
                 const eventText = dayEvent && dayEvent.event ? dayEvent.event.replace(/\n/g, ' ') : '';
-                const tooltipTitle = escapeHtml(eventText ? `${item.m}월 ${day}일: ${eventText}` : `${item.m}월 ${day}일 (정규수업)`);
+                const tooltipTitle = escapeHtml(eventText ? `${item.m}월 ${day}일: ${eventText}` : `${item.m}월 ${day}일`);
 
                 return `
-                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${tooltipTitle}">
+                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" title="${tooltipTitle}">
                     ${day}
                   </span>
                 `;
@@ -6385,7 +6502,7 @@ function renderCalendarMonthView(cal) {
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
       <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(-1)">◀ 이전 달</button>
-        <select class="filter-select" style="font-weight: 700; font-size: 1rem; padding: 0.4rem 0.85rem;" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);">
+        <select class="filter-select calendar-month-select" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);">
           ${monthOptions.map(opt => `
             <option value="${opt.y}-${opt.m}" ${opt.y === y && opt.m === m ? 'selected' : ''}>
               ${opt.label}
@@ -6447,16 +6564,19 @@ function renderCalendarMonthView(cal) {
           </div>
 
           <div class="day-events-list">
-            ${isHoliday ? '<span class="calendar-event-pill pill-holiday">🌴 휴일</span>' : ''}
-            ${isExam ? `<span class="calendar-event-pill pill-exam">📝 ${dayEvent.examTitle || '시험/평가'}</span>` : ''}
             ${friChangche ? `
-              <span class="calendar-event-pill pill-changche" title="금 5~7교시 창체">
-                🎯 1:${friChangche.grade1[0]}·2:${friChangche.grade2[0]}·3:${friChangche.grade3[0]}
+              <span class="calendar-event-pill pill-changche" title="금 5~7교시 창체: 1학년 [${friChangche.grade1.join('/')}] · 2학년 [${friChangche.grade2.join('/')}] · 3학년 [${friChangche.grade3.join('/')}]">
+                🎯 창체 1:${friChangche.grade1[0]}·2:${friChangche.grade2[0]}·3:${friChangche.grade3[0]}
               </span>
             ` : ''}
-            ${dayEvent && dayEvent.event ? dayEvent.event.split('\n').filter(Boolean).map(e => `
-              <span class="calendar-event-pill pill-general" title="${escapeHtml(e)}">${escapeHtml(e)}</span>
-            `).join('') : ''}
+            ${dayEvent && dayEvent.event ? dayEvent.event.split('\n').map(l => l.trim()).filter(Boolean).map(e => {
+              const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+              return `
+                <span class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" title="${escapeHtml(e)}">
+                  ${formatEventLineWithDeptBadges(e)}
+                </span>
+              `;
+            }).join('') : ''}
           </div>
         </td>
       `;
@@ -6508,7 +6628,7 @@ function renderCalendarWeekView(cal) {
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem; margin-bottom: 1.25rem;">
       <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; max-width: 100%;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(-1)">◀ 이전 주</button>
-        <select class="filter-select" style="font-weight: 700; font-size: 0.92rem; padding: 0.4rem 0.75rem; max-width: 100%;" onchange="selectCalendarWeek(this.value)">
+        <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
               ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
@@ -6553,18 +6673,19 @@ function renderCalendarWeekView(cal) {
                 </div>
               ` : ''}
 
-              ${isExam ? `
-                <div class="calendar-event-pill pill-exam" style="padding:0.4rem 0.6rem;">
-                  📝 <strong>${dayEvt.examTitle || '시험/평가'}</strong>
-                </div>
-              ` : ''}
-
               <!-- Daily Events -->
               <div style="flex:1;">
                 <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem;">학사 행사 및 일정:</div>
                 ${dayEvt && dayEvt.event ? `
-                  <div style="font-size:0.85rem; color:var(--text-primary); line-height:1.5; white-space:pre-line;">
-                    ${escapeHtml(dayEvt.event)}
+                  <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                    ${dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean).map(e => {
+                      const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+                      return `
+                        <div class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
+                          ${formatEventLineWithDeptBadges(e)}
+                        </div>
+                      `;
+                    }).join('')}
                   </div>
                 ` : `
                   <span style="font-size:0.8rem; color:var(--text-muted);">정규 수업 일정</span>
@@ -6704,17 +6825,19 @@ function openCalendarDayDetailModal(dateStr) {
             </div>
           ` : ''}
 
-          ${dayEvt && dayEvt.isExam ? `
-            <div class="calendar-event-pill pill-exam" style="margin-bottom: 1rem; font-size: 0.9rem; padding: 0.5rem 0.8rem; text-align: center;">
-              📝 ${dayEvt.examTitle || '시험 / 평가'}
-            </div>
-          ` : ''}
-
           <div style="margin-bottom: 1.25rem;">
             <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem;">주요 학사 행사:</div>
             ${dayEvt && dayEvt.event ? `
-              <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); white-space: pre-line;">
-                ${escapeHtml(dayEvt.event)}
+              <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.5rem;">
+                ${dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+                  const isActualExam = (line === '1회고사' || line === '2회고사' || line.startsWith('대학수학능력시험') || line.startsWith('학평') || line.startsWith('모의평가'));
+                  return `
+                    <div style="display: flex; align-items: baseline; gap: 0.4rem;">
+                      <span style="color: ${isActualExam ? '#6366f1' : 'var(--primary)'}; font-weight: bold;">•</span>
+                      <span ${isActualExam ? 'style="font-weight:700; color:#4f46e5;"' : ''}>${formatEventLineWithDeptBadges(line)}</span>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             ` : `
               <div style="color: var(--text-muted); font-size: 0.88rem; font-style: italic;">별도의 특별 학사 일정이 없는 정규 일과일입니다.</div>
