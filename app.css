@@ -2507,6 +2507,11 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
+[data-theme="dark"] .teacher-live-hero-card {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%) !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+}
+
 .student-hero-header {
   display: flex;
   justify-content: space-between;
