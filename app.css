@@ -3344,43 +3344,47 @@ body {
     max-width: 38px !important;
   }
 
-  /* Table structure on mobile: table-layout fixed so column widths are strictly enforced */
+  /* Table structure on mobile: 100% width proportional layout with ZERO horizontal scroll */
   .matrix-container {
     max-height: 75vh !important;
     border-radius: var(--radius-sm) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    width: 100% !important;
   }
 
   .matrix-table {
     table-layout: fixed !important;
     width: 100% !important;
-    min-width: 356px !important;
+    min-width: unset !important;
+    max-width: 100% !important;
   }
 
-  /* Entity Column: 62px fixed */
+  /* Entity Column: 16% fixed width */
   .matrix-table th.entity-col,
   .matrix-table td.entity-col {
-    width: 62px !important;
-    min-width: 62px !important;
-    max-width: 62px !important;
-    padding: 0.3rem 0.2rem !important;
+    width: 16% !important;
+    min-width: unset !important;
+    max-width: 16% !important;
+    padding: 0.3rem 0.08rem !important;
     text-align: center !important;
     box-sizing: border-box !important;
   }
 
-  /* 7 Period Columns: 42px each -> 7 * 42 = 294px */
+  /* 7 Period Columns: 12% each -> 7 * 12% = 84% (16% + 84% = 100%) */
   .matrix-table th:not(.entity-col),
   .matrix-table td:not(.entity-col) {
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-    padding: 0.2rem 0.05rem !important;
+    width: 12% !important;
+    min-width: unset !important;
+    max-width: 12% !important;
+    padding: 0.2rem 0.03rem !important;
     box-sizing: border-box !important;
   }
 
   .matrix-table th:not(.entity-col) {
     font-size: 0.72rem !important;
-    padding: 0.4rem 0.05rem !important;
-    letter-spacing: -0.5px !important;
+    padding: 0.35rem 0.03rem !important;
+    letter-spacing: -0.6px !important;
   }
 
   /* Subject pill inside cell */
@@ -3510,5 +3514,111 @@ body {
     opacity: 1;
   }
 }
+
+/* ==========================================================================
+   Live Schedule Grade Separation Styles (v3.7)
+   ========================================================================== */
+.live-grade-section {
+  margin-bottom: 1.75rem;
+}
+
+.live-grade-section:last-child {
+  margin-bottom: 0.5rem;
+}
+
+.live-grade-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.live-grade-badge {
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.live-grade-badge-1 {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1.5px solid rgba(16, 185, 129, 0.35);
+}
+
+[data-theme="dark"] .live-grade-badge-1 {
+  background: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+}
+
+.live-grade-badge-2 {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  border: 1.5px solid rgba(59, 130, 246, 0.35);
+}
+
+[data-theme="dark"] .live-grade-badge-2 {
+  background: rgba(59, 130, 246, 0.25);
+  color: #60a5fa;
+}
+
+.live-grade-badge-3 {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+}
+
+[data-theme="dark"] .live-grade-badge-3 {
+  background: rgba(139, 92, 246, 0.25);
+  color: #a78bfa;
+}
+
+.live-grade-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Empty State Selection Card (v3.7)
+   ========================================================================== */
+.empty-selection-card {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--bg-surface);
+  border: 1.5px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  animation: fadeInSubmenu 0.25s ease-in-out;
+}
+
+.empty-selection-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.empty-selection-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-selection-desc {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  max-width: 480px;
+  margin: 0 auto 1.35rem auto;
+  line-height: 1.6;
+}
+
 
 

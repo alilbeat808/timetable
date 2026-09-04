@@ -344,8 +344,12 @@ function toggleTheme() {
 }
 
 function initDefaultSelections() {
+  // Keep selections null initially as requested: do not force-display any arbitrary teacher, class, or student
+  AppState.selectedTeacherId = null;
+  AppState.selectedClassId = null;
+  AppState.selectedStudentId = null;
+
   if (AppState.data && AppState.data.teachers && AppState.data.teachers.length > 0) {
-    AppState.selectedTeacherId = AppState.data.teachers[0].id;
     // Default meeting teachers preset: 교무기획부
     if (AppState.meetingSelectedTeachers.length === 0) {
       const gyoNames = OFFICIAL_ADMIN_DEPTS['교무기획부'];
@@ -355,9 +359,6 @@ function initDefaultSelections() {
       AppState.meetingActivePreset = 'admin_교무기획부';
       AppState.meetingActivePresetTitle = '교무기획부';
     }
-  }
-  if (AppState.data && AppState.data.classes && AppState.data.classes.length > 0) {
-    AppState.selectedClassId = AppState.data.classes[0].id;
   }
   
   const todayIdx = new Date().getDay();
@@ -967,16 +968,13 @@ function renderTeacherView(container) {
   const sortAdminDept = (AppState.teacherFilterType === 'admin' && AppState.teacherFilterValue !== 'all') ? AppState.teacherFilterValue : null;
   filteredTeachers = sortTeachersList(filteredTeachers, sortAdminDept);
 
-  let currentTeacher = allTeachers.find(t => t.id === AppState.selectedTeacherId) || allTeachers[0];
-  if (currentTeacher) {
-    AppState.selectedTeacherId = currentTeacher.id;
-  }
+  let currentTeacher = AppState.selectedTeacherId ? allTeachers.find(t => t.id === AppState.selectedTeacherId) : null;
 
   const now = new Date();
   const state = getActivePeriodState(now);
   const todayName = state.todayDayName || getTodayDayName();
   const liveStatus = currentTeacher ? getTeacherLiveStatus(currentTeacher, now) : null;
-  const isFavorite = AppState.favorites.includes(currentTeacher ? currentTeacher.id : '');
+  const isFavorite = currentTeacher ? AppState.favorites.includes(currentTeacher.id) : false;
   const currentDept = currentTeacher ? getTeacherDepartment(currentTeacher.name) : '';
   const currentDeptIcon = DEPT_ICONS[currentDept] || '👨‍🏫';
   const currentAdmin = currentTeacher ? getTeacherAdminInfo(currentTeacher.name) : null;
@@ -984,18 +982,19 @@ function renderTeacherView(container) {
 
   let html = '';
 
-  if (currentTeacher) {
     // 1. Top Controls Bar (Compact Title & Actions)
     html += `
       <div class="control-card" style="margin-bottom: 0.85rem; padding: 0.85rem 1.15rem;">
         <div class="control-header" style="margin-bottom: 0; flex-wrap: wrap; gap: 0.75rem;">
           <div class="control-title" style="font-size: 1.15rem;">
             <span>👨‍🏫</span>
-            <span><strong>${currentTeacher.name}</strong> 선생님 시간표</span>
-            ${currentTeacher.homeroom ? `<span class="chip-badge">${currentTeacher.homeroom} 담임</span>` : ''}
-            <button class="icon-btn" onclick="toggleFavorite('${currentTeacher.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
-              ${isFavorite ? '⭐' : '☆'}
-            </button>
+            <span><strong>${currentTeacher ? `${currentTeacher.name} 선생님` : '교사별'}</strong> 시간표</span>
+            ${currentTeacher && currentTeacher.homeroom ? `<span class="chip-badge">${currentTeacher.homeroom} 담임</span>` : ''}
+            ${currentTeacher ? `
+              <button class="icon-btn" onclick="toggleFavorite('${currentTeacher.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
+                ${isFavorite ? '⭐' : '☆'}
+              </button>
+            ` : ''}
           </div>
           <div class="control-tools">
             <button type="button" class="btn ${AppState.teacherSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleTeacherSubmenu()" title="교사 선택 및 부서/초성 메뉴 펼치기/접기">
@@ -1012,9 +1011,11 @@ function renderTeacherView(container) {
             <button class="btn btn-secondary" onclick="window.print()" title="시간표 인쇄 / PDF 출력">
               🖨️ 인쇄
             </button>
-            <button class="btn btn-secondary" onclick="exportCurrentTimetableToCsv('${currentTeacher.name}')" title="CSV 다운로드">
-              📥 CSV
-            </button>
+            ${currentTeacher ? `
+              <button class="btn btn-secondary" onclick="exportCurrentTimetableToCsv('${currentTeacher.name}')" title="CSV 다운로드">
+                📥 CSV
+              </button>
+            ` : ''}
           </div>
         </div>
 
@@ -1117,77 +1118,93 @@ function renderTeacherView(container) {
           `}
         </div>
       ` : ''}
-
-      <!-- 2. TEACHER LIVE HERO STATUS & CURRENT LOCATION CARD (JEIL SANGDAN!) -->
-      ${renderTeacherLiveHeroCard(currentTeacher, todayName, state, now, liveStatus)}
-
-      <!-- 3. Teacher Info Banner -->
-      <div class="entity-info-bar">
-        <div class="entity-main-meta">
-          <div class="entity-avatar">${currentTeacher.name[0]}</div>
-          <div class="entity-title-wrap">
-            <h2>
-              <span>${currentTeacher.name} 선생님</span>
-              <button class="icon-btn" onclick="toggleFavorite('${currentTeacher.id}')" title="즐겨찾기">
-                ${isFavorite ? '⭐' : '☆'}
-              </button>
-            </h2>
-            <div style="display: flex; gap: 0.45rem; align-items: center; margin-top: 0.25rem; flex-wrap: wrap;">
-              <span class="entity-tag">${AppState.data.schoolYear || '2026학년도'} ${AppState.data.semester || '2학기'}</span>
-              
-              <!-- Admin Dept & Role / Duty Badge -->
-              ${currentAdmin ? `
-                <span class="${currentAdmin.isHead ? 'role-badge-head' : (currentAdmin.isPlan ? 'role-badge-plan' : (currentAdmin.isDuty ? `role-badge-duty badge-admin-${currentAdmin.dept}` : `role-badge-dept badge-admin-${currentAdmin.dept}`))}" style="font-size:0.8rem; padding:0.25rem 0.65rem;">
-                  ${ADMIN_DEPT_ICONS[currentAdmin.dept] || '🏢'} ${currentAdmin.dept ? `${currentAdmin.dept} ` : ''}${currentAdmin.position !== '부원' ? `<strong>${currentAdmin.position}</strong>` : ''}
-                </span>
-              ` : ''}
-
-              <!-- Subject Dept Badge -->
-              ${currentSubj ? `
-                <span class="entity-tag badge-subj-${currentSubj}" style="font-weight: 700;">
-                  ${SUBJ_ICONS[currentSubj] || currentDeptIcon || '📚'} ${currentSubj}${currentDept && currentDept !== currentSubj + '과' && currentDept !== currentSubj ? ` (${currentDept})` : ''}
-                </span>
-              ` : (currentDept ? `
-                <span class="entity-tag badge-subj-${currentDept}" style="font-weight: 700;">
-                  ${currentDeptIcon} ${currentDept}
-                </span>
-              ` : '')}
-
-              <!-- Homeroom Badge -->
-              ${currentTeacher.homeroom ? `
-                <button class="entity-tag badge-grade-${getGradeFromHomeroom(currentTeacher.homeroom)}" style="border: none; cursor: pointer;" onclick="navigateToClass('${currentTeacher.homeroom}')">
-                  🏫 ${currentTeacher.homeroom} 담임 ➔
-                </button>
-              ` : ''}
-            </div>
-          </div>
-        </div>
-
-        <div class="entity-stats">
-          <div class="stat-item">
-            <div class="stat-val">${currentTeacher.totalHours}</div>
-            <div class="stat-label">주당 총 시수</div>
-          </div>
-          ${DAYS.map(d => `
-            <div class="stat-item">
-              <div class="stat-val" style="font-size: 1.1rem;">${currentTeacher.hoursByDay[d] || 0}</div>
-              <div class="stat-label">${d}요일</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <!-- 4. Teacher Timetable (Card View or Table View) -->
-      ${AppState.viewMode === 'card' ? renderTeacherCardView(currentTeacher, todayName, liveStatus) : renderTeacherTableView(currentTeacher, todayName, liveStatus)}
-
-      <!-- 5. Bottom quick toggle button -->
-      <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
-        <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
-          ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 다른 교사 찾기 / 부서·초성별 목록 펼치기 ▾'}
-        </button>
-      </div>
     `;
-  }
+
+    if (currentTeacher) {
+      html += `
+        <!-- 2. TEACHER LIVE HERO STATUS & CURRENT LOCATION CARD (JEIL SANGDAN!) -->
+        ${renderTeacherLiveHeroCard(currentTeacher, todayName, state, now, liveStatus)}
+
+        <!-- 3. Teacher Info Banner -->
+        <div class="entity-info-bar">
+          <div class="entity-main-meta">
+            <div class="entity-avatar">${currentTeacher.name[0]}</div>
+            <div class="entity-title-wrap">
+              <h2>
+                <span>${currentTeacher.name} 선생님</span>
+                <button class="icon-btn" onclick="toggleFavorite('${currentTeacher.id}')" title="즐겨찾기">
+                  ${isFavorite ? '⭐' : '☆'}
+                </button>
+              </h2>
+              <div style="display: flex; gap: 0.45rem; align-items: center; margin-top: 0.25rem; flex-wrap: wrap;">
+                <span class="entity-tag">${AppState.data.schoolYear || '2026학년도'} ${AppState.data.semester || '2학기'}</span>
+                
+                <!-- Admin Dept & Role / Duty Badge -->
+                ${currentAdmin ? `
+                  <span class="${currentAdmin.isHead ? 'role-badge-head' : (currentAdmin.isPlan ? 'role-badge-plan' : (currentAdmin.isDuty ? `role-badge-duty badge-admin-${currentAdmin.dept}` : `role-badge-dept badge-admin-${currentAdmin.dept}`))}" style="font-size:0.8rem; padding:0.25rem 0.65rem;">
+                    ${ADMIN_DEPT_ICONS[currentAdmin.dept] || '🏢'} ${currentAdmin.dept ? `${currentAdmin.dept} ` : ''}${currentAdmin.position !== '부원' ? `<strong>${currentAdmin.position}</strong>` : ''}
+                  </span>
+                ` : ''}
+
+                <!-- Subject Dept Badge -->
+                ${currentSubj ? `
+                  <span class="entity-tag badge-subj-${currentSubj}" style="font-weight: 700;">
+                    ${SUBJ_ICONS[currentSubj] || currentDeptIcon || '📚'} ${currentSubj}${currentDept && currentDept !== currentSubj + '과' && currentDept !== currentSubj ? ` (${currentDept})` : ''}
+                  </span>
+                ` : (currentDept ? `
+                  <span class="entity-tag badge-subj-${currentDept}" style="font-weight: 700;">
+                    ${currentDeptIcon} ${currentDept}
+                  </span>
+                ` : '')}
+
+                <!-- Homeroom Badge -->
+                ${currentTeacher.homeroom ? `
+                  <button class="entity-tag badge-grade-${getGradeFromHomeroom(currentTeacher.homeroom)}" style="border: none; cursor: pointer;" onclick="navigateToClass('${currentTeacher.homeroom}')">
+                    🏫 ${currentTeacher.homeroom} 담임 ➔
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="entity-stats">
+            <div class="stat-item">
+              <div class="stat-val">${currentTeacher.totalHours}</div>
+              <div class="stat-label">주당 총 시수</div>
+            </div>
+            ${DAYS.map(d => `
+              <div class="stat-item">
+                <div class="stat-val" style="font-size: 1.1rem;">${currentTeacher.hoursByDay[d] || 0}</div>
+                <div class="stat-label">${d}요일</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- 4. Teacher Timetable (Card View or Table View) -->
+        ${AppState.viewMode === 'card' ? renderTeacherCardView(currentTeacher, todayName, liveStatus) : renderTeacherTableView(currentTeacher, todayName, liveStatus)}
+
+        <!-- 5. Bottom quick toggle button -->
+        <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
+            ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 다른 선생님 선택하기 ▾'}
+          </button>
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="empty-selection-card">
+          <div class="empty-selection-icon">👨‍🏫</div>
+          <div class="empty-selection-title">선택된 선생님이 없습니다</div>
+          <div class="empty-selection-desc">
+            상단 검색창에서 교사 이름을 검색하시거나, 아래 <strong>[교사 선택 / 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 선생님을 선택해 주세요.
+          </div>
+          <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
+            ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 교사 선택 / 목록 펼치기 ▾'}
+          </button>
+        </div>
+      `;
+    }
 
   container.innerHTML = html;
 }
@@ -2027,17 +2044,11 @@ function renderClassView(container) {
   let currentClass = null;
   if (AppState.searchQuery && filteredClasses.length > 0) {
     currentClass = filteredClasses.find(c => c.id === AppState.selectedClassId) || filteredClasses[0];
-  } else {
-    currentClass = AppState.data.classes.find(c => c.id === AppState.selectedClassId) || filteredClasses[0];
-  }
-  if (!currentClass && AppState.data.classes.length > 0) {
-    currentClass = AppState.data.classes[0];
-  }
-  if (currentClass) {
-    AppState.selectedClassId = currentClass.id;
+  } else if (AppState.selectedClassId) {
+    currentClass = AppState.data.classes.find(c => c.id === AppState.selectedClassId);
   }
 
-  const isFavorite = AppState.favorites.includes(currentClass ? currentClass.id : '');
+  const isFavorite = currentClass ? AppState.favorites.includes(currentClass.id) : false;
   const todayName = getTodayDayName();
 
   let html = `
@@ -2046,7 +2057,7 @@ function renderClassView(container) {
       <div class="control-header" style="margin-bottom: 0; flex-wrap: wrap; gap: 0.75rem;">
         <div class="control-title" style="font-size: 1.15rem;">
           <span>🏫</span>
-          <span><strong>${currentClass ? currentClass.name : '학반'}</strong> 시간표</span>
+          <span><strong>${currentClass ? currentClass.name : '학반별'}</strong> 시간표</span>
           ${currentClass && currentClass.homeroom ? `<span class="chip-badge">담임: ${currentClass.homeroom} 선생님</span>` : ''}
           ${currentClass ? `
             <button class="icon-btn" onclick="toggleFavorite('${currentClass.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
@@ -2069,9 +2080,11 @@ function renderClassView(container) {
           <button class="btn btn-secondary" onclick="window.print()" title="시간표 인쇄 / PDF 출력">
             🖨️ 인쇄
           </button>
-          <button class="btn btn-secondary" onclick="exportCurrentTimetableToCsv('${currentClass ? currentClass.name : ''}')" title="CSV 다운로드">
-            📥 CSV
-          </button>
+          ${currentClass ? `
+            <button class="btn btn-secondary" onclick="exportCurrentTimetableToCsv('${currentClass.name}')" title="CSV 다운로드">
+              📥 CSV
+            </button>
+          ` : ''}
         </div>
       </div>
 
@@ -2175,6 +2188,19 @@ function renderClassView(container) {
       <div style="text-align: center; margin: 1.75rem 0 0.5rem 0;">
         <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleClassSubmenu();" style="font-size: 0.92rem; padding: 0.6rem 1.4rem; border-radius: 9999px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
           ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 다른 학반 선택하기 ▾'}
+        </button>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="empty-selection-card">
+        <div class="empty-selection-icon">🏫</div>
+        <div class="empty-selection-title">선택된 학반이 없습니다</div>
+        <div class="empty-selection-desc">
+          상단 검색창에서 학반을 검색하시거나, 아래 <strong>[학반 선택 / 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학급을 선택해 주세요.
+        </div>
+        <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleClassSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
+          ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 학반 선택 / 목록 펼치기 ▾'}
         </button>
       </div>
     `;
@@ -2595,16 +2621,13 @@ function renderStudentView(container) {
   const nameToCount = {};
   allStudents.forEach(s => { nameToCount[s.name] = (nameToCount[s.name] || 0) + 1; });
 
-  // Default selection if none selected or selected not in allStudents
-  if (!AppState.selectedStudentId || !allStudents.some(s => s.id === AppState.selectedStudentId)) {
-    if (filtered.length > 0) {
-      AppState.selectedStudentId = filtered[0].id;
-    } else {
-      AppState.selectedStudentId = allStudents[0].id;
-    }
+  // Selection logic: Do not default to allStudents[0] (Kang Ye-in) if not selected!
+  let currentStudent = null;
+  if (AppState.studentSearchQuery && filtered.length > 0) {
+    currentStudent = filtered.find(s => s.id === AppState.selectedStudentId) || filtered[0];
+  } else if (AppState.selectedStudentId) {
+    currentStudent = allStudents.find(s => s.id === AppState.selectedStudentId);
   }
-
-  const currentStudent = allStudents.find(s => s.id === AppState.selectedStudentId) || allStudents[0];
 
   // Real-time calculation & Simulation support
   const now = new Date();
@@ -2685,41 +2708,55 @@ function renderStudentView(container) {
   }
 
   let html = `
-    <!-- Top Search & View Control Bar -->
-    <div class="control-card student-top-controls-card" style="margin-bottom: 1rem;">
-      <div class="control-header student-control-header">
-        <div class="student-header-title">
-          <span style="font-size: 1.3rem;">🎓</span>
-          <div>
-            <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0;">지금 우리 학생은</h2>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;">
-              1·2·3학년 전교생(${allStudents.length}명) 시간표 · 실시간 위치
-            </p>
-          </div>
+    <!-- Top View Control Bar (Compact & Unified Layout) -->
+    <div class="control-card" style="margin-bottom: 0.85rem; padding: 0.85rem 1.15rem;">
+      <div class="control-header" style="margin-bottom: 0; flex-wrap: wrap; gap: 0.75rem;">
+        <div class="control-title" style="font-size: 1.15rem;">
+          <span>🎓</span>
+          <span><strong>${currentStudent ? `${currentStudent.className} ${currentStudent.name}` : '학생별'}</strong> 시간표</span>
+          ${currentStudent ? `<span class="chip-badge">${currentStudent.studentNum}번</span>` : ''}
+          ${currentStudent ? `
+            <button class="icon-btn" onclick="toggleFavorite('${currentStudent.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
+              ${AppState.favorites.includes(currentStudent.id) ? '⭐' : '☆'}
+            </button>
+          ` : ''}
         </div>
 
-        <div class="student-controls-toolbar">
-          <div class="search-container student-search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="studentSearchInput" class="search-input" placeholder="학생 이름 검색..." value="${escapeHtml(AppState.studentSearchQuery)}" oninput="handleStudentSearch(event)" onkeydown="handleStudentSearchKeyDown(event)">
-            <button type="button" id="studentSearchClearBtn" class="search-clear-btn" onclick="clearStudentSearch()" style="display: ${AppState.studentSearchQuery ? 'flex' : 'none'};">✕</button>
-          </div>
-
-          <div class="student-sub-toolbar">
-            <button type="button" class="btn ${AppState.studentSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleStudentSubmenu()" title="학생 목록 및 학반/초성 필터 펼치기/접기">
-              ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 / 학반·초성 필터 ▾'}
+        <div class="control-tools">
+          <button type="button" class="btn ${AppState.studentSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleStudentSubmenu()" title="학생 목록 및 학반/초성 필터 펼치기/접기">
+            ${AppState.studentSubmenuOpen ? '▲ 학생 선택 닫기' : '👥 다른 학생 선택 ▾'}
+          </button>
+          <div class="view-mode-switcher">
+            <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
+              📱 요일별 카드
             </button>
-            <div class="view-mode-toggle">
-              <button type="button" class="toggle-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')" title="카드 뷰">
-                📱 카드
-              </button>
-              <button type="button" class="toggle-btn ${AppState.viewMode === 'table' ? 'active' : ''}" onclick="setViewMode('table')" title="테이블 그리드">
-                📊 시간표
-              </button>
-            </div>
+            <button class="view-mode-btn ${AppState.viewMode === 'table' ? 'active' : ''}" onclick="setViewMode('table')">
+              🌐 전체 5일 표
+            </button>
           </div>
+          <button class="btn btn-secondary" onclick="window.print()" title="시간표 인쇄 / PDF 출력">
+            🖨️ 인쇄
+          </button>
+          ${currentStudent ? `
+            <button class="btn btn-secondary" onclick="exportCurrentTimetableToCsv('${currentStudent.name}')" title="CSV 다운로드">
+              📥 CSV
+            </button>
+          ` : ''}
         </div>
       </div>
+
+      <!-- Search Active Indicator & Reset Button if global search -->
+      ${AppState.searchQuery ? `
+        <div class="search-result-banner" style="margin-top: 0.75rem;">
+          <div class="search-result-info">
+            <span>🔍</span>
+            <span>'<strong>${escapeHtml(AppState.searchQuery)}</strong>' 검색 결과</span>
+          </div>
+          <button class="btn-clear-search" onclick="resetGlobalSearch()" title="검색어 초기화">
+            ✕ 검색 초기화
+          </button>
+        </div>
+      ` : ''}
     </div>
 
     <!-- Collapsible Student Catalog & Filter Card (펼침/접힘 드로어) -->
@@ -2734,6 +2771,15 @@ function renderStudentView(container) {
           <button type="button" class="btn btn-secondary" onclick="toggleStudentSubmenu()" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
             ▲ 닫기
           </button>
+        </div>
+
+        <!-- Student In-Drawer Search Box -->
+        <div style="margin-bottom: 0.75rem;">
+          <div class="search-container" style="max-width: 100%;">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="studentSearchInput" class="search-input" placeholder="학생 이름 검색 (초성 ㄱ, ㄴ, ㄷ 가능)..." value="${escapeHtml(AppState.studentSearchQuery)}" oninput="handleStudentSearch(event)" onkeydown="handleStudentSearchKeyDown(event)">
+            <button type="button" id="studentSearchClearBtn" class="search-clear-btn" onclick="clearStudentSearch()" style="display: ${AppState.studentSearchQuery ? 'flex' : 'none'};">✕</button>
+          </div>
         </div>
 
         <!-- Grade Filter Tabs -->
@@ -2775,24 +2821,41 @@ function renderStudentView(container) {
         </div>
       </div>
     ` : ''}
-
-    <!-- 1. Duplicate Student Alert Container (동명이인 안내) -->
-    <div id="duplicateAlertContainer">
-      ${renderDuplicateAlertHtml(filtered, currentStudent, nameToCount, AppState.studentSearchQuery)}
-    </div>
-
-    <!-- 2. Student Timetable Detail Area (현재 위치 Hero Card + Info Bar + Timetable - 최상단 표시!) -->
-    <div id="studentTimetableDetailArea">
-      ${renderStudentDetailAreaHtml(currentStudent, todayName, state, now)}
-    </div>
-
-    <!-- 3. Bottom Quick Toggle Button -->
-    <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
-      <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
-        ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 다른 학생 찾기 / 학반·초성 목록 펼치기 ▾'}
-      </button>
-    </div>
   `;
+
+  if (currentStudent) {
+    html += `
+      <!-- 1. Duplicate Student Alert Container (동명이인 안내) -->
+      <div id="duplicateAlertContainer">
+        ${renderDuplicateAlertHtml(filtered, currentStudent, nameToCount, AppState.studentSearchQuery)}
+      </div>
+
+      <!-- 2. Student Timetable Detail Area (현재 위치 Hero Card + Info Bar + Timetable) -->
+      <div id="studentTimetableDetailArea">
+        ${renderStudentDetailAreaHtml(currentStudent, todayName, state, now)}
+      </div>
+
+      <!-- 3. Bottom Quick Toggle Button -->
+      <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
+          ${AppState.studentSubmenuOpen ? '▲ 학생 선택 닫기' : '👥 다른 학생 선택하기 ▾'}
+        </button>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="empty-selection-card">
+        <div class="empty-selection-icon">🎓</div>
+        <div class="empty-selection-title">선택된 학생이 없습니다</div>
+        <div class="empty-selection-desc">
+          상단 검색창에서 학생 이름을 검색하시거나, 아래 <strong>[학생 목록 / 필터 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학생을 선택해 주세요.
+        </div>
+        <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
+          ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 / 학반·초성 필터 ▾'}
+        </button>
+      </div>
+    `;
+  }
 
   container.innerHTML = html;
 }
@@ -4719,7 +4782,7 @@ function renderLiveView(container) {
         </div>
       </div>
 
-      <div class="finder-grid" id="liveClassesGrid">
+      <div id="liveClassesContainer">
         ${renderLiveClassesCards(todayDayName, currentPeriodInfo)}
       </div>
     </div>
@@ -4732,27 +4795,52 @@ function renderLiveView(container) {
 function renderLiveClassesCards(todayDayName, currentPeriodInfo) {
   if (!AppState.data || !AppState.data.classes) return '';
   const period = currentPeriodInfo && currentPeriodInfo.period > 0 ? currentPeriodInfo.period.toString() : '1';
-  return AppState.data.classes.map(c => {
-    const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
-    const isFree = !cell || cell.isFree;
-    const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, c.name, todayDayName, parseInt(period, 10)) : null;
-    const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
-    const displaySubj = trackInfo ? (trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject) : '';
+
+  const grades = [
+    { grade: '1', title: '1학년', icon: '🌱', badgeClass: 'live-grade-badge-1' },
+    { grade: '2', title: '2학년', icon: '🌿', badgeClass: 'live-grade-badge-2' },
+    { grade: '3', title: '3학년', icon: '🌳', badgeClass: 'live-grade-badge-3' }
+  ];
+
+  return grades.map(gInfo => {
+    const gradeClasses = AppState.data.classes.filter(c => c.grade === gInfo.grade || c.name.startsWith(`${gInfo.grade}-`));
+    if (gradeClasses.length === 0) return '';
 
     return `
-      <div class="finder-card" onclick="navigateToClass('${c.name}')">
-        <div>
-          <div class="finder-name">${c.name}</div>
-          <div class="finder-meta">담임: ${c.homeroom || '-'}</div>
+      <div class="live-grade-section">
+        <div class="live-grade-header">
+          <span class="live-grade-badge ${gInfo.badgeClass}">
+            <span>${gInfo.icon}</span>
+            <span>${gInfo.title} (${gradeClasses.length}개 반)</span>
+          </span>
+          <span class="live-grade-count">${gInfo.grade}-1반 ~ ${gInfo.grade}-${gradeClasses.length}반</span>
         </div>
-        <div>
-          ${isFree ? `
-            <span class="free-period">수업 없음</span>
-          ` : `
-            <span class="subject-pill ${cat}">
-              ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
-            </span>
-          `}
+        <div class="finder-grid">
+          ${gradeClasses.map(c => {
+            const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
+            const isFree = !cell || cell.isFree;
+            const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, c.name, todayDayName, parseInt(period, 10)) : null;
+            const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
+            const displaySubj = trackInfo ? (trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject) : '';
+
+            return `
+              <div class="finder-card" onclick="navigateToClass('${c.name}')">
+                <div>
+                  <div class="finder-name">${c.name}</div>
+                  <div class="finder-meta">담임: ${c.homeroom || '-'}</div>
+                </div>
+                <div>
+                  ${isFree ? `
+                    <span class="free-period">수업 없음</span>
+                  ` : `
+                    <span class="subject-pill ${cat}">
+                      ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
+                    </span>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
