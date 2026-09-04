@@ -297,7 +297,7 @@ const AppState = {
 
   // Academic Calendar & Changche State (학사일정 및 주차별 창체 운영계획)
   academicCalendar: (window.SCHOOL_TIMETABLE_DATA && window.SCHOOL_TIMETABLE_DATA.academicCalendar) ? window.SCHOOL_TIMETABLE_DATA.academicCalendar : null,
-  calendarViewMode: 'month', // 'year' | 'month' | 'week'
+  calendarViewMode: 'week', // 'year' | 'month' | 'week'
   calendarYear: 2026,
   calendarMonth: 9, // 1~12
   calendarWeekDate: '2026-09-04',
@@ -1040,6 +1040,9 @@ function switchTab(tab) {
   // preserved as requested, allowing users to keep their mutual free period intersection setup.
 
   AppState.currentTab = tab;
+  if (tab === 'calendar') {
+    AppState.calendarViewMode = 'week';
+  }
   
   document.querySelectorAll('.nav-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
@@ -6407,9 +6410,11 @@ function renderCalendarYearView(cal) {
       <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
         🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월, 월~금 일과 기준)
       </h3>
-      <span style="font-size: 0.8rem; color: var(--text-muted);">
-        💡 날짜에 마우스를 올리면 학사 행사가 표시되며, 월 카드를 클릭하면 해당 월별 캘린더로 이동합니다.
-      </span>
+      <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; flex-wrap: wrap;">
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#dc2626; border-radius:2px;"></span> 공휴일</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#4f46e5; border-radius:2px;"></span> 1·2회고사 / 모의고사 / 수능</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:var(--primary); border-radius:2px;"></span> 오늘</span>
+      </div>
     </div>
 
     <div class="calendar-year-grid">
@@ -6452,12 +6457,13 @@ function renderCalendarYearView(cal) {
                 const dateStr = `${item.y}-${String(item.m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayEvent = monthEvents.find(d => d.date === dateStr);
                 const isHoliday = dayEvent && dayEvent.isHoliday;
+                const isExam = dayEvent && dayEvent.isExam;
                 const isToday = isCurMonth && (day === now.getDate());
                 const eventText = dayEvent && dayEvent.event ? dayEvent.event.replace(/\n/g, ' ') : '';
                 const tooltipTitle = escapeHtml(eventText ? `${item.m}월 ${day}일: ${eventText}` : `${item.m}월 ${day}일`);
 
                 return `
-                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" title="${tooltipTitle}">
+                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${tooltipTitle}">
                     ${day}
                   </span>
                 `;

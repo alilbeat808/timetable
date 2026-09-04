@@ -3953,6 +3953,17 @@ body {
   background: rgba(239, 68, 68, 0.14);
 }
 
+.mini-day-cell.is-exam {
+  color: #4338ca;
+  font-weight: 800;
+  background: rgba(99, 102, 241, 0.18);
+}
+
+[data-theme="dark"] .mini-day-cell.is-exam {
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.35);
+}
+
 .mini-day-cell.is-today {
   background: var(--primary);
   color: #ffffff;
