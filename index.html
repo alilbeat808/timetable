@@ -9,7 +9,7 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="app.css?v=3.1">
+  <link rel="stylesheet" href="app.css?v=3.2">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
 </head>
 <body>
@@ -21,9 +21,10 @@
         <div class="brand-icon">📅</div>
         <div class="brand-info">
           <h1>
-            <span>부산동고등학교 시간표 시스템</span>
-            <span class="brand-author">by 동글동글</span>
+            <span class="brand-title-full">부산동고등학교 시간표 시스템</span>
+            <span class="brand-title-short">부산동고 시간표</span>
             <span class="brand-badge">2026 2학기</span>
+            <span class="brand-author">by 동글동글</span>
           </h1>
           <p>교사별 · 학반별 반응형 시간표 & 공강/회의 추천</p>
         </div>
@@ -38,13 +39,15 @@
           <div id="globalSearchDropdown" class="search-dropdown" style="display: none;"></div>
         </div>
 
-        <button class="icon-btn" id="printBtn" title="시간표 인쇄 / PDF 출력">
-          🖨️
-        </button>
+        <div class="header-tool-btns">
+          <button class="icon-btn" id="printBtn" title="시간표 인쇄 / PDF 출력">
+            🖨️
+          </button>
 
-        <button class="icon-btn" id="themeToggleBtn" title="다크 모드 / 라이트 모드 전환">
-          🌙
-        </button>
+          <button class="icon-btn" id="themeToggleBtn" title="다크 모드 / 라이트 모드 전환">
+            🌙
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -127,8 +130,8 @@
   </footer>
 
   <!-- Timetable Data Script (Rapid standalone load) -->
-  <script src="timetable_data.js?v=3.1"></script>
+  <script src="timetable_data.js?v=3.2"></script>
   <!-- Application Core Script -->
-  <script src="app.js?v=3.1"></script>
+  <script src="app.js?v=3.2"></script>
 </body>
 </html>
