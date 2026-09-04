@@ -545,7 +545,7 @@ function searchEntities(query) {
   });
 
   // 3. Subjects Match
-  const subjectList = ['국어', '영어', '일본어', '수학', '사회', '과학', '체육', '음악', '미술', '정보'];
+  const subjectList = ['국어', '수학', '외국어', '영어', '일본어', '사회', '과학', '체육', '음악', '미술', '정보', '진로'];
   const matchedSubjects = subjectList.filter(s => s.toLowerCase().includes(q));
 
   // 4. Students Match ('지금 우리 학생은' 전교생 검색)
@@ -609,13 +609,13 @@ function handleSearchInput(e) {
 
   let html = '';
 
-  // Students (학생)
-  if (results.students && results.students.length > 0) {
+  const renderStudentSection = () => {
+    if (!results.students || results.students.length === 0) return '';
     const now = new Date();
     const state = getActivePeriodState(now);
     const curP = state.activePeriod;
-    html += `<div class="search-category-title">🎓 학생 (${results.students.length})</div>`;
-    html += results.students.slice(0, 5).map(s => {
+    let sec = `<div class="search-category-title">🎓 학생 (${results.students.length})</div>`;
+    sec += results.students.slice(0, 5).map(s => {
       let liveSummary = '시간표 보기 ➔';
       if (curP && s.schedule && s.schedule[state.todayDayName]) {
         const cell = s.schedule[state.todayDayName][curP.toString()];
@@ -627,46 +627,48 @@ function handleSearchInput(e) {
       }
       return `
         <div class="search-item" onclick="onSelectSearchStudent('${s.id}')">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%;">
-            <div style="display: flex; align-items: center; gap: 0.45rem;">
+          <div class="search-item-header">
+            <div class="search-item-info">
               <span class="search-item-title">${escapeHtml(s.name)}</span>
-              <span class="chip-badge" style="font-size: 0.72rem;">${s.className} ${s.studentNum}번</span>
+              <span class="chip-badge" style="font-size: 0.72rem; padding: 0.12rem 0.45rem; font-weight: 600;">${s.className} ${s.studentNum}번</span>
+              <span class="chip-badge" style="font-size: 0.72rem; padding: 0.12rem 0.45rem; background: var(--bg-hover);">${s.grade}학년</span>
             </div>
-            <span class="search-item-desc" style="white-space: nowrap;">시간표 ➔</span>
+            <span class="search-item-action">시간표 보기 ➔</span>
           </div>
-          <div style="font-size: 0.76rem; color: var(--primary); margin-top: 0.25rem;">
-            <span class="live-status-pill ${state.statusBadgeClass}" style="font-size: 0.7rem; padding: 0.12rem 0.45rem; font-weight: 600;">
+          <div class="search-item-live">
+            <span class="live-status-pill ${state.statusBadgeClass}">
               ${liveSummary}
             </span>
           </div>
         </div>
       `;
     }).join('');
-  }
+    return sec;
+  };
 
-  // Teachers
-  if (results.teachers.length > 0) {
+  const renderTeacherSection = () => {
+    if (!results.teachers || results.teachers.length === 0) return '';
     const now = new Date();
-    html += `<div class="search-category-title">👨‍🏫 교사 (${results.teachers.length})</div>`;
-    html += results.teachers.slice(0, 5).map(t => {
+    let sec = `<div class="search-category-title">👨‍🏫 교사 (${results.teachers.length})</div>`;
+    sec += results.teachers.slice(0, 5).map(t => {
       const subj = getTeacherSubject(t.name);
       const admin = getTeacherAdminInfo(t.name);
       const live = getTeacherLiveStatus(t, now);
       return `
         <div class="search-item" onclick="onSelectSearchTeacher('${t.name}')">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%;">
-            <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
+          <div class="search-item-header">
+            <div class="search-item-info">
               <span class="search-item-title">${t.name}</span>
-              <span class="badge-subj-${subj}" style="font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 4px;">${subj}</span>
-              ${admin && admin.position ? `<span class="chip-badge" style="font-size: 0.7rem;">${admin.dept ? admin.dept + ' ' : ''}${admin.position}</span>` : ''}
-              ${t.homeroom ? `<span class="chip-badge" style="font-size: 0.7rem;">${t.homeroom} 담임</span>` : ''}
-              ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size: 0.7rem; background:#f0fdf4; color:#166534; border-color:#86efac;">${getSubHomeroomForTeacher(t.name)} 부담임</span>` : ''}
+              <span class="badge-subj-${subj}" style="font-size: 0.72rem; padding: 0.12rem 0.45rem; border-radius: 4px; font-weight: 600;">${subj}</span>
+              ${admin && admin.position ? `<span class="chip-badge" style="font-size: 0.72rem; padding: 0.12rem 0.45rem;">${admin.dept ? admin.dept + ' ' : ''}${admin.position}</span>` : ''}
+              ${t.homeroom ? `<span class="chip-badge" style="font-size: 0.72rem; padding: 0.12rem 0.45rem; font-weight: 600; background: rgba(79, 70, 229, 0.08); color: var(--primary); border-color: rgba(79, 70, 229, 0.25);">${t.homeroom} 담임</span>` : ''}
+              ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size: 0.72rem; padding: 0.12rem 0.45rem; font-weight: 600; background: #f0fdf4; color: #166534; border-color: #86efac;">${getSubHomeroomForTeacher(t.name)} 부담임</span>` : ''}
             </div>
-            <span class="search-item-desc" style="white-space: nowrap;">시간표 ➔</span>
+            <span class="search-item-action">시간표 보기 ➔</span>
           </div>
           ${live ? `
-            <div style="margin-top: 0.25rem; display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
-              <span class="live-status-pill ${live.badgeClass}" style="font-size: 0.7rem; padding: 0.12rem 0.45rem; font-weight: 600;">
+            <div class="search-item-live">
+              <span class="live-status-pill ${live.badgeClass}">
                 ${live.displayText}
               </span>
             </div>
@@ -674,33 +676,58 @@ function handleSearchInput(e) {
         </div>
       `;
     }).join('');
-  }
+    return sec;
+  };
 
-  // Classes
-  if (results.classes.length > 0) {
-    html += `<div class="search-category-title">🏫 학반 (${results.classes.length})</div>`;
-    html += results.classes.slice(0, 4).map(c => {
+  const renderClassSection = () => {
+    if (!results.classes || results.classes.length === 0) return '';
+    let sec = `<div class="search-category-title">🏫 학반 (${results.classes.length})</div>`;
+    sec += results.classes.slice(0, 4).map(c => {
       const subH = getSubHomeroomForClass(c.name);
       return `
         <div class="search-item" onclick="onSelectSearchClass('${c.name}')">
-          <span class="search-item-title">${c.name}반</span>
-          <span class="search-item-desc">담임: ${c.homeroom || '-'}${subH ? ` / 부담임: ${subH}` : ''} ➔</span>
+          <div class="search-item-header">
+            <div class="search-item-info">
+              <span class="search-item-title">${c.name}반</span>
+              <span class="chip-badge" style="font-size: 0.74rem; background: var(--bg-hover);">담임: ${c.homeroom || '-'}${subH ? ` · 부담임: ${subH}` : ''}</span>
+            </div>
+            <span class="search-item-action">시간표 보기 ➔</span>
+          </div>
         </div>
       `;
     }).join('');
-  }
+    return sec;
+  };
 
-  // Subjects
-  if (results.subjects.length > 0) {
-    html += `<div class="search-category-title">📚 교과/과목</div>`;
-    html += results.subjects.slice(0, 3).map(s => {
+  const renderSubjectSection = () => {
+    if (!results.subjects || results.subjects.length === 0) return '';
+    let sec = `<div class="search-category-title">📚 교과/과목</div>`;
+    sec += results.subjects.slice(0, 3).map(s => {
       return `
         <div class="search-item" onclick="executeGlobalSearch('${s}')">
-          <span class="search-item-title">${s}</span>
-          <span class="search-item-desc">과목 교사 보기 ➔</span>
+          <div class="search-item-header">
+            <div class="search-item-info">
+              <span class="search-item-title">${s}</span>
+              <span class="chip-badge" style="font-size: 0.74rem; background: var(--bg-hover);">교과 과목</span>
+            </div>
+            <span class="search-item-action">과목 교사 보기 ➔</span>
+          </div>
         </div>
       `;
     }).join('');
+    return sec;
+  };
+
+  if (AppState.currentTab === 'student') {
+    html += renderStudentSection();
+    html += renderTeacherSection();
+    html += renderClassSection();
+    html += renderSubjectSection();
+  } else {
+    html += renderTeacherSection();
+    html += renderClassSection();
+    html += renderStudentSection();
+    html += renderSubjectSection();
   }
 
   if (dropdown) {
@@ -905,6 +932,12 @@ function escapeHtml(str) {
 
 function onSelectSearchStudent(studentId) {
   closeSearchDropdown();
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
   navigateToStudent(studentId);
   if (AppState.data && AppState.data.students) {
     const student = AppState.data.students.find(s => s.id === studentId);

@@ -407,7 +407,21 @@ body {
 /* Quick Search Bar */
 .search-container {
   position: relative;
-  width: 240px;
+  width: 290px;
+  transition: width var(--transition-normal);
+}
+
+.search-container:focus-within {
+  width: 350px;
+}
+
+@media (min-width: 1200px) {
+  .search-container {
+    width: 320px;
+  }
+  .search-container:focus-within {
+    width: 380px;
+  }
 }
 
 .search-input {
@@ -521,53 +535,118 @@ body {
 .search-dropdown {
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
-  width: 320px;
-  max-height: 420px;
+  right: 0;
+  left: auto;
+  width: 580px;
+  max-width: min(580px, calc(100vw - 2rem));
+  max-height: 520px;
   overflow-y: auto;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.08);
   z-index: 100;
-  padding: 0.4rem;
+  padding: 0.5rem;
   scrollbar-width: thin;
 }
 
+[data-theme="dark"] .search-dropdown {
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
 .search-category-title {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 800;
   color: var(--text-muted);
-  padding: 0.35rem 0.6rem 0.2rem;
+  padding: 0.45rem 0.7rem 0.25rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .search-item {
-  padding: 0.5rem 0.65rem;
-  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius-md);
   cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
   transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-item:last-child {
+  border-bottom: none;
 }
 
 .search-item:hover {
   background: var(--bg-hover);
 }
 
+.search-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.search-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
 .search-item-title {
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.94rem;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .search-item-desc {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-item-action {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.search-item-live {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.search-item-live .live-status-pill {
+  font-size: 0.76rem;
+  padding: 0.25rem 0.65rem;
+  font-weight: 600;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: keep-all;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
 }
 
 /* In-Page Search Active / Reset Banner (시간표 상단 검색 결과 표시 및 초기화 바) */
@@ -2495,10 +2574,12 @@ body {
 
   .search-dropdown {
     width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
     left: 0 !important;
     right: 0 !important;
     top: calc(100% + 4px);
-    max-height: 50vh;
+    max-height: 55vh;
   }
   
   .mobile-nav-bar {
