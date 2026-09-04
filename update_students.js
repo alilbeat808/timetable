@@ -141,6 +141,10 @@ function resolveSpecialRoom(grade, subject, teacher, defaultRoom, day = null, pe
   if (tName.includes('성경진')) return '4층 무한상상실';
   // 전체 학년 박주현 선생님 수업은 5층 물리실에서 함
   if (tName.includes('박주현')) return '5층 물리실';
+  // 강봉수 선생님 체전실기 수업은 운동장에서 함
+  if (tName.includes('강봉수') && normSubj.includes('체전실기')) return '운동장';
+  // 김정열 선생님 1학년 미술 수업은 3층 미술실에서 함
+  if (tName.includes('김정열') && (normSubj.includes('미술') || grade === 1)) return '3층 미술실';
 
   // 전체 학년 유연정 선생님 수업:
   // 같은 시간에 김정현 선생님 수업이 겹치지 않는다면 5층 지구과학실에서 하고, 김정현 선생님과 겹치는 시간에는 시간표에 표기된 교실에서 수업함
@@ -165,6 +169,8 @@ function resolveSpecialRoom(grade, subject, teacher, defaultRoom, day = null, pe
     if (normSubj.includes('음악')) return '5층 음악실';
     // 1학년 체육 수업은 운동장에서 함
     if (normSubj.includes('체육')) return '운동장';
+    // 1학년 미술 수업은 3층 미술실에서 함
+    if (normSubj.includes('미술')) return '3층 미술실';
   }
 
   // 3. Grade 2 subject-based rules
@@ -179,8 +185,8 @@ function resolveSpecialRoom(grade, subject, teacher, defaultRoom, day = null, pe
 
   // 4. Grade 3 subject-based rules
   if (grade === 3) {
-    // 3학년 스포츠생활 수업은 운동장에서 함
-    if (normSubj.includes('스포츠생활')) return '운동장';
+    // 3학년 스포츠생활 및 체전실기 수업은 운동장에서 함
+    if (normSubj.includes('스포츠생활') || normSubj.includes('체전실기')) return '운동장';
   }
 
   return defaultRoom;
@@ -389,7 +395,68 @@ function buildGrade1Timetables(g1Students, existingClasses, teachers = null) {
   return g1Students;
 }
 
-// 4. 데이터 통합 및 파일 업데이트
+// 4. 이동수업군(배포용) 엑셀에서 과목 매핑 정보 추출
+function extractTrackSubjectMap() {
+  const excelPath = path.join(projectDir, '2026-2학기 이동수업군(배포용).xlsx');
+  if (!fs.existsSync(excelPath)) return {};
+  const wb = XLSX.readFile(excelPath);
+  const map = {};
+
+  function parseSheet(sheetName, grade) {
+    const ws = wb.Sheets[sheetName];
+    if (!ws) return;
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+    const header = rows[0] || [];
+    const groups = [];
+    header.forEach((val, idx) => {
+      if (typeof val === 'string' && new RegExp(`^[A-I]${grade}`).test(val.trim())) {
+        groups.push({ code: val.trim(), col: idx });
+      }
+    });
+
+    let currentRoom = null;
+    for (let r = 2; r < rows.length; r++) {
+      const row = rows[r];
+      if (!row) continue;
+      const rVal = row[1];
+      if (typeof rVal === 'string') {
+        const m = rVal.match(/([1-3])-(\d+)/);
+        if (m) currentRoom = `${m[1]}-${m[2]}`;
+      }
+      for (const g of groups) {
+        const sub = row[g.col - 1];
+        const subj = row[g.col];
+        if (typeof sub === 'string' && ['가', '나', '다', '라', '마'].includes(sub.trim())) {
+          const fullCode = `${g.code}${sub.trim()}`;
+          const subject = typeof subj === 'string' ? subj.trim() : '';
+          const nextRow = rows[r + 1];
+          let slot = null;
+          let teacher = null;
+          if (nextRow) {
+            const sVal = nextRow[g.col - 1];
+            const tVal = nextRow[g.col];
+            if (typeof sVal === 'string' && /^[월화수목금][1-7]/.test(sVal.trim())) slot = sVal.trim();
+            if (typeof tVal === 'string') teacher = tVal.trim();
+          }
+          if (teacher === '이상균') teacher = '전아린';
+
+          if (subject) {
+            if (teacher) map[`${fullCode}|${teacher}`] = subject;
+            if (currentRoom) map[`${fullCode}|${currentRoom}`] = subject;
+            if (slot && currentRoom) map[`${fullCode}|${slot}|${currentRoom}`] = subject;
+            if (slot && teacher) map[`${fullCode}|${slot}|${teacher}`] = subject;
+          }
+        }
+      }
+    }
+  }
+
+  parseSheet('2학년 이동그룹', 2);
+  parseSheet('3학년 이동그룹', 3);
+  return map;
+}
+
+// 5. 데이터 통합 및 파일 업데이트
 function updateAllData() {
   const jsonPath = path.join(projectDir, 'timetable_data.json');
   const jsPath = path.join(projectDir, 'timetable_data.js');
@@ -444,6 +511,12 @@ function updateAllData() {
     const hena = timetableData.teachers.find(t => t.name === '이혜나');
     if (hena) hena.position = '평가2';
   }
+
+  // 이동수업군 엑셀에서 과목 매핑 추출
+  console.log('4. 이동수업군(배포용) 엑셀 파싱 중...');
+  const trackMap = extractTrackSubjectMap();
+  timetableData.trackSubjectMap = trackMap;
+  console.log(`- 이동수업 과목 매핑 ${Object.keys(trackMap).length}건 생성 완료`);
 
   timetableData.studentCount = allStudents.length;
   timetableData.students = allStudents;

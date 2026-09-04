@@ -1226,6 +1226,16 @@ function getTeacherActualRoom(teacherName, day, period, cell) {
     }
   }
 
+  // 강봉수 선생님 체전실기 수업은 운동장에서 함
+  if (tName.includes('강봉수') && (cell.subject || '').includes('체전실기')) {
+    return '운동장';
+  }
+
+  // 김정열 선생님 1학년 미술 수업은 3층 미술실에서 함
+  if (tName.includes('김정열') && ((cell.subject || '').includes('미술') || (cell.target || '').startsWith('1-'))) {
+    return '3층 미술실';
+  }
+
   // 전체 학년 유연정 선생님 수업:
   // 같은 시간에 김정현 선생님 수업이 겹치지 않는다면 5층 지구과학실에서 하고, 김정현 선생님과 겹치는 시간에는 시간표에 표기된 교실에서 수업함
   if (tName.includes('유연정')) {
@@ -1261,14 +1271,15 @@ function getTeacherActualRoom(teacherName, day, period, cell) {
   if (grade === 1) {
     if (subj.includes('음악')) return '5층 음악실';
     if (subj.includes('체육')) return '운동장';
+    if (subj.includes('미술')) return '3층 미술실';
   }
   if (grade === 2 || subj.includes('음악과미디어') || subj.includes('운동과건강') || subj.includes('기초체육전공실기') || subj.includes('미술과매체')) {
     if (subj.includes('음악과미디어')) return '5층 음악실';
     if (subj.includes('운동과건강') || subj.includes('기초체육전공실기')) return '운동장';
     if (subj.includes('미술과매체')) return '3층 미술실';
   }
-  if (grade === 3 || subj.includes('스포츠생활')) {
-    if (subj.includes('스포츠생활')) return '운동장';
+  if (grade === 3 || subj.includes('스포츠생활') || subj.includes('체전실기')) {
+    if (subj.includes('스포츠생활') || subj.includes('체전실기')) return '운동장';
   }
 
   return null;
@@ -1284,6 +1295,84 @@ function isDifferentFromTimetable(target, actualRoom) {
   const m = t.match(/^([1-3])-(\d+)$/);
   if (m && a === `${m[1]}학년 ${m[2]}반`) return false;
   return true;
+}
+
+// Track code to real subject resolution helper
+function resolveTrackSubject(rawSubject, teacherName, roomName, day, period) {
+  const code = (rawSubject || '').trim();
+  if (!code || !/^[A-I][23]/.test(code)) {
+    return {
+      realSubject: code,
+      groupCode: '',
+      isCoded: false
+    };
+  }
+
+  // 3학년 화/수/목 7교시 H3
+  if (code.startsWith('H3')) {
+    return {
+      realSubject: '자율/공강',
+      groupCode: code,
+      isCoded: true
+    };
+  }
+
+  let tName = (teacherName || '').trim();
+  if (tName === '이상균') tName = '전아린';
+  let rName = (roomName || '').trim();
+  const slot = (day && period) ? `${day}${period}` : '';
+
+  // 1. From student schedules at (teacher, day, period)
+  if (tName && day && period) {
+    const map = getTeacherStudentScheduleMap();
+    const stList = map[tName] && map[tName][day] && map[tName][day][period];
+    if (stList && stList.length > 0) {
+      for (const item of stList) {
+        if (item.subject && !/^[A-I][23]/.test(item.subject)) {
+          return {
+            realSubject: item.subject,
+            groupCode: code,
+            isCoded: true
+          };
+        }
+      }
+    }
+  }
+
+  // 2. From trackSubjectMap in AppState.data
+  const trackMap = (AppState.data && AppState.data.trackSubjectMap) || {};
+  let found = null;
+  if (tName) {
+    if (slot) found = trackMap[`${code}|${slot}|${tName}`];
+    if (!found) found = trackMap[`${code}|${tName}`];
+  }
+  if (!found && rName) {
+    if (slot) found = trackMap[`${code}|${slot}|${rName}`];
+    if (!found) found = trackMap[`${code}|${rName}`];
+  }
+
+  if (found) {
+    return {
+      realSubject: found,
+      groupCode: code,
+      isCoded: true
+    };
+  }
+
+  // 3. If no teacher and class view (students dispersed)
+  if (!tName) {
+    return {
+      realSubject: '이동수업',
+      groupCode: code,
+      isCoded: true
+    };
+  }
+
+  return {
+    realSubject: code,
+    groupCode: code,
+    isCoded: false
+  };
 }
 
 function renderTeacherCardView(teacher, todayName) {
@@ -1315,7 +1404,8 @@ function renderTeacherCardView(teacher, todayName) {
         const timeInfo = AppState.bellSchedule.find(b => b.period === period);
         const cell = teacher.schedule[currentDay] ? teacher.schedule[currentDay][period.toString()] : null;
         const isFree = !cell || cell.isFree;
-        const cat = !isFree ? getSubjectCategory(cell.subject) : '';
+        const trackInfo = !isFree ? resolveTrackSubject(cell.subject, teacher.name, cell.target, currentDay, period) : null;
+        const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
         const isToday = (currentDay === todayName);
         const actualRoom = !isFree ? getTeacherActualRoom(teacher.name, currentDay, period, cell) : null;
         const hasDiffRoom = actualRoom && isDifferentFromTimetable(cell ? cell.target : '', actualRoom);
@@ -1353,7 +1443,7 @@ function renderTeacherCardView(teacher, todayName) {
                   </div>
                 ` : `
                   <div class="mobile-period-subject">
-                    <span class="subject-pill ${cat}">${cell.subject}</span>
+                    <span class="subject-pill ${cat}">${trackInfo.realSubject}${trackInfo.isCoded ? ` <span class="group-code-tag">(${trackInfo.groupCode})</span>` : ''}</span>
                   </div>
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
                     ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''}
@@ -1470,12 +1560,13 @@ function renderTeacherTableView(teacher, todayName) {
 
                   const actualRoom = !cell.isFree ? getTeacherActualRoom(teacher.name, day, period, cell) : null;
                   const hasDiffRoom = actualRoom && isDifferentFromTimetable(cell.target, actualRoom);
-                  const categoryClass = getSubjectCategory(cell.subject);
+                  const trackInfo = resolveTrackSubject(cell.subject, teacher.name, cell.target, day, period);
+                  const categoryClass = getSubjectCategory(trackInfo.realSubject);
                   return `
                     <td class="${cellClass}">
                       <div class="cell-content">
                         ${slotBadge}
-                        <span class="subject-pill ${categoryClass}">${cell.subject}</span>
+                        <span class="subject-pill ${categoryClass}">${trackInfo.realSubject}${trackInfo.isCoded ? ` <span class="group-code-tag">(${trackInfo.groupCode})</span>` : ''}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToClass('${cell.target}')" title="${cell.target} 학반 시간표로 이동">
                             🏫 ${cell.target}
@@ -1744,7 +1835,8 @@ function renderClassCardView(classObj, todayName) {
         const timeInfo = AppState.bellSchedule.find(b => b.period === period);
         const cell = classObj.schedule[currentDay] ? classObj.schedule[currentDay][period.toString()] : null;
         const isFree = !cell || cell.isFree;
-        const cat = !isFree ? getSubjectCategory(cell.subject) : '';
+        const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, classObj.name, currentDay, period) : null;
+        const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
         const isToday = (currentDay === todayName);
 
         let isCurrentSlot = false;
@@ -1779,7 +1871,7 @@ function renderClassCardView(classObj, todayName) {
                   </div>
                 ` : `
                   <div class="mobile-period-subject">
-                    <span class="subject-pill ${cat}">${cell.subject}</span>
+                    <span class="subject-pill ${cat}">${trackInfo.realSubject}${trackInfo.isCoded ? ` <span class="group-code-tag">(${trackInfo.groupCode})</span>` : ''}</span>
                   </div>
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
                     ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''}
@@ -1891,12 +1983,13 @@ function renderClassTableView(classObj, todayName) {
                     `;
                   }
 
-                  const categoryClass = getSubjectCategory(cell.subject);
+                  const trackInfo = resolveTrackSubject(cell.subject, cell.target, classObj.name, day, period);
+                  const categoryClass = getSubjectCategory(trackInfo.realSubject);
                   return `
                     <td class="${cellClass}">
                       <div class="cell-content">
                         ${slotBadge}
-                        <span class="subject-pill ${categoryClass}">${cell.subject}</span>
+                        <span class="subject-pill ${categoryClass}">${trackInfo.realSubject}${trackInfo.isCoded ? ` <span class="group-code-tag">(${trackInfo.groupCode})</span>` : ''}</span>
                         ${cell.target ? `
                           <button class="target-badge" onclick="navigateToTeacher('${cell.target}')" title="${cell.target} 선생님 시간표로 이동">
                             👨‍🏫 ${cell.target}
@@ -3451,6 +3544,8 @@ function renderSlotDetailBox(slot, analysisResult, selectedTeachers) {
             <div style="display: flex; flex-direction: column; gap: 0.35rem;">
               ${slotData.busyTeachers.slice().sort((a, b) => a.name.localeCompare(b.name, 'ko')).map(b => {
                 const admin = getTeacherAdminInfo(b.name);
+                const trackInfo = resolveTrackSubject(b.subject, b.name, b.target, slot.day, slot.period);
+                const displaySubj = trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject;
                 return `
                   <div style="font-size: 0.85rem; display: flex; justify-content: space-between; padding: 0.35rem 0.6rem; background: var(--bg-hover); border-radius: var(--radius-sm); align-items: center;">
                     <div style="display:flex; align-items:center; gap:0.3rem;">
@@ -3459,7 +3554,7 @@ function renderSlotDetailBox(slot, analysisResult, selectedTeachers) {
                       ${admin && admin.isPlan ? `<span class="role-badge-plan" style="font-size:0.65rem;">기획</span>` : ''}
                       ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="font-size:0.65rem;">${admin.duty}</span>` : ''}
                     </div>
-                    <span style="color: var(--text-secondary); font-size:0.82rem;">${b.subject} (${b.target})</span>
+                    <span style="color: var(--text-secondary); font-size:0.82rem;">${displaySubj} (${b.target})</span>
                   </div>
                 `;
               }).join('')}
@@ -3645,11 +3740,13 @@ function renderTeacherMatrixRows() {
           }
           const actualRoom = !cell.isFree ? getTeacherActualRoom(t.name, day, p, cell) : null;
           const hasDiffRoom = actualRoom && isDifferentFromTimetable(cell.target, actualRoom);
-          const cat = getSubjectCategory(cell.subject);
+          const trackInfo = resolveTrackSubject(cell.subject, t.name, cell.target, day, p);
+          const cat = getSubjectCategory(trackInfo.realSubject);
+          const displaySubj = trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject;
           return `
             <td>
-              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToClass('${cell.target}')" title="${cell.raw}${hasDiffRoom ? ` (실제 장소: ${actualRoom})` : ''}">
-                ${cell.subject} ${cell.target ? `(${cell.target})` : ''}${hasDiffRoom ? ` (${actualRoom})` : ''}
+              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToClass('${cell.target}')" title="${displaySubj}${hasDiffRoom ? ` (실제 장소: ${actualRoom})` : ''}">
+                ${displaySubj} ${cell.target ? `(${cell.target})` : ''}${hasDiffRoom ? ` (${actualRoom})` : ''}
               </span>
             </td>
           `;
@@ -3673,11 +3770,13 @@ function renderClassMatrixRows() {
           if (!cell || cell.isFree) {
             return `<td style="color: var(--text-muted); background: var(--bg-surface);">-</td>`;
           }
-          const cat = getSubjectCategory(cell.subject);
+          const trackInfo = resolveTrackSubject(cell.subject, cell.target, c.name, day, p);
+          const cat = getSubjectCategory(trackInfo.realSubject);
+          const displaySubj = trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject;
           return `
             <td>
-              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToTeacher('${cell.target}')" title="${cell.raw}">
-                ${cell.subject} ${cell.target ? `(${cell.target})` : ''}
+              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToTeacher('${cell.target}')" title="${displaySubj}">
+                ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
               </span>
             </td>
           `;
@@ -3951,7 +4050,9 @@ function renderLiveClassesCards(todayDayName, currentPeriodInfo) {
   return AppState.data.classes.map(c => {
     const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
     const isFree = !cell || cell.isFree;
-    const cat = !isFree ? getSubjectCategory(cell.subject) : '';
+    const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, c.name, todayDayName, parseInt(period, 10)) : null;
+    const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
+    const displaySubj = trackInfo ? (trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject) : '';
 
     return `
       <div class="finder-card" onclick="navigateToClass('${c.name}')">
@@ -3964,7 +4065,7 @@ function renderLiveClassesCards(todayDayName, currentPeriodInfo) {
             <span class="free-period">수업 없음</span>
           ` : `
             <span class="subject-pill ${cat}">
-              ${cell.subject} (${cell.target})
+              ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
             </span>
           `}
         </div>

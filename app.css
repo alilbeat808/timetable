@@ -1282,6 +1282,14 @@ body {
   transform: scale(1.04);
 }
 
+.subject-pill .group-code-tag {
+  font-size: 0.76rem;
+  opacity: 0.88;
+  font-weight: 600;
+  margin-left: 0.25rem;
+  letter-spacing: normal;
+}
+
 /* Dynamic category colors for subjects */
 .cat-korean { background: var(--cat-korean-bg); color: var(--cat-korean-text); border-color: var(--cat-korean-border); }
 .cat-math { background: var(--cat-math-bg); color: var(--cat-math-text); border-color: var(--cat-math-border); }
