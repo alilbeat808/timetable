@@ -1162,7 +1162,7 @@ function getActivePeriodState(now = new Date()) {
   };
 }
 
-// Teacher Special Classroom Resolution Rules (13 Special Location Rules)
+// Teacher Special Classroom Resolution Rules (15 Special Location Rules)
 const TEACHER_SPECIAL_ROOM_RULES = {
   '이우석': '3층 수학실',
   '최진화': '4층 수학전용실',
@@ -1170,8 +1170,18 @@ const TEACHER_SPECIAL_ROOM_RULES = {
   '김정현': '5층 지구과학실',
   '양우석': '5층 화학실',
   '이상환': '3층 영어전용실',
-  '오정훈': '4층 컴퓨터실'
+  '오정훈': '4층 컴퓨터실',
+  '성경진': '4층 무한상상실',
+  '박주현': '5층 물리실'
 };
+
+function isTeacherActive(teacherName, day, period) {
+  if (!AppState.data || !AppState.data.teachers) return false;
+  const teacher = AppState.data.teachers.find(t => t.name === teacherName);
+  if (!teacher || !teacher.schedule) return false;
+  const cell = teacher.schedule[day] && teacher.schedule[day][period.toString()];
+  return !!(cell && !cell.isFree && cell.subject && cell.subject !== '여유');
+}
 
 let _teacherStudentScheduleMap = null;
 
@@ -1213,6 +1223,20 @@ function getTeacherActualRoom(teacherName, day, period, cell) {
         }
       }
       return room;
+    }
+  }
+
+  // 전체 학년 유연정 선생님 수업:
+  // 같은 시간에 김정현 선생님 수업이 겹치지 않는다면 5층 지구과학실에서 하고, 김정현 선생님과 겹치는 시간에는 시간표에 표기된 교실에서 수업함
+  if (tName.includes('유연정')) {
+    if (day === '금' && (period === 5 || period === 6 || period === 7)) {
+      return null;
+    }
+    const kimActive = isTeacherActive('김정현', day, period);
+    if (!kimActive) {
+      return '5층 지구과학실';
+    } else {
+      return null; // 겹칠 때는 시간표 교실이므로 차이 없음
     }
   }
 
@@ -2178,7 +2202,7 @@ function renderStudentView(container) {
         <div class="student-controls-toolbar">
           <div class="search-container student-search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="studentSearchInput" class="search-input" placeholder="학생 이름 검색 (예: 강예인, 이동건)..." value="${escapeHtml(AppState.studentSearchQuery)}" oninput="handleStudentSearch(event)" onkeydown="handleStudentSearchKeyDown(event)">
+            <input type="text" id="studentSearchInput" class="search-input" placeholder="학생 이름 검색..." value="${escapeHtml(AppState.studentSearchQuery)}" oninput="handleStudentSearch(event)" onkeydown="handleStudentSearchKeyDown(event)">
             <button type="button" id="studentSearchClearBtn" class="search-clear-btn" onclick="clearStudentSearch()" style="display: ${AppState.studentSearchQuery ? 'flex' : 'none'};">✕</button>
           </div>
 

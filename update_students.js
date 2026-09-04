@@ -109,8 +109,16 @@ function parseGrade1Students() {
   return Object.values(classStudents).flat();
 }
 
+function isKimJeongHyeonActive(day, period, teachers) {
+  if (!teachers) return false;
+  const kim = teachers.find(t => t.name === '김정현');
+  if (!kim || !kim.schedule) return false;
+  const cell = kim.schedule[day] && kim.schedule[day][period.toString()];
+  return !!(cell && !cell.isFree && cell.subject && cell.subject !== '여유');
+}
+
 // Special classroom resolution based on user requirements
-function resolveSpecialRoom(grade, subject, teacher, defaultRoom) {
+function resolveSpecialRoom(grade, subject, teacher, defaultRoom, day = null, period = null, teachers = null) {
   const normSubj = (subject || '').replace(/\s+/g, '');
   const tName = (teacher || '').trim();
 
@@ -129,6 +137,27 @@ function resolveSpecialRoom(grade, subject, teacher, defaultRoom) {
   if (tName.includes('이상환')) return '3층 영어전용실';
   // 전체 학년 오정훈 선생님 수업은 4층 컴퓨터실에서 함
   if (tName.includes('오정훈')) return '4층 컴퓨터실';
+  // 전체 학년 성경진 선생님 수업은 4층 무한상상실에서 함
+  if (tName.includes('성경진')) return '4층 무한상상실';
+  // 전체 학년 박주현 선생님 수업은 5층 물리실에서 함
+  if (tName.includes('박주현')) return '5층 물리실';
+
+  // 전체 학년 유연정 선생님 수업:
+  // 같은 시간에 김정현 선생님 수업이 겹치지 않는다면 5층 지구과학실에서 하고, 김정현 선생님과 겹치는 시간에는 시간표에 표기된 교실에서 수업함
+  if (tName.includes('유연정')) {
+    if (day === '금' && (period === 5 || period === 6 || period === 7)) {
+      return defaultRoom;
+    }
+    if (day && period && teachers) {
+      const kimActive = isKimJeongHyeonActive(day, period, teachers);
+      if (kimActive) {
+        return defaultRoom; // 김정현 선생님과 겹치는 시간에는 시간표에 표기된 교실
+      } else {
+        return '5층 지구과학실'; // 겹치지 않는다면 5층 지구과학실
+      }
+    }
+    return '5층 지구과학실';
+  }
 
   // 2. Grade 1 subject-based rules
   if (grade === 1) {
@@ -158,7 +187,7 @@ function resolveSpecialRoom(grade, subject, teacher, defaultRoom) {
 }
 
 // 2. 엑셀 파일(2학년 or 3학년) 파싱
-function parseGradeFromExcel(grade, classCount) {
+function parseGradeFromExcel(grade, classCount, teachers = null) {
   const allStudents = [];
 
   for (let c = 1; c <= classCount; c++) {
@@ -236,7 +265,7 @@ function parseGradeFromExcel(grade, classCount) {
             }
 
             // Apply special room rules
-            room = resolveSpecialRoom(grade, subject, teacher, room);
+            room = resolveSpecialRoom(grade, subject, teacher, room, day, p, teachers);
 
             // 1) 월요일 1교시 (자율활동: 전원 자기 교실)
             // 및 1교시가 공란인 경우: 자율 시간으로 자기 교실 배정
@@ -302,7 +331,7 @@ function parseGradeFromExcel(grade, classCount) {
 }
 
 // 3. 1학년 학생 시간표 생성 (1학년 학반별 시간표 기반)
-function buildGrade1Timetables(g1Students, existingClasses) {
+function buildGrade1Timetables(g1Students, existingClasses, teachers = null) {
   g1Students.forEach(student => {
     student.totalHours = 0;
     student.hoursByDay = { '월': 0, '화': 0, '수': 0, '목': 0, '금': 0 };
@@ -332,7 +361,7 @@ function buildGrade1Timetables(g1Students, existingClasses) {
           if (subjRaw && subjRaw.includes('이상균')) {
             subjRaw = subjRaw.replace(/이상균/g, '전아린');
           }
-          room = resolveSpecialRoom(1, subject, teacher, student.classRoom);
+          room = resolveSpecialRoom(1, subject, teacher, student.classRoom, day, p, teachers);
         }
 
         // 금요일 5, 6, 7교시 처리 (자기 교실 고정)
@@ -372,21 +401,22 @@ function updateAllData() {
 
   const rawJson = fs.readFileSync(jsonPath, 'utf8').replace(/^\uFEFF/, '');
   const timetableData = JSON.parse(rawJson);
+  const teachers = timetableData.teachers || [];
 
   // 1학년 파싱 및 시간표 구성
   console.log('1. 1학년 학생 명렬표 파싱 중...');
   const g1Raw = parseGrade1Students();
-  const g1Students = buildGrade1Timetables(g1Raw, timetableData.classes || []);
+  const g1Students = buildGrade1Timetables(g1Raw, timetableData.classes || [], teachers);
   console.log(`- 1학년 학생 수: ${g1Students.length}명`);
 
   // 2학년 파싱
   console.log('2. 2학년(2-1 ~ 2-7) 엑셀 파싱 중...');
-  const g2Students = parseGradeFromExcel(2, 7);
+  const g2Students = parseGradeFromExcel(2, 7, teachers);
   console.log(`- 2학년 학생 수: ${g2Students.length}명`);
 
   // 3학년 파싱
   console.log('3. 3학년(3-1 ~ 3-7) 엑셀 파싱 중...');
-  const g3Students = parseGradeFromExcel(3, 7);
+  const g3Students = parseGradeFromExcel(3, 7, teachers);
   console.log(`- 3학년 학생 수: ${g3Students.length}명`);
 
   const allStudents = [...g1Students, ...g2Students, ...g3Students];

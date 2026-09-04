@@ -22079,7 +22079,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -22354,7 +22354,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -22629,7 +22629,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -22904,7 +22904,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -23179,7 +23179,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -23454,7 +23454,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -23729,7 +23729,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -24004,7 +24004,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -24279,7 +24279,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -24554,7 +24554,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -24829,7 +24829,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -25104,7 +25104,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -25379,7 +25379,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -25654,7 +25654,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -25929,7 +25929,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -26204,7 +26204,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -26479,7 +26479,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -26754,7 +26754,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -27029,7 +27029,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -27304,7 +27304,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 1반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -27725,7 +27725,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -27739,7 +27739,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -28000,7 +28000,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -28014,7 +28014,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -28275,7 +28275,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -28289,7 +28289,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -28550,7 +28550,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -28564,7 +28564,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -28825,7 +28825,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -28839,7 +28839,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -29100,7 +29100,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -29114,7 +29114,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -29375,7 +29375,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -29389,7 +29389,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -29650,7 +29650,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -29664,7 +29664,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -29925,7 +29925,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -29939,7 +29939,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -30200,7 +30200,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -30214,7 +30214,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -30475,7 +30475,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -30489,7 +30489,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -30750,7 +30750,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -30764,7 +30764,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -31025,7 +31025,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -31039,7 +31039,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -31300,7 +31300,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -31314,7 +31314,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -31575,7 +31575,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -31589,7 +31589,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -31850,7 +31850,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -31864,7 +31864,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -32125,7 +32125,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -32139,7 +32139,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -32400,7 +32400,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -32414,7 +32414,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -32675,7 +32675,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 2반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -32689,7 +32689,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 2반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "5": {
@@ -32892,7 +32892,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -33167,7 +33167,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -33442,7 +33442,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -33717,7 +33717,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -33992,7 +33992,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -34267,7 +34267,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -34542,7 +34542,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -34817,7 +34817,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -35092,7 +35092,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -35367,7 +35367,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -35642,7 +35642,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -35917,7 +35917,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -36192,7 +36192,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -36467,7 +36467,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -36742,7 +36742,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -37017,7 +37017,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -37292,7 +37292,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -37567,7 +37567,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -37842,7 +37842,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 3반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -38073,7 +38073,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -38131,7 +38131,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -38159,7 +38159,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -38348,7 +38348,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -38406,7 +38406,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -38434,7 +38434,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -38623,7 +38623,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -38681,7 +38681,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -38709,7 +38709,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -38898,7 +38898,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -38956,7 +38956,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -38984,7 +38984,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -39173,7 +39173,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -39231,7 +39231,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -39259,7 +39259,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -39448,7 +39448,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -39506,7 +39506,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -39534,7 +39534,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -39723,7 +39723,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -39781,7 +39781,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -39809,7 +39809,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -39998,7 +39998,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -40056,7 +40056,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -40084,7 +40084,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -40273,7 +40273,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -40331,7 +40331,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -40359,7 +40359,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -40548,7 +40548,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -40606,7 +40606,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -40634,7 +40634,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -40823,7 +40823,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -40881,7 +40881,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -40909,7 +40909,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -41098,7 +41098,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -41156,7 +41156,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -41184,7 +41184,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -41373,7 +41373,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -41431,7 +41431,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -41459,7 +41459,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -41648,7 +41648,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -41706,7 +41706,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -41734,7 +41734,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -41923,7 +41923,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -41981,7 +41981,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -42009,7 +42009,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -42198,7 +42198,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -42256,7 +42256,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -42284,7 +42284,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -42473,7 +42473,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -42531,7 +42531,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -42559,7 +42559,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -42748,7 +42748,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -42806,7 +42806,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -42834,7 +42834,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -43023,7 +43023,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
@@ -43081,7 +43081,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 4반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -43109,7 +43109,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "진직",
             "teacher": "유연정",
             "subjectRaw": "진직 유연정",
-            "room": "1학년 4반",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -43282,7 +43282,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -43319,7 +43319,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -43557,7 +43557,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -43594,7 +43594,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -43832,7 +43832,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -43869,7 +43869,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -44107,7 +44107,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -44144,7 +44144,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -44382,7 +44382,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -44419,7 +44419,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -44657,7 +44657,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -44694,7 +44694,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -44932,7 +44932,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -44969,7 +44969,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -45207,7 +45207,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -45244,7 +45244,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -45482,7 +45482,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -45519,7 +45519,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -45757,7 +45757,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -45794,7 +45794,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -46032,7 +46032,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -46069,7 +46069,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -46307,7 +46307,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -46344,7 +46344,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -46582,7 +46582,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -46619,7 +46619,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -46857,7 +46857,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -46894,7 +46894,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -47132,7 +47132,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -47169,7 +47169,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -47407,7 +47407,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -47444,7 +47444,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -47682,7 +47682,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -47719,7 +47719,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -47957,7 +47957,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -47994,7 +47994,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -48232,7 +48232,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 5반",
+            "room": "5층 물리실",
             "isFree": false
           }
         },
@@ -48269,7 +48269,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 5반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "6": {
@@ -48653,7 +48653,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -48683,7 +48683,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -48928,7 +48928,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -48958,7 +48958,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -49203,7 +49203,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -49233,7 +49233,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -49478,7 +49478,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -49508,7 +49508,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -49753,7 +49753,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -49783,7 +49783,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -50028,7 +50028,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -50058,7 +50058,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -50303,7 +50303,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -50333,7 +50333,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -50578,7 +50578,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -50608,7 +50608,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -50853,7 +50853,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -50883,7 +50883,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -51128,7 +51128,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -51158,7 +51158,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -51403,7 +51403,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -51433,7 +51433,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -51678,7 +51678,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -51708,7 +51708,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -51953,7 +51953,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -51983,7 +51983,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -52228,7 +52228,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -52258,7 +52258,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -52503,7 +52503,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -52533,7 +52533,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -52778,7 +52778,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -52808,7 +52808,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -53053,7 +53053,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -53083,7 +53083,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -53328,7 +53328,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -53358,7 +53358,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -53603,7 +53603,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "과탐실",
             "teacher": "유연정",
             "subjectRaw": "과탐실 유연정",
-            "room": "1학년 6반",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "7": {
@@ -53633,7 +53633,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "통과",
             "teacher": "박주현",
             "subjectRaw": "통과 박주현",
-            "room": "1학년 6반",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -53703,7 +53703,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -53768,7 +53768,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -53849,7 +53849,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -53977,7 +53977,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -54042,7 +54042,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -54123,7 +54123,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -54360,7 +54360,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -54432,7 +54432,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -54448,7 +54448,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -54799,7 +54799,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -54864,7 +54864,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -54945,7 +54945,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -55080,7 +55080,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -55152,7 +55152,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -55284,7 +55284,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -55456,7 +55456,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -55528,7 +55528,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -55544,7 +55544,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -55902,7 +55902,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -55974,7 +55974,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -56106,7 +56106,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -57100,7 +57100,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -57172,7 +57172,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -57188,7 +57188,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -57265,7 +57265,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -57330,7 +57330,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -57411,7 +57411,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -57820,7 +57820,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -57892,7 +57892,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -58024,7 +58024,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -58642,7 +58642,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -58714,7 +58714,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -58846,7 +58846,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -58902,7 +58902,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -58967,7 +58967,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -59039,7 +59039,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -59176,7 +59176,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -59241,7 +59241,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -59313,7 +59313,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -59840,7 +59840,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -59912,7 +59912,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -59928,7 +59928,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -60388,7 +60388,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -60460,7 +60460,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -60476,7 +60476,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -60632,7 +60632,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -60662,7 +60662,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -60734,7 +60734,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -60750,7 +60750,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -60906,7 +60906,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -61094,7 +61094,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -61159,7 +61159,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -61231,7 +61231,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -61382,7 +61382,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -61454,7 +61454,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -61586,7 +61586,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -62197,7 +62197,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -62262,7 +62262,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -62343,7 +62343,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -63026,7 +63026,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -63098,7 +63098,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -63230,7 +63230,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -63286,7 +63286,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -63351,7 +63351,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -63423,7 +63423,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -64108,7 +64108,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -64173,7 +64173,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -64245,7 +64245,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -64663,7 +64663,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -64728,7 +64728,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -64809,7 +64809,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -65046,7 +65046,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -65118,7 +65118,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -65134,7 +65134,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -65594,7 +65594,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -65666,7 +65666,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -65682,7 +65682,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -65766,7 +65766,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -65838,7 +65838,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -65970,7 +65970,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -66300,7 +66300,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -66365,7 +66365,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -66437,7 +66437,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -66855,7 +66855,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -66920,7 +66920,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -67001,7 +67001,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -67129,7 +67129,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -67194,7 +67194,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -67275,7 +67275,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -67403,7 +67403,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -67468,7 +67468,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -67482,7 +67482,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -67549,7 +67549,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -68060,7 +68060,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -68132,7 +68132,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -68148,7 +68148,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -68492,7 +68492,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -68557,7 +68557,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -68629,7 +68629,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -68852,7 +68852,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -69321,7 +69321,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -69386,7 +69386,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -69467,7 +69467,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -69588,7 +69588,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -69653,7 +69653,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -69725,7 +69725,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -69869,7 +69869,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -69934,7 +69934,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -70015,7 +70015,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -70150,7 +70150,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -70222,7 +70222,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -70354,7 +70354,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -70691,7 +70691,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -70756,7 +70756,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -70837,7 +70837,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -71074,7 +71074,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -71146,7 +71146,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -71162,7 +71162,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -71513,7 +71513,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -71578,7 +71578,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -71659,7 +71659,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -72962,7 +72962,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -72992,7 +72992,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -73064,7 +73064,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -73080,7 +73080,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -73266,7 +73266,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -73338,7 +73338,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -73354,7 +73354,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -73438,7 +73438,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -73510,7 +73510,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -73642,7 +73642,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -74253,7 +74253,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -74318,7 +74318,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -74399,7 +74399,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -74636,7 +74636,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -74708,7 +74708,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -74724,7 +74724,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -74794,7 +74794,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -74859,7 +74859,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -74880,7 +74880,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -74931,7 +74931,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -75082,7 +75082,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -75154,7 +75154,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -75286,7 +75286,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -75702,7 +75702,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -75904,7 +75904,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -75976,7 +75976,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -76108,7 +76108,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -76171,7 +76171,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -76236,7 +76236,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -76250,7 +76250,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -76317,7 +76317,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -76828,7 +76828,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -76900,7 +76900,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -76916,7 +76916,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -77102,7 +77102,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -77174,7 +77174,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -77190,7 +77190,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -78356,7 +78356,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -78421,7 +78421,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -78493,7 +78493,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -78644,7 +78644,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -78716,7 +78716,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -78848,7 +78848,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -79020,7 +79020,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -79092,7 +79092,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -79108,7 +79108,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -79178,7 +79178,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -79243,7 +79243,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -79315,7 +79315,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -79726,7 +79726,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -79791,7 +79791,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -79863,7 +79863,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -80938,7 +80938,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -81010,7 +81010,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -81026,7 +81026,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_I",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -81377,7 +81377,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "4": {
@@ -81442,7 +81442,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "6": {
@@ -81523,7 +81523,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_B",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -81644,7 +81644,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -81709,7 +81709,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -81730,7 +81730,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "행성우주과학",
             "teacher": "유연정",
             "subjectRaw": "행성우주과학(유연정)",
-            "room": "203_H",
+            "room": "5층 지구과학실",
             "isFree": false
           }
         },
@@ -81781,7 +81781,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_G",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -82206,7 +82206,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -82278,7 +82278,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           }
         },
@@ -82410,7 +82410,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "역학과 에너지",
             "teacher": "성경진",
             "subjectRaw": "역학과 에너지(성경진)",
-            "room": "204_H",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "5": {
@@ -83613,7 +83613,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -83664,14 +83664,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -83780,7 +83780,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -83887,7 +83887,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -83938,21 +83938,21 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -84033,7 +84033,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -84054,7 +84054,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -84175,7 +84175,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -84270,7 +84270,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -85206,7 +85206,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -85250,7 +85250,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -86093,7 +86093,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -86188,7 +86188,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -86353,7 +86353,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -86404,14 +86404,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -86520,7 +86520,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -86692,7 +86692,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -86773,7 +86773,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -87514,7 +87514,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -87595,7 +87595,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -87672,7 +87672,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -87716,7 +87716,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -88062,7 +88062,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -88143,7 +88143,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -88884,7 +88884,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -88965,7 +88965,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -89158,7 +89158,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -89239,7 +89239,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -89316,7 +89316,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -89360,7 +89360,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -89929,7 +89929,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -90024,7 +90024,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -90477,7 +90477,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -90572,7 +90572,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -91011,7 +91011,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -91062,14 +91062,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -91178,7 +91178,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -91234,7 +91234,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -91278,7 +91278,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -91573,7 +91573,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -91668,7 +91668,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -91861,7 +91861,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -91877,7 +91877,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -91928,7 +91928,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -92381,7 +92381,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -92395,7 +92395,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -92432,14 +92432,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -92490,7 +92490,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -92548,7 +92548,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -92683,7 +92683,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -92699,7 +92699,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -92750,7 +92750,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -92957,7 +92957,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -92973,7 +92973,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -93024,7 +93024,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -93231,7 +93231,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -93247,7 +93247,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -93298,7 +93298,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -93816,7 +93816,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -93897,7 +93897,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -94025,7 +94025,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -94076,14 +94076,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -94192,7 +94192,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -94847,7 +94847,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -94898,14 +94898,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -95014,7 +95014,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -95683,7 +95683,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -95778,7 +95778,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -95971,7 +95971,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -95987,7 +95987,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -96038,7 +96038,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -96830,7 +96830,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -96911,7 +96911,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -97039,7 +97039,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -97090,21 +97090,21 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -97185,7 +97185,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -97206,7 +97206,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -97615,7 +97615,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -97631,7 +97631,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -97682,7 +97682,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -98084,7 +98084,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -98128,7 +98128,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -99793,7 +99793,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -99807,7 +99807,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -99823,7 +99823,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -99874,7 +99874,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -99888,7 +99888,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -100053,7 +100053,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -100104,14 +100104,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -100220,7 +100220,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -100615,7 +100615,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -100710,7 +100710,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_B",
+            "room": "5층 물리실",
             "isFree": false
           },
           "4": {
@@ -101488,7 +101488,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -101569,7 +101569,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -102273,7 +102273,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -102289,7 +102289,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -102340,7 +102340,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -102519,7 +102519,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -102570,14 +102570,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -102686,7 +102686,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -102742,7 +102742,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -102786,7 +102786,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -103016,7 +103016,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -103060,7 +103060,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -103564,7 +103564,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -103608,7 +103608,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -103838,7 +103838,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -103882,7 +103882,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -104502,7 +104502,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -104583,7 +104583,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -104776,7 +104776,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -104857,7 +104857,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -105259,7 +105259,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -105310,14 +105310,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -105426,7 +105426,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -105482,7 +105482,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -105526,7 +105526,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -105561,7 +105561,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "308_E",
+            "room": "5층 물리실",
             "isFree": false
           },
           "7": {
@@ -105577,7 +105577,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "308_E",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "2": {
@@ -105628,7 +105628,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "308_E",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "2": {
@@ -105756,7 +105756,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "3": {
@@ -105800,7 +105800,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_D",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
@@ -106355,7 +106355,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "성경진",
             "subjectRaw": "융합과학(성경진)",
-            "room": "304_A",
+            "room": "4층 무한상상실",
             "isFree": false
           },
           "3": {
@@ -106406,14 +106406,14 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "3": {
             "subject": "융합과학",
             "teacher": "유연정",
             "subjectRaw": "융합과학(유연정)",
-            "room": "304_A",
+            "room": "5층 지구과학실",
             "isFree": false
           },
           "4": {
@@ -106522,7 +106522,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "융합과학",
             "teacher": "박주현",
             "subjectRaw": "융합과학(박주현)",
-            "room": "304_A",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -106694,7 +106694,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "5": {
@@ -106775,7 +106775,7 @@ window.SCHOOL_TIMETABLE_DATA = {
             "subject": "생활과 과학",
             "teacher": "박주현",
             "subjectRaw": "생활과 과학(박주현)",
-            "room": "303_C",
+            "room": "5층 물리실",
             "isFree": false
           },
           "2": {
