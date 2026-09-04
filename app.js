@@ -288,7 +288,7 @@ const GOOGLE_SHEET_VIEW_URL = 'https://docs.google.com/spreadsheets/d/1ggyWYYaAx
 // Application State
 const AppState = {
   data: window.SCHOOL_TIMETABLE_DATA || null,
-  currentTab: 'teacher', // 'teacher' | 'class' | 'meeting' | 'free' | 'matrix' | 'live' | 'calendar' | 'upload'
+  currentTab: 'calendar', // 'calendar' (default) | 'teacher' | 'class' | 'meeting' | 'free' | 'matrix' | 'live' | 'calendar' | 'upload'
   selectedTeacherId: null,
   selectedClassId: null,
   selectedGrade: 'all', // 'all' | '1' | '2' | '3'
@@ -5761,37 +5761,57 @@ function parseCSV(text) {
 
 function parseGoogleSheetCalendarCSV(csvText) {
   const rows = parseCSV(csvText);
-  let currentMonth = null;
-  const allCalendarDays = [];
+  const calendarDays = [];
   const fridaySchedule = [];
 
   const weekdays = [
-    { name: '월', dayIdx: 3, eventIdx: 4, lessonIdx: [5, 6, 7] },
-    { name: '화', dayIdx: 11, eventIdx: 12, lessonIdx: [13, 14, 15] },
-    { name: '수', dayIdx: 19, eventIdx: 20, lessonIdx: [21, 22, 23] },
-    { name: '목', dayIdx: 27, eventIdx: 28, lessonIdx: [29, 30, 31] },
-    { name: '금', dayIdx: 35, eventIdx: 36, lessonIdx: [37, 38, 39] }
+    { name: '월', dayIdx: 3, eventIdx: 4, lessonIdx: [5, 6, 7], dow: 1 },
+    { name: '화', dayIdx: 11, eventIdx: 12, lessonIdx: [13, 14, 15], dow: 2 },
+    { name: '수', dayIdx: 19, eventIdx: 20, lessonIdx: [21, 22, 23], dow: 3 },
+    { name: '목', dayIdx: 27, eventIdx: 28, lessonIdx: [29, 30, 31], dow: 4 },
+    { name: '금', dayIdx: 35, eventIdx: 36, lessonIdx: [37, 38, 39], dow: 5 }
   ];
+
+  let currentMonth = 3;
 
   rows.forEach((r, idx) => {
     const col0 = r[0]?.trim();
-    if (col0 && /^\d+$/.test(col0)) {
+    const col1 = r[1]?.trim();
+
+    // Row-based month transitions in official sheet
+    if (idx === 5) currentMonth = 3;
+    else if (idx === 10) currentMonth = 4;
+    else if (idx === 16) currentMonth = 5;
+    else if (idx === 21) currentMonth = 6;
+    else if (idx === 27) currentMonth = 7;
+    else if (idx === 38 || idx === 39) currentMonth = 8;
+    else if (idx === 46) currentMonth = 8;
+    else if (idx === 49) currentMonth = 9;
+    else if (idx === 54 || idx === 55 || idx === 57) currentMonth = 10;
+    else if (idx === 60) currentMonth = 11;
+    else if (idx === 65 || idx === 67) currentMonth = 12;
+    else if (idx === 71) currentMonth = 2;
+    else if (col0 && /^\d+$/.test(col0)) {
       currentMonth = parseInt(col0);
     }
 
-    const weekStr = r[1]?.trim();
-    const weekNum = parseInt(weekStr) || null;
-
-    if (!currentMonth) return;
+    const weekNum = parseInt(col1) || null;
 
     weekdays.forEach(wd => {
       const dayStr = r[wd.dayIdx]?.trim();
       if (dayStr && /^\d+$/.test(dayStr)) {
         const dayNum = parseInt(dayStr);
         const eventRaw = r[wd.eventIdx]?.trim() || '';
-        const year = (currentMonth >= 3) ? 2026 : 2027;
-        const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-        
+
+        let actualMonth = currentMonth;
+        let actualYear = (actualMonth >= 3) ? 2026 : 2027;
+        if (idx === 70 && wd.name === '금' && dayNum === 1) {
+          actualMonth = 1;
+          actualYear = 2027;
+        }
+
+        const dateStr = `${actualYear}-${String(actualMonth).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+
         const lessonDays = wd.lessonIdx.map(i => r[i]?.trim() || '');
         const isZeroLesson = lessonDays.length > 0 && lessonDays.every(l => l === '0');
 
@@ -5806,7 +5826,7 @@ function parseGoogleSheetCalendarCSV(csvText) {
                         eventRaw.includes('광복절') ||
                         eventRaw.includes('개천절') || 
                         eventRaw.includes('한글날') || 
-                        eventRaw.includes('성탄절') ||
+                        eventRaw.includes('성탄절') || 
                         eventRaw.includes('신정') || 
                         eventRaw.includes('삼일절') || 
                         eventRaw.includes('노동절');
@@ -5815,10 +5835,10 @@ function parseGoogleSheetCalendarCSV(csvText) {
         let examTitle = '';
         if (eventRaw.includes('1회고사')) {
           isExam = true;
-          examTitle = `${currentMonth <= 7 ? '1학기' : '2학기'} 1회고사 (중간고사)`;
+          examTitle = `${actualMonth <= 7 ? '1학기' : '2학기'} 1회고사 (중간고사)`;
         } else if (eventRaw.includes('2회고사')) {
           isExam = true;
-          examTitle = `${currentMonth <= 7 ? '1학기' : '2학기'} 2회고사 (기말고사)`;
+          examTitle = `${actualMonth <= 7 ? '1학기' : '2학기'} 2회고사 (기말고사)`;
         } else if (eventRaw.includes('학평') || eventRaw.includes('모평')) {
           isExam = true;
           examTitle = '전국연합학력평가 / 모의평가';
@@ -5827,10 +5847,10 @@ function parseGoogleSheetCalendarCSV(csvText) {
           examTitle = '대학수학능력시험';
         }
 
-        allCalendarDays.push({
+        calendarDays.push({
           date: dateStr,
-          year,
-          month: currentMonth,
+          year: actualYear,
+          month: actualMonth,
           day: dayNum,
           dayOfWeek: wd.name,
           week: weekNum,
@@ -5849,15 +5869,20 @@ function parseGoogleSheetCalendarCSV(csvText) {
 
     if (friDayStr && /^\d+$/.test(friDayStr)) {
       const friDay = parseInt(friDayStr);
-      const year = (currentMonth >= 3) ? 2026 : 2027;
-      const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(friDay).padStart(2, '0')}`;
+      let actualMonth = currentMonth;
+      let actualYear = (actualMonth >= 3) ? 2026 : 2027;
+      if (idx === 70 && friDay === 1) {
+        actualMonth = 1;
+        actualYear = 2027;
+      }
+      const dateStr = `${actualYear}-${String(actualMonth).padStart(2, '0')}-${String(friDay).padStart(2, '0')}`;
       const friEvent = r[36]?.trim() || '';
 
       if (c1.some(x => x && x !== '5' && x !== '1학년')) {
         fridaySchedule.push({
           date: dateStr,
-          year,
-          month: currentMonth,
+          year: actualYear,
+          month: actualMonth,
           day: friDay,
           week: weekNum,
           event: friEvent,
@@ -5870,7 +5895,7 @@ function parseGoogleSheetCalendarCSV(csvText) {
   });
 
   return {
-    calendarDays: allCalendarDays,
+    calendarDays: calendarDays,
     fridaySchedule: fridaySchedule
   };
 }
@@ -6086,6 +6111,46 @@ function stepFridayWeek(step) {
   renderApp();
 }
 
+
+function generate5DayMonthRows(y, m) {
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const rows = [];
+  let currentRow = [];
+
+  let firstWeekday = 1;
+  while (firstWeekday <= daysInMonth) {
+    const dow = new Date(y, m - 1, firstWeekday).getDay();
+    if (dow >= 1 && dow <= 5) break;
+    firstWeekday++;
+  }
+
+  const firstDow = new Date(y, m - 1, firstWeekday).getDay();
+  for (let i = 1; i < firstDow; i++) {
+    currentRow.push({ type: 'empty' });
+  }
+
+  for (let d = firstWeekday; d <= daysInMonth; d++) {
+    const dow = new Date(y, m - 1, d).getDay();
+    if (dow === 0 || dow === 6) continue; // Skip Sat & Sun
+
+    currentRow.push({ type: 'day', day: d, dow: dow });
+
+    if (dow === 5) {
+      rows.push(currentRow);
+      currentRow = [];
+    }
+  }
+
+  if (currentRow.length > 0) {
+    while (currentRow.length < 5) {
+      currentRow.push({ type: 'empty' });
+    }
+    rows.push(currentRow);
+  }
+
+  return rows;
+}
+
 /* ==========================================================================
    Calendar Renderers (연간, 월별, 주별 캘린더 독립 뷰)
    ========================================================================== */
@@ -6199,6 +6264,7 @@ function renderCalendarView(container) {
 
 // 1. Year View (연간 캘린더)
 function renderCalendarYearView(cal) {
+  cal = cal || getAcademicCalendar();
   const months = [
     { y: 2026, m: 3, label: '3월' },
     { y: 2026, m: 4, label: '4월' },
@@ -6221,10 +6287,10 @@ function renderCalendarYearView(cal) {
   let html = `
     <div style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
       <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
-        🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월)
+        🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월, 월~금 일과 기준)
       </h3>
       <span style="font-size: 0.8rem; color: var(--text-muted);">
-        💡 각 월 카드를 클릭하면 해당 월별 캘린더로 이동합니다.
+        💡 날짜에 마우스를 올리면 학사 행사가 표시되며, 월 카드를 클릭하면 해당 월별 캘린더로 이동합니다.
       </span>
     </div>
 
@@ -6232,7 +6298,16 @@ function renderCalendarYearView(cal) {
       ${months.map(item => {
         const isCurMonth = (item.y === curY && item.m === curM);
         const daysInMonth = new Date(item.y, item.m, 0).getDate();
-        const firstDayDow = new Date(item.y, item.m - 1, 1).getDay();
+
+        // 5-day week empty prefix calculation
+        let firstWeekday = 1;
+        while (firstWeekday <= daysInMonth) {
+          const dow = new Date(item.y, item.m - 1, firstWeekday).getDay();
+          if (dow >= 1 && dow <= 5) break;
+          firstWeekday++;
+        }
+        const firstDow = new Date(item.y, item.m - 1, firstWeekday).getDay(); // 1~5
+        const emptyCount = Math.max(0, firstDow - 1);
 
         const monthEvents = cal.calendarDays.filter(d => d.year === item.y && d.month === item.m);
 
@@ -6244,24 +6319,28 @@ function renderCalendarYearView(cal) {
             </div>
 
             <div class="mini-month-grid">
-              <span class="mini-month-th">일</span>
               <span class="mini-month-th">월</span>
               <span class="mini-month-th">화</span>
               <span class="mini-month-th">수</span>
               <span class="mini-month-th">목</span>
               <span class="mini-month-th">금</span>
-              <span class="mini-month-th">토</span>
 
-              ${Array(firstDayDow).fill(0).map(() => '<span class="mini-day-cell other-month"></span>').join('')}
+              ${Array(emptyCount).fill(0).map(() => '<span class="mini-day-cell other-month"></span>').join('')}
 
               ${Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
-                const dayEvent = monthEvents.find(d => d.day === day);
+                const dow = new Date(item.y, item.m - 1, day).getDay();
+                if (dow === 0 || dow === 6) return ''; // Skip Sat & Sun!
+
+                const dateStr = `${item.y}-${String(item.m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvent = monthEvents.find(d => d.date === dateStr);
                 const isHoliday = dayEvent && dayEvent.isHoliday;
                 const isExam = dayEvent && dayEvent.isExam;
                 const isToday = isCurMonth && (day === now.getDate());
+                const eventText = dayEvent && dayEvent.event ? dayEvent.event.replace(/\n/g, ' ') : '';
+                const tooltipTitle = escapeHtml(eventText ? `${item.m}월 ${day}일: ${eventText}` : `${item.m}월 ${day}일 (정규수업)`);
 
                 return `
-                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${dayEvent ? `${day}일: ${dayEvent.event.replace(/\n/g, ' ')}` : `${day}일`}">
+                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${tooltipTitle}">
                     ${day}
                   </span>
                 `;
@@ -6276,16 +6355,13 @@ function renderCalendarYearView(cal) {
   return html;
 }
 
-// 2. Month View (월별 캘린더)
+// 2. Month View (월별 캘린더 - 토·일 제외 월~금 5열 학사일정)
 function renderCalendarMonthView(cal) {
+  cal = cal || getAcademicCalendar();
   const y = AppState.calendarYear || 2026;
   const m = AppState.calendarMonth || 9;
   const now = new Date();
   const isCurrentMonth = (y === now.getFullYear() && m === (now.getMonth() + 1));
-
-  const daysInMonth = new Date(y, m, 0).getDate();
-  const firstDayDow = new Date(y, m - 1, 1).getDay();
-  const totalCells = Math.ceil((firstDayDow + daysInMonth) / 7) * 7;
 
   const monthOptions = [
     { y: 2026, m: 3, label: '2026년 3월' },
@@ -6302,10 +6378,12 @@ function renderCalendarMonthView(cal) {
     { y: 2027, m: 2, label: '2027년 2월' }
   ];
 
+  const rows = generate5DayMonthRows(y, m);
+
   let html = `
     <!-- Month Controls -->
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(-1)">◀ 이전 달</button>
         <select class="filter-select" style="font-weight: 700; font-size: 1rem; padding: 0.4rem 0.85rem;" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);">
           ${monthOptions.map(opt => `
@@ -6327,55 +6405,49 @@ function renderCalendarMonthView(cal) {
       </div>
     </div>
 
-    <!-- Month Table -->
+    <!-- Month Table (5 Columns: Mon ~ Fri) -->
     <div style="overflow-x: auto;">
       <table class="month-calendar-table">
         <thead>
           <tr>
-            <th class="sun">일 (Sun)</th>
-            <th>월 (Mon)</th>
-            <th>화 (Tue)</th>
-            <th>수 (Wed)</th>
-            <th>목 (Thu)</th>
-            <th>금 (Fri)</th>
-            <th class="sat">토 (Sat)</th>
+            <th style="width: 20%;">월 (Mon)</th>
+            <th style="width: 20%;">화 (Tue)</th>
+            <th style="width: 20%;">수 (Wed)</th>
+            <th style="width: 20%;">목 (Thu)</th>
+            <th style="width: 20%;">금 (Fri)</th>
           </tr>
         </thead>
         <tbody>
   `;
 
-  for (let c = 0; c < totalCells; c += 7) {
+  rows.forEach(r => {
     html += '<tr>';
-    for (let dow = 0; dow < 7; dow++) {
-      const cellIdx = c + dow;
-      const dayNum = cellIdx - firstDayDow + 1;
-      const isCurrentDay = (dayNum >= 1 && dayNum <= daysInMonth);
-
-      if (!isCurrentDay) {
+    r.forEach(cell => {
+      if (cell.type === 'empty') {
         html += '<td class="month-day-cell other-month"></td>';
-        continue;
+        return;
       }
 
+      const dayNum = cell.day;
       const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
       const dayEvent = cal.calendarDays.find(d => d.date === dateStr);
       const isToday = isCurrentMonth && (dayNum === now.getDate());
-      const isSun = (dow === 0);
-      const isSat = (dow === 6);
-      const isFri = (dow === 5);
-      const isHoliday = isSun || (dayEvent && dayEvent.isHoliday);
-      const isExam = dayEvent && dayEvent.isExam;
+      const isFri = (cell.dow === 5);
+      const isHoliday = (dayEvent && dayEvent.isHoliday);
+      const isExam = (dayEvent && dayEvent.isExam);
 
       const friChangche = isFri ? cal.fridaySchedule.find(f => f.date === dateStr) : null;
+      const tooltipTitle = escapeHtml(dayEvent && dayEvent.event ? `${m}월 ${dayNum}일: ${dayEvent.event.replace(/\n/g, ' ')}` : `${m}월 ${dayNum}일`);
 
       html += `
-        <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="openCalendarDayDetailModal('${dateStr}')">
-          <div class="day-header-num ${isSun ? 'sun' : ''} ${isSat ? 'sat' : ''}">
-            <span class="day-number">${dayNum}</span>
+        <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="openCalendarDayDetailModal('${dateStr}')" title="${tooltipTitle}">
+          <div class="day-header-num">
+            <span class="day-number" ${isHoliday ? 'style="color:#ef4444;"' : ''}>${dayNum}</span>
             ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:var(--primary);">오늘</span>' : ''}
           </div>
 
           <div class="day-events-list">
-            ${isHoliday && !isSun ? '<span class="calendar-event-pill pill-holiday">🌴 휴일</span>' : ''}
+            ${isHoliday ? '<span class="calendar-event-pill pill-holiday">🌴 휴일</span>' : ''}
             ${isExam ? `<span class="calendar-event-pill pill-exam">📝 ${dayEvent.examTitle || '시험/평가'}</span>` : ''}
             ${friChangche ? `
               <span class="calendar-event-pill pill-changche" title="금 5~7교시 창체">
@@ -6388,9 +6460,9 @@ function renderCalendarMonthView(cal) {
           </div>
         </td>
       `;
-    }
+    });
     html += '</tr>';
-  }
+  });
 
   html += `
         </tbody>
@@ -6401,8 +6473,9 @@ function renderCalendarMonthView(cal) {
   return html;
 }
 
-// 3. Week View (주별 캘린더)
+// 3. Week View (주별 캘린더 - 월~금 5열 및 금요 창체 카드)
 function renderCalendarWeekView(cal) {
+  cal = cal || getAcademicCalendar();
   const fridayList = cal.fridaySchedule || [];
   const selectedDate = AppState.calendarWeekDate || (fridayList[0] ? fridayList[0].date : '2026-09-04');
   const selectedFri = fridayList.find(f => f.date === selectedDate) || fridayList[0];
@@ -6431,20 +6504,20 @@ function renderCalendarWeekView(cal) {
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   let html = `
-    <!-- Week Controls -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+    <!-- Week Controls (Responsive & Non-clipping) -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem; margin-bottom: 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; max-width: 100%;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(-1)">◀ 이전 주</button>
-        <select class="filter-select" style="font-weight: 700; font-size: 0.95rem; padding: 0.4rem 0.85rem;" onchange="selectCalendarWeek(this.value)">
+        <select class="filter-select" style="font-weight: 700; font-size: 0.92rem; padding: 0.4rem 0.75rem; max-width: 100%;" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금요일) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
+              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
             </option>
           `).join('')}
         </select>
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(1)">다음 주 ▶</button>
         <button type="button" class="btn btn-sm ${selectedDate === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
-          이번 주 (9월 4일)로 이동
+          이번 주 (9/4)
         </button>
       </div>
 

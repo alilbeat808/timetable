@@ -9,7 +9,7 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="app.css?v=4.1">
+  <link rel="stylesheet" href="app.css?v=4.2">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
 </head>
 <body>
@@ -17,7 +17,7 @@
   <!-- Top App Header -->
   <header class="app-header">
     <div class="header-inner">
-      <div class="brand-section" onclick="switchTab('teacher')">
+      <div class="brand-section" onclick="switchTab('calendar')">
         <div class="brand-icon">📅</div>
         <div class="brand-info">
           <h1>
@@ -61,7 +61,11 @@
   <!-- Desktop Navigation Tabs -->
   <div class="nav-tabs-wrapper">
     <nav class="nav-tabs">
-      <button class="nav-tab-btn active" data-tab="teacher">
+      <button class="nav-tab-btn active" data-tab="calendar">
+        <span>📅</span>
+        <span>학사일정</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="teacher">
         <span>👨‍🏫</span>
         <span>교사별 시간표</span>
       </button>
@@ -89,10 +93,6 @@
         <span>⏰</span>
         <span>실시간 일과</span>
       </button>
-      <button class="nav-tab-btn" data-tab="calendar">
-        <span>📅</span>
-        <span>학사일정</span>
-      </button>
       <button class="nav-tab-btn" data-tab="upload">
         <span>🔄</span>
         <span>파일 업로드</span>
@@ -107,7 +107,11 @@
 
   <!-- Mobile Bottom Navigation Bar -->
   <nav class="mobile-nav-bar">
-    <button class="mobile-nav-item active" data-tab="teacher">
+    <button class="mobile-nav-item active" data-tab="calendar">
+      <span>📅</span>
+      <span>학사일정</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="teacher">
       <span>👨‍🏫</span>
       <span>교사별</span>
     </button>
@@ -118,10 +122,6 @@
     <button class="mobile-nav-item" data-tab="student">
       <span>🎓</span>
       <span>학생별</span>
-    </button>
-    <button class="mobile-nav-item" data-tab="calendar">
-      <span>📅</span>
-      <span>학사일정</span>
     </button>
     <button class="mobile-nav-item" data-tab="meeting">
       <span>🤝</span>
@@ -144,8 +144,8 @@
   </footer>
 
   <!-- Timetable Data Script (Rapid standalone load) -->
-  <script src="timetable_data.js?v=4.1"></script>
+  <script src="timetable_data.js?v=4.2"></script>
   <!-- Application Core Script -->
-  <script src="app.js?v=4.1"></script>
+  <script src="app.js?v=4.2"></script>
 </body>
 </html>

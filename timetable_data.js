@@ -109658,9 +109658,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-03",
+      "date": "2026-08-03",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 3,
       "dayOfWeek": "월",
       "week": 8,
@@ -109670,9 +109670,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-04",
+      "date": "2026-08-04",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 4,
       "dayOfWeek": "화",
       "week": 8,
@@ -109682,9 +109682,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-08-05",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 5,
       "dayOfWeek": "수",
       "week": 8,
@@ -109694,9 +109694,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-06",
+      "date": "2026-08-06",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 6,
       "dayOfWeek": "목",
       "week": 8,
@@ -109706,9 +109706,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-07",
+      "date": "2026-08-07",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 7,
       "dayOfWeek": "금",
       "week": 8,
@@ -109718,9 +109718,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-10",
+      "date": "2026-08-10",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 10,
       "dayOfWeek": "월",
       "week": 8,
@@ -109730,9 +109730,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-11",
+      "date": "2026-08-11",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 11,
       "dayOfWeek": "화",
       "week": 8,
@@ -109742,9 +109742,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-12",
+      "date": "2026-08-12",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 12,
       "dayOfWeek": "수",
       "week": 8,
@@ -109754,9 +109754,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-13",
+      "date": "2026-08-13",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 13,
       "dayOfWeek": "목",
       "week": 8,
@@ -109766,9 +109766,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-07-14",
+      "date": "2026-08-14",
       "year": 2026,
-      "month": 7,
+      "month": 8,
       "day": 14,
       "dayOfWeek": "금",
       "week": 8,
@@ -110174,9 +110174,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-01",
+      "date": "2026-10-01",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 1,
       "dayOfWeek": "목",
       "week": 7,
@@ -110186,9 +110186,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-02",
+      "date": "2026-10-02",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 2,
       "dayOfWeek": "금",
       "week": 7,
@@ -110198,9 +110198,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-05",
+      "date": "2026-10-05",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 5,
       "dayOfWeek": "월",
       "week": 8,
@@ -110210,9 +110210,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-06",
+      "date": "2026-10-06",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 6,
       "dayOfWeek": "화",
       "week": 8,
@@ -110222,9 +110222,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-10-07",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 7,
       "dayOfWeek": "수",
       "week": 8,
@@ -110234,9 +110234,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-08",
+      "date": "2026-10-08",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 8,
       "dayOfWeek": "목",
       "week": 8,
@@ -110246,9 +110246,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-09-09",
+      "date": "2026-10-09",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 9,
       "dayOfWeek": "금",
       "week": 8,
@@ -110966,9 +110966,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       "examTitle": ""
     },
     {
-      "date": "2026-12-01",
-      "year": 2026,
-      "month": 12,
+      "date": "2027-01-01",
+      "year": 2027,
+      "month": 1,
       "day": 1,
       "dayOfWeek": "금",
       "week": 20,
@@ -111569,9 +111569,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
       ]
     },
     {
-      "date": "2026-09-02",
+      "date": "2026-10-02",
       "year": 2026,
-      "month": 9,
+      "month": 10,
       "day": 2,
       "week": 7,
       "event": "동아리활동\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
