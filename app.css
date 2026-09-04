@@ -1814,7 +1814,7 @@ body {
    Matrix Overview Table & Sticky Headers
    ========================================================================== */
 .matrix-container {
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: auto;
   max-height: 720px;
   position: relative;
@@ -1822,10 +1822,12 @@ body {
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   scrollbar-width: thin;
+  width: 100%;
 }
 
 .matrix-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   background: var(--bg-surface);
@@ -1835,10 +1837,11 @@ body {
 .matrix-table td {
   border-right: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.55rem 0.45rem;
+  padding: 0.4rem 0.25rem;
   text-align: center;
   font-size: 0.82rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Regular th: sticky to top */
@@ -1850,6 +1853,7 @@ body {
   box-shadow: 0 1px 0 var(--border-color);
   font-weight: 700;
   color: var(--text-primary);
+  font-size: 0.8rem;
 }
 
 /* Regular td */
@@ -1864,10 +1868,15 @@ body {
   background: var(--bg-surface-elevated);
   font-weight: 700;
   z-index: 10;
-  text-align: left;
-  padding-left: 0.85rem;
+  text-align: center;
+  padding: 0.35rem 0.25rem;
   box-shadow: 1px 0 0 var(--border-color);
   white-space: nowrap;
+  width: 11%;
+  max-width: 11%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Top-Left Corner Header Cell: STICKY ON BOTH TOP AND LEFT */
@@ -1878,9 +1887,38 @@ body {
   z-index: 35;
   background: var(--bg-surface-elevated);
   box-shadow: 1px 1px 0 var(--border-color);
-  text-align: left;
-  padding-left: 0.85rem;
+  text-align: center;
+  padding: 0.45rem 0.25rem;
   white-space: nowrap;
+  width: 11%;
+  max-width: 11%;
+  box-sizing: border-box;
+}
+
+/* 7 period columns: 12.71% each -> 7 * 12.71% = 88.97% + 11% = 100% */
+.matrix-table th:not(.entity-col),
+.matrix-table td:not(.entity-col) {
+  width: 12.71%;
+  max-width: 12.71%;
+  box-sizing: border-box;
+  padding: 0.35rem 0.2rem;
+  overflow: hidden;
+}
+
+/* Subject pill inside matrix cell */
+.matrix-cell-pill {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.26rem 0.3rem;
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
 /* Desktop vs Mobile Matrix View Visibility (Default: Desktop) */
@@ -1897,7 +1935,11 @@ body {
   display: none;
 }
 .matrix-desktop-text {
-  display: inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  letter-spacing: -0.2px;
 }
 .matrix-mobile-compact {
   display: none;

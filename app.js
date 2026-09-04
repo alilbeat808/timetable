@@ -349,17 +349,15 @@ function initDefaultSelections() {
   AppState.selectedClassId = null;
   AppState.selectedStudentId = null;
 
-  if (AppState.data && AppState.data.teachers && AppState.data.teachers.length > 0) {
-    // Default meeting teachers preset: 교무기획부
-    if (AppState.meetingSelectedTeachers.length === 0) {
-      const gyoNames = OFFICIAL_ADMIN_DEPTS['교무기획부'];
-      AppState.meetingSelectedTeachers = AppState.data.teachers
-        .filter(t => gyoNames.includes(t.name))
-        .map(t => t.id);
-      AppState.meetingActivePreset = 'admin_교무기획부';
-      AppState.meetingActivePresetTitle = '교무기획부';
-    }
-  }
+  // Submenus should default to CLOSED on initial load as requested
+  AppState.teacherSubmenuOpen = false;
+  AppState.classSubmenuOpen = false;
+  AppState.studentSubmenuOpen = false;
+
+  // Meeting tab also starts with NO preset/teachers selected initially as requested
+  AppState.meetingSelectedTeachers = [];
+  AppState.meetingActivePreset = '';
+  AppState.meetingActivePresetTitle = '';
   
   const todayIdx = new Date().getDay();
   if (todayIdx >= 1 && todayIdx <= 5) {
@@ -378,21 +376,21 @@ function setupEventListeners() {
           toggleTeacherSubmenu();
           return;
         } else {
-          AppState.teacherSubmenuOpen = true;
+          AppState.teacherSubmenuOpen = false;
         }
       } else if (tab === 'student') {
         if (AppState.currentTab === 'student') {
           toggleStudentSubmenu();
           return;
         } else {
-          AppState.studentSubmenuOpen = true;
+          AppState.studentSubmenuOpen = false;
         }
       } else if (tab === 'class') {
         if (AppState.currentTab === 'class') {
           toggleClassSubmenu();
           return;
         } else {
-          AppState.classSubmenuOpen = true;
+          AppState.classSubmenuOpen = false;
         }
       }
       switchTab(tab);
@@ -862,6 +860,11 @@ function switchTab(tab) {
 
   // Reset matrix filter
   AppState.matrixFilter = 'all';
+
+  // Submenus should start closed when navigating to any tab
+  AppState.teacherSubmenuOpen = false;
+  AppState.classSubmenuOpen = false;
+  AppState.studentSubmenuOpen = false;
 
   // Note: AppState.meetingSelectedTeachers (공강 교집합 선택 교사 목록) is intentionally
   // preserved as requested, allowing users to keep their mutual free period intersection setup.
@@ -4367,7 +4370,7 @@ function renderMatrixView(container) {
           <thead>
             <tr>
               <th class="entity-col">
-                <span class="matrix-header-desktop">${AppState.matrixType === 'teacher' ? '교사명 (직책/시수)' : '학반명 (담임)'}</span>
+                <span class="matrix-header-desktop">${AppState.matrixType === 'teacher' ? '교사' : '학반'}</span>
                 <span class="matrix-header-mobile">${AppState.matrixType === 'teacher' ? '교사' : '학반'}</span>
               </th>
               ${PERIODS.map(p => `<th>${p}교시</th>`).join('')}
@@ -4418,14 +4421,9 @@ function renderTeacherMatrixRows() {
     return `
       <tr>
         <td class="entity-col">
-          <div class="matrix-entity-desktop">
+          <div class="matrix-entity-desktop" title="${t.name}${admin ? ` [${admin.dept} ${admin.duty}]` : ''}${subj ? ` [${subj}]` : ''}${t.homeroom ? ` [${t.homeroom} 담임]` : ''}">
             <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToTeacher('${t.name}')">${t.name}</span>
-            ${admin && admin.isHead ? `<span class="role-badge-head" style="font-size:0.65rem;">부장</span>` : ''}
-            ${admin && admin.isPlan ? `<span class="role-badge-plan" style="font-size:0.65rem;">기획</span>` : ''}
-            ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="font-size:0.65rem;">${admin.duty}</span>` : ''}
-            ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${subj}</span>` : ''}
-            ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${t.homeroom}</span>` : ''}
-            <span style="font-size: 0.72rem; color: var(--text-muted);">(${dayHours}h)</span>
+            ${t.homeroom ? `<span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-left: 0.2rem;">(${t.homeroom})</span>` : ''}
           </div>
           <div class="matrix-entity-mobile">
             <span class="matrix-name-mobile" onclick="navigateToTeacher('${t.name}')">${t.name}</span>
@@ -4446,9 +4444,9 @@ function renderTeacherMatrixRows() {
           const shortRoom = getMatrixShortRoom(cell.target, actualRoom);
           return `
             <td class="matrix-period-cell">
-              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToClass('${cell.target}')" title="${displaySubj}${hasDiffRoom ? ` (실제 장소: ${actualRoom})` : ''}">
+              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToClass('${cell.target}')" title="${displaySubj}${cell.target ? ` (${cell.target})` : ''}${hasDiffRoom ? ` [실제 장소: ${actualRoom}]` : ''}">
                 <span class="matrix-desktop-text">
-                  ${displaySubj} ${cell.target ? `(${cell.target})` : ''}${hasDiffRoom ? ` (${actualRoom})` : ''}
+                  ${trackInfo.realSubject}${cell.target ? ` (${cell.target})` : ''}
                 </span>
                 <span class="matrix-mobile-compact">
                   <span class="matrix-short-subj">${shortSubj}</span>
@@ -4492,7 +4490,7 @@ function renderClassMatrixRows() {
         <td class="entity-col">
           <div class="matrix-entity-desktop">
             <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToClass('${c.name}')">${c.name}</span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">(${c.homeroom || ''})</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-left: 0.2rem;">(${c.homeroom || ''})</span>
           </div>
           <div class="matrix-entity-mobile">
             <span class="matrix-name-mobile" onclick="navigateToClass('${c.name}')">${c.name}</span>
@@ -4511,9 +4509,9 @@ function renderClassMatrixRows() {
           const shortRoom = getMatrixShortRoom(cell.target, null);
           return `
             <td class="matrix-period-cell">
-              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToTeacher('${cell.target}')" title="${displaySubj}">
+              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToTeacher('${cell.target}')" title="${displaySubj}${cell.target ? ` (${cell.target})` : ''}">
                 <span class="matrix-desktop-text">
-                  ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
+                  ${trackInfo.realSubject}${cell.target ? ` (${cell.target})` : ''}
                 </span>
                 <span class="matrix-mobile-compact">
                   <span class="matrix-short-subj">${shortSubj}</span>
