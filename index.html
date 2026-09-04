@@ -9,7 +9,7 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="app.css?v=4.0">
+  <link rel="stylesheet" href="app.css?v=4.1">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
 </head>
 <body>
@@ -37,6 +37,12 @@
           <input type="text" id="globalSearchInput" class="search-input" placeholder="교사, 학반, 학생 검색..." autocomplete="off">
           <button type="button" id="globalSearchClearBtn" class="search-clear-btn" style="display: none;" title="검색어 지우기 / 전체 목록 복원">✕</button>
           <div id="globalSearchDropdown" class="search-dropdown" style="display: none;"></div>
+        </div>
+
+        <div class="header-live-clock" id="headerLiveClock" title="오늘 날짜 및 현재 시각">
+          <span>📅</span>
+          <span id="headerClockDateText">2026. 9. 4. (금)</span>
+          <span id="headerClockTimeText" style="opacity: 0.85; margin-left: 0.2rem;">19:00</span>
         </div>
 
         <div class="header-tool-btns">
@@ -83,6 +89,10 @@
         <span>⏰</span>
         <span>실시간 일과</span>
       </button>
+      <button class="nav-tab-btn" data-tab="calendar">
+        <span>📅</span>
+        <span>학사일정</span>
+      </button>
       <button class="nav-tab-btn" data-tab="upload">
         <span>🔄</span>
         <span>파일 업로드</span>
@@ -109,13 +119,17 @@
       <span>🎓</span>
       <span>학생별</span>
     </button>
+    <button class="mobile-nav-item" data-tab="calendar">
+      <span>📅</span>
+      <span>학사일정</span>
+    </button>
     <button class="mobile-nav-item" data-tab="meeting">
       <span>🤝</span>
       <span>회의추천</span>
     </button>
-    <button class="mobile-nav-item" data-tab="free">
-      <span>🔍</span>
-      <span>보강도우미</span>
+    <button class="mobile-nav-item" data-tab="live">
+      <span>⏰</span>
+      <span>실시간</span>
     </button>
     <button class="mobile-nav-item" data-tab="matrix">
       <span>📊</span>
@@ -130,8 +144,8 @@
   </footer>
 
   <!-- Timetable Data Script (Rapid standalone load) -->
-  <script src="timetable_data.js?v=4.0"></script>
+  <script src="timetable_data.js?v=4.1"></script>
   <!-- Application Core Script -->
-  <script src="app.js?v=4.0"></script>
+  <script src="app.js?v=4.1"></script>
 </body>
 </html>

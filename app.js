@@ -187,6 +187,34 @@ function getSubHomeroomForTeacher(teacherName) {
   return TEACHER_SUB_HOMEROOMS[teacherName] || '';
 }
 
+// 6. Official Homeroom Teachers (학급별 담임 교사 명단 20명)
+const CLASS_HOMEROOMS = {
+  '1-1': '신인철', '1-2': '김지원', '1-3': '황정환', '1-4': '유연정', '1-5': '정환웅', '1-6': '배수경',
+  '2-1': '장충걸', '2-2': '김정열', '2-3': '이혜나', '2-4': '김동민', '2-5': '양우석', '2-6': '박태언', '2-7': '김혜정',
+  '3-1': '정동걸', '3-2': '김주영', '3-3': '정석원', '3-4': '강연선', '3-5': '정용', '3-6': '박상율', '3-7': '최호성'
+};
+
+function getHomeroomForClass(className) {
+  if (CLASS_HOMEROOMS[className]) return CLASS_HOMEROOMS[className];
+  if (AppState.data && AppState.data.teachers) {
+    const t = AppState.data.teachers.find(teacher => teacher.homeroom === className);
+    if (t) return t.name;
+  }
+  return '';
+}
+
+function getHomeroomForTeacher(teacherName) {
+  for (const [cls, tName] of Object.entries(CLASS_HOMEROOMS)) {
+    if (tName === teacherName) return cls;
+  }
+  if (AppState.data && AppState.data.teachers) {
+    const t = AppState.data.teachers.find(teacher => teacher.name === teacherName);
+    if (t && t.homeroom) return t.homeroom;
+  }
+  return '';
+}
+
+
 function getTeacherDepartment(teacherName) {
   if (!teacherName) return '';
   for (const [dept, names] of Object.entries(OFFICIAL_DEPARTMENTS)) {
@@ -253,15 +281,29 @@ function sortTeachersList(teachers, adminDept = null) {
   return list.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 }
 
+// Google Sheets Live Academic Calendar URLs
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1ggyWYYaAxecocTBJdqgY6Q7oNh1KICPuwMYHZ232NZU/export?format=csv&gid=352545300';
+const GOOGLE_SHEET_VIEW_URL = 'https://docs.google.com/spreadsheets/d/1ggyWYYaAxecocTBJdqgY6Q7oNh1KICPuwMYHZ232NZU/edit?gid=352545300#gid=352545300';
+
 // Application State
 const AppState = {
   data: window.SCHOOL_TIMETABLE_DATA || null,
-  currentTab: 'teacher', // 'teacher' | 'class' | 'meeting' | 'free' | 'matrix' | 'live' | 'upload'
+  currentTab: 'teacher', // 'teacher' | 'class' | 'meeting' | 'free' | 'matrix' | 'live' | 'calendar' | 'upload'
   selectedTeacherId: null,
   selectedClassId: null,
   selectedGrade: 'all', // 'all' | '1' | '2' | '3'
   selectedDay: '월',
   selectedPeriod: '1',
+
+  // Academic Calendar & Changche State (학사일정 및 주차별 창체 운영계획)
+  academicCalendar: (window.SCHOOL_TIMETABLE_DATA && window.SCHOOL_TIMETABLE_DATA.academicCalendar) ? window.SCHOOL_TIMETABLE_DATA.academicCalendar : null,
+  calendarViewMode: 'month', // 'year' | 'month' | 'week'
+  calendarYear: 2026,
+  calendarMonth: 9, // 1~12
+  calendarWeekDate: '2026-09-04',
+  selectedFridayWeekDate: '2026-09-04',
+  calendarSelectedDayDetail: null,
+  lastCalendarSyncTime: null,
   matrixType: 'teacher', // 'teacher' | 'class'
   matrixFilter: 'all',
   searchQuery: '',
@@ -1017,6 +1059,9 @@ function renderApp() {
     case 'upload':
       renderUploadView(container);
       break;
+    case 'calendar':
+      renderCalendarView(container);
+      break;
     default:
       renderTeacherView(container);
   }
@@ -1635,6 +1680,21 @@ function getTeacherLiveStatus(teacher, now = new Date()) {
   const todayName = state.todayDayName || getTodayDayName();
   const curPeriod = state.activePeriod;
 
+  // Check Academic Calendar Holiday
+  const todayHolidayEvt = getTodayAcademicEvent(now);
+  if (todayHolidayEvt && todayHolidayEvt.isHoliday) {
+    return {
+      statusType: 'holiday',
+      badgeClass: 'status-idle',
+      badgeText: '🌴 학사 휴업일',
+      periodText: '휴일',
+      subjectText: '',
+      locationText: todayHolidayEvt.event || '공휴일/휴업일',
+      displayText: `🌴 학사 휴업일입니다: ${todayHolidayEvt.event}`,
+      subNote: '💡 학사일정에 따른 공식 휴업일로 정규 수업이 진행되지 않습니다.'
+    };
+  }
+
   if (!state.isWeekday) {
     return {
       statusType: 'weekend',
@@ -1827,6 +1887,7 @@ function renderTeacherCardView(teacher, todayName, liveStatus) {
       </span>
     </div>
 
+    ${renderFridayChangcheSelectorBar()}
     <div class="mobile-day-tabs">
       ${DAYS.map(day => `
         <button class="mobile-day-tab ${day === currentDay ? 'active' : ''} ${day === todayName ? 'today-marker' : ''}" onclick="setMobileDay('${day}')">
@@ -1840,11 +1901,20 @@ function renderTeacherCardView(teacher, todayName, liveStatus) {
       ${PERIODS.map(period => {
         const timeInfo = AppState.bellSchedule.find(b => b.period === period);
         const cell = teacher.schedule[currentDay] ? teacher.schedule[currentDay][period.toString()] : null;
-        const isFree = !cell || cell.isFree;
-        const trackInfo = !isFree ? resolveTrackSubject(cell.subject, teacher.name, cell.target, currentDay, period) : null;
-        const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
+
+        // Dynamic Friday Changche for Teacher Card
+        let isTeacherChangche = false;
+        let teacherChangcheInfo = null;
+        if (currentDay === '금' && period >= 5) {
+          teacherChangcheInfo = getTeacherFridayChangche(teacher, period, AppState.selectedFridayWeekDate);
+          if (teacherChangcheInfo) isTeacherChangche = true;
+        }
+
+        const isFree = isTeacherChangche ? false : (!cell || cell.isFree);
+        const trackInfo = (!isFree && !isTeacherChangche) ? resolveTrackSubject(cell.subject, teacher.name, cell.target, currentDay, period) : null;
+        const cat = isTeacherChangche ? teacherChangcheInfo.category : (!isFree ? getSubjectCategory(trackInfo.realSubject) : '');
         const isToday = (currentDay === todayName);
-        const actualRoom = !isFree ? getTeacherActualRoom(teacher.name, currentDay, period, cell) : null;
+        const actualRoom = (!isFree && !isTeacherChangche) ? getTeacherActualRoom(teacher.name, currentDay, period, cell) : null;
         const hasDiffRoom = actualRoom && isDifferentFromTimetable(cell ? cell.target : '', actualRoom);
         
         let isCurrentSlot = false;
@@ -1873,10 +1943,17 @@ function renderTeacherCardView(teacher, todayName, liveStatus) {
               </div>
               <div>
                 ${badgeHtml}
-                ${isFree ? `
+                ${isTeacherChangche ? `
+                  <div class="mobile-period-subject">
+                    <span class="subject-pill ${cat}">${teacherChangcheInfo.subject}</span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
+                    ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''} · ${teacherChangcheInfo.note}
+                  </div>
+                ` : (isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
-                    <span>🌿</span>
-                    <span>${cell && cell.subject === '여유' ? '여유 시간' : '공강 (수업 없음)'}</span>
+                    <span>${currentDay === '금' && period >= 5 ? '🎯' : '🌿'}</span>
+                    <span>${currentDay === '금' && period >= 5 ? '창체·동아리 활동' : (cell && cell.subject === '여유' ? '여유 시간' : '공강 (수업 없음)')}</span>
                   </div>
                 ` : `
                   <div class="mobile-period-subject">
@@ -1885,16 +1962,20 @@ function renderTeacherCardView(teacher, todayName, liveStatus) {
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
                     ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''}
                   </div>
-                `}
+                `)}
               </div>
             </div>
 
             <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem;">
-              ${!isFree && cell.target ? `
+              ${isTeacherChangche ? `
+                <button class="target-badge" style="font-size: 0.88rem; padding: 0.35rem 0.75rem;" onclick="navigateToClass('${teacherChangcheInfo.target}')">
+                  🏫 ${teacherChangcheInfo.target}반 ➔
+                </button>
+              ` : (!isFree && cell && cell.target ? `
                 <button class="target-badge" style="font-size: 0.88rem; padding: 0.35rem 0.75rem;" onclick="navigateToClass('${cell.target}')">
                   🏫 ${cell.target}반 ➔
                 </button>
-              ` : ''}
+              ` : '')}
               ${hasDiffRoom ? `
                 <span class="teacher-actual-room" title="실제 수업 장소: ${actualRoom}">(${actualRoom})</span>
               ` : ''}
@@ -1936,6 +2017,7 @@ function renderTeacherTableView(teacher, todayName, liveStatus) {
       </span>
     </div>
 
+    ${renderFridayChangcheSelectorBar()}
     <div class="timetable-card">
       <table class="timetable-grid">
         <thead>
@@ -1984,6 +2066,33 @@ function renderTeacherTableView(teacher, todayName, liveStatus) {
                   }
 
                   const cellClass = `timetable-cell ${isToday ? 'is-today' : ''} ${isCurrentSlot ? 'is-current-slot' : ''} ${isUpcomingSlot ? 'is-upcoming-slot' : ''}`;
+
+                  // Dynamic Friday Changche Override for Teachers
+                  if (day === '금' && period >= 5) {
+                    const changcheInfo = getTeacherFridayChangche(teacher, period, AppState.selectedFridayWeekDate);
+                    if (changcheInfo) {
+                      return `
+                        <td class="${cellClass}">
+                          <div class="cell-content">
+                            ${slotBadge}
+                            <span class="subject-pill ${changcheInfo.category}">${changcheInfo.subject}</span>
+                            <button class="target-badge" onclick="navigateToClass('${changcheInfo.target}')" title="${changcheInfo.target}반 시간표로 이동">
+                              🏫 ${changcheInfo.target}반
+                            </button>
+                          </div>
+                        </td>
+                      `;
+                    } else {
+                      return `
+                        <td class="${cellClass}">
+                          <div class="cell-content">
+                            ${slotBadge}
+                            <span class="free-period">창체·동아리</span>
+                          </div>
+                        </td>
+                      `;
+                    }
+                  }
                   
                   if (!cell || cell.isFree) {
                     return `
@@ -2349,6 +2458,7 @@ function renderClassCardView(classObj, todayName) {
       </span>
     </div>
 
+    ${renderFridayChangcheSelectorBar()}
     <div class="mobile-day-tabs">
       ${DAYS.map(day => `
         <button class="mobile-day-tab ${day === currentDay ? 'active' : ''} ${day === todayName ? 'today-marker' : ''}" onclick="setMobileDay('${day}')">
@@ -2362,9 +2472,18 @@ function renderClassCardView(classObj, todayName) {
       ${PERIODS.map(period => {
         const timeInfo = AppState.bellSchedule.find(b => b.period === period);
         const cell = classObj.schedule[currentDay] ? classObj.schedule[currentDay][period.toString()] : null;
-        const isFree = !cell || cell.isFree;
-        const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, classObj.name, currentDay, period) : null;
-        const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
+        // Dynamic Friday Changche for Class Mobile Card
+        let isChangcheSlot = false;
+        let changcheSlotData = null;
+        if (currentDay === '금' && period >= 5) {
+          const [gNum, cNum] = classObj.name.split('-').map(Number);
+          changcheSlotData = resolveChangcheSlot(gNum, cNum, period, AppState.selectedFridayWeekDate);
+          if (changcheSlotData) isChangcheSlot = true;
+        }
+
+        const isFree = isChangcheSlot ? false : (!cell || cell.isFree);
+        const trackInfo = (!isFree && !isChangcheSlot) ? resolveTrackSubject(cell.subject, cell.target, classObj.name, currentDay, period) : null;
+        const cat = isChangcheSlot ? changcheSlotData.category : (!isFree ? getSubjectCategory(trackInfo.realSubject) : '');
         const isToday = (currentDay === todayName);
 
         let isCurrentSlot = false;
@@ -2393,7 +2512,14 @@ function renderClassCardView(classObj, todayName) {
               </div>
               <div>
                 ${badgeHtml}
-                ${isFree ? `
+                ${isChangcheSlot ? `
+                  <div class="mobile-period-subject">
+                    <span class="subject-pill ${cat}">${changcheSlotData.subject}</span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
+                    ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''} · ${changcheSlotData.note}
+                  </div>
+                ` : (isFree ? `
                   <div class="mobile-period-subject" style="color: var(--text-muted); font-size: 0.95rem;">
                     <span>수업 없음</span>
                   </div>
@@ -2404,16 +2530,20 @@ function renderClassCardView(classObj, todayName) {
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
                     ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''}
                   </div>
-                `}
+                `)}
               </div>
             </div>
 
             <div>
-              ${!isFree && cell.target ? `
+              ${isChangcheSlot ? `
+                <button class="target-badge" style="font-size: 0.88rem; padding: 0.35rem 0.75rem;" ${changcheSlotData.teacherName ? `onclick="navigateToTeacher('${changcheSlotData.teacherName}')"` : 'style="cursor:default;"'} title="${changcheSlotData.note}">
+                  👨‍🏫 ${changcheSlotData.teacher}
+                </button>
+              ` : (!isFree && cell && cell.target ? `
                 <button class="target-badge" style="font-size: 0.88rem; padding: 0.35rem 0.75rem;" onclick="navigateToTeacher('${cell.target}')">
                   👨‍🏫 ${cell.target} ➔
                 </button>
-              ` : ''}
+              ` : '')}
             </div>
           </div>
         `;
@@ -2509,6 +2639,25 @@ function renderClassTableView(classObj, todayName) {
                         </div>
                       </td>
                     `;
+                  }
+
+                  // Dynamic Friday Changche Override (금요일 5~7교시 여유·진로·동아리 동적 반영)
+                  if (day === '금' && period >= 5) {
+                    const [gNum, cNum] = classObj.name.split('-').map(Number);
+                    const changcheSlot = resolveChangcheSlot(gNum, cNum, period, AppState.selectedFridayWeekDate);
+                    if (changcheSlot) {
+                      return `
+                        <td class="${cellClass}">
+                          <div class="cell-content">
+                            ${slotBadge}
+                            <span class="subject-pill ${changcheSlot.category}">${changcheSlot.subject}</span>
+                            <button class="target-badge" ${changcheSlot.teacherName ? `onclick="navigateToTeacher('${changcheSlot.teacherName}')" title="${changcheSlot.teacherName} 선생님 시간표로 이동"` : 'style="cursor:default;"'} title="${changcheSlot.note}">
+                              👨‍🏫 ${changcheSlot.teacher}
+                            </button>
+                          </div>
+                        </td>
+                      `;
+                    }
                   }
 
                   const trackInfo = resolveTrackSubject(cell.subject, cell.target, classObj.name, day, period);
@@ -3066,9 +3215,16 @@ function renderStudentLiveHeroCard(student, todayName, state, now) {
 
     if (isFri567) {
       displayRoom = `${student.classRoom} (본인 학급 교실)`;
-      displaySubject = cell && cell.subject ? cell.subject : '창체활동';
-      displayTeacher = cell && cell.teacher ? cell.teacher : '담임';
-      subNote = '💡 금요일 5~7교시 창체(자율/진로/동아리) 활동은 본인 학급 교실에서 진행됩니다.';
+      const curChangche = resolveChangcheSlot(student.grade, student.classNum, curPeriodNum, AppState.selectedFridayWeekDate);
+      if (curChangche) {
+        displaySubject = curChangche.subject;
+        displayTeacher = curChangche.teacher;
+        subNote = `💡 금요일 5~7교시 창체 활동: ${curChangche.note}`;
+      } else {
+        displaySubject = cell && cell.subject ? cell.subject : '창체활동';
+        displayTeacher = cell && cell.teacher ? cell.teacher : '담임';
+        subNote = '💡 금요일 5~7교시 창체(자율/진로/동아리) 활동은 본인 학급 교실에서 진행됩니다.';
+      }
     } else if (isMon1) {
       displayRoom = `${student.classRoom} (본인 학급 교실)`;
       displaySubject = '자율활동';
@@ -3275,6 +3431,7 @@ function renderStudentTableView(student, todayName, state) {
   const curPeriodNum = state.activePeriod;
 
   return `
+    ${renderFridayChangcheSelectorBar()}
     <div class="timetable-card">
       <table class="timetable-grid">
         <thead>
@@ -3327,6 +3484,32 @@ function renderStudentTableView(student, todayName, state) {
                   const isFri567 = day === '금' && (period === 5 || period === 6 || period === 7);
                   const isMon1 = day === '월' && period === 1;
                   const isG3Twt7 = student.grade === 3 && (day === '화' || day === '수' || day === '목') && period === 7;
+
+                  // Dynamic Friday Changche for Student Table View
+                  if (isFri567) {
+                    const changcheSlot = resolveChangcheSlot(student.grade, student.classNum, period, AppState.selectedFridayWeekDate);
+                    if (changcheSlot) {
+                      return `
+                        <td class="${cellClass}">
+                          ${slotBadge}
+                          <div class="student-cell-subject">
+                            <span class="subject-pill ${changcheSlot.category}">${escapeHtml(changcheSlot.subject)}</span>
+                          </div>
+                          <div class="student-cell-teacher">
+                            <button type="button" class="target-badge" style="font-size: 0.76rem; padding: 0.15rem 0.45rem; border-radius: 4px;" ${changcheSlot.teacherName ? `onclick="navigateToTeacher('${changcheSlot.teacherName}')" title="${changcheSlot.teacherName} 선생님 시간표로 이동"` : 'style="cursor:default;"'} title="${changcheSlot.note}">
+                              👨‍🏫 ${escapeHtml(changcheSlot.teacher)}
+                            </button>
+                          </div>
+                          <div class="student-cell-room">
+                            <span class="room-pill is-homeroom">
+                              📍 ${escapeHtml(student.classRoom)}
+                            </span>
+                          </div>
+                        </td>
+                      `;
+                    }
+                  }
+
                   const isFree = !cell || cell.isFree || cell.subject === '공강';
 
                   if (isFree) {
@@ -3411,6 +3594,7 @@ function renderStudentCardView(student, todayName, state) {
   const currentDay = AppState.mobileSelectedDay;
 
   return `
+    ${renderFridayChangcheSelectorBar()}
     <div class="mobile-day-tabs">
       ${DAYS.map(day => `
         <button type="button" class="mobile-day-tab ${day === currentDay ? 'active' : ''} ${day === todayName ? 'today-marker' : ''}" onclick="setMobileDay('${day}')">
@@ -3445,8 +3629,17 @@ function renderStudentCardView(student, todayName, state) {
         const isFri567 = currentDay === '금' && (period === 5 || period === 6 || period === 7);
         const isMon1 = currentDay === '월' && period === 1;
         const isG3Twt7 = student.grade === 3 && (currentDay === '화' || currentDay === '수' || currentDay === '목') && period === 7;
-        const isFree = !cell || cell.isFree || cell.subject === '공강';
-        const cat = !isFree && cell ? getSubjectCategory(cell.subject) : '';
+
+        // Dynamic Friday Changche for Student Mobile Card
+        let isStudentChangche = false;
+        let studentChangcheSlot = null;
+        if (isFri567) {
+          studentChangcheSlot = resolveChangcheSlot(student.grade, student.classNum, period, AppState.selectedFridayWeekDate);
+          if (studentChangcheSlot) isStudentChangche = true;
+        }
+
+        const isFree = isStudentChangche ? false : (!cell || cell.isFree || cell.subject === '공강');
+        const cat = isStudentChangche ? studentChangcheSlot.category : (!isFree && cell ? getSubjectCategory(cell.subject) : '');
 
         let freeRoom = student.classRoom;
         if (isG3Twt7) {
@@ -3483,14 +3676,14 @@ function renderStudentCardView(student, todayName, state) {
                   </div>
                 ` : `
                   <div class="mobile-period-subject">
-                    <span class="subject-pill ${cat}">${escapeHtml(cell.subject)}</span>
+                    <span class="subject-pill ${cat}">${isStudentChangche ? escapeHtml(studentChangcheSlot.subject) : escapeHtml(cell ? cell.subject : '')}</span>
                   </div>
                   <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem;">
-                    ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''}
+                    ${timeInfo ? `${timeInfo.start} ~ ${timeInfo.end}` : ''} ${isStudentChangche ? `· ${studentChangcheSlot.note}` : ''}
                   </div>
                   <div class="student-cell-room ${isCurrentSlot ? 'highlight-room' : ''}" style="margin-top: 0.25rem;">
                     <span class="room-pill ${isHomeroom ? 'is-homeroom' : ''}">
-                      📍 강의실: <strong>${escapeHtml(cell.room)}</strong> ${isHomeroom ? '<span style="font-size:0.68rem; opacity:0.85;">(학급)</span>' : ''}
+                      📍 ${isStudentChangche ? '위치' : '강의실'}: <strong>${isStudentChangche ? escapeHtml(student.classRoom) : escapeHtml(cell.room)}</strong> ${isHomeroom ? '<span style="font-size:0.68rem; opacity:0.85;">(학급)</span>' : ''}
                     </span>
                   </div>
                 `}
@@ -3498,11 +3691,15 @@ function renderStudentCardView(student, todayName, state) {
             </div>
 
             <div>
-              ${!isFree && cell.teacher ? `
+              ${isStudentChangche ? `
+                <button type="button" class="target-badge" style="font-size: 0.82rem; padding: 0.3rem 0.65rem; border:none; cursor:pointer;" ${studentChangcheSlot.teacherName ? `onclick="navigateToTeacher('${studentChangcheSlot.teacherName}')"` : 'style="cursor:default;"'} title="${studentChangcheSlot.note}">
+                  👨‍🏫 ${escapeHtml(studentChangcheSlot.teacher)}
+                </button>
+              ` : (!isFree && cell && cell.teacher ? `
                 <button type="button" class="target-badge" style="font-size: 0.82rem; padding: 0.3rem 0.65rem; border:none; cursor:pointer;" onclick="navigateToTeacher('${cell.teacher}')">
                   👨‍🏫 ${escapeHtml(cell.teacher)} ➔
                 </button>
-              ` : ''}
+              ` : '')}
             </div>
           </div>
         `;
@@ -4950,11 +5147,20 @@ function renderLiveClassesCards(todayDayName, currentPeriodInfo) {
         </div>
         <div class="finder-grid">
           ${gradeClasses.map(c => {
+            const pNum = parseInt(period, 10);
+            let isChangche = false;
+            let changcheData = null;
+            if (todayDayName === '금' && pNum >= 5) {
+              const [gNum, cNum] = c.name.split('-').map(Number);
+              changcheData = resolveChangcheSlot(gNum, cNum, pNum, AppState.selectedFridayWeekDate);
+              if (changcheData) isChangche = true;
+            }
+
             const cell = c.schedule[todayDayName] ? c.schedule[todayDayName][period] : null;
-            const isFree = !cell || cell.isFree;
-            const trackInfo = !isFree ? resolveTrackSubject(cell.subject, cell.target, c.name, todayDayName, parseInt(period, 10)) : null;
-            const cat = !isFree ? getSubjectCategory(trackInfo.realSubject) : '';
-            const displaySubj = trackInfo ? (trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject) : '';
+            const isFree = isChangche ? false : (!cell || cell.isFree);
+            const trackInfo = (!isFree && !isChangche) ? resolveTrackSubject(cell.subject, cell.target, c.name, todayDayName, pNum) : null;
+            const cat = isChangche ? changcheData.category : (!isFree ? getSubjectCategory(trackInfo.realSubject) : '');
+            const displaySubj = isChangche ? changcheData.subject : (trackInfo ? (trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject) : '');
 
             return `
               <div class="finder-card" onclick="navigateToClass('${c.name}')">
@@ -5053,6 +5259,17 @@ function formatTime(date) {
 
 function updateLiveClock() {
   const now = new Date();
+  // 0. Header Live Date & Clock Display
+  const headerDateElem = document.getElementById('headerClockDateText');
+  if (headerDateElem) {
+    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    headerDateElem.textContent = `${now.getFullYear()}. ${now.getMonth() + 1}. ${now.getDate()}. (${dayNames[now.getDay()]})`;
+  }
+  const headerTimeElem = document.getElementById('headerClockTimeText');
+  if (headerTimeElem) {
+    headerTimeElem.textContent = formatTime(now);
+  }
+
   
   // 1. Digital Clock
   const clock = document.getElementById('liveClockDisplay');
@@ -5489,6 +5706,991 @@ function parseHmlClassTablesInBrowser(tables) {
     result.push(entity);
   }
   return result;
+}
+
+
+/* ==========================================================================
+   Academic Calendar & Friday Changche Dynamic System (학사일정 & 금요일 창체 시스템)
+   ========================================================================== */
+
+function getAcademicCalendar() {
+  if (AppState.academicCalendar) return AppState.academicCalendar;
+  if (window.SCHOOL_TIMETABLE_DATA && window.SCHOOL_TIMETABLE_DATA.academicCalendar) {
+    AppState.academicCalendar = window.SCHOOL_TIMETABLE_DATA.academicCalendar;
+    return AppState.academicCalendar;
+  }
+  return null;
+}
+
+// RFC 4180 CSV parser
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let current = '';
+  let insideQuotes = false;
+  
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+    if (char === '"') {
+      if (insideQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        insideQuotes = !insideQuotes;
+      }
+    } else if (char === ',' && !insideQuotes) {
+      row.push(current);
+      current = '';
+    } else if ((char === '\r' || char === '\n') && !insideQuotes) {
+      if (char === '\r' && nextChar === '\n') i++;
+      row.push(current);
+      current = '';
+      if (row.length > 1 || row[0] !== '') rows.push(row);
+      row = [];
+    } else {
+      current += char;
+    }
+  }
+  if (current !== '' || row.length > 0) {
+    row.push(current);
+    rows.push(row);
+  }
+  return rows;
+}
+
+function parseGoogleSheetCalendarCSV(csvText) {
+  const rows = parseCSV(csvText);
+  let currentMonth = null;
+  const allCalendarDays = [];
+  const fridaySchedule = [];
+
+  const weekdays = [
+    { name: '월', dayIdx: 3, eventIdx: 4, lessonIdx: [5, 6, 7] },
+    { name: '화', dayIdx: 11, eventIdx: 12, lessonIdx: [13, 14, 15] },
+    { name: '수', dayIdx: 19, eventIdx: 20, lessonIdx: [21, 22, 23] },
+    { name: '목', dayIdx: 27, eventIdx: 28, lessonIdx: [29, 30, 31] },
+    { name: '금', dayIdx: 35, eventIdx: 36, lessonIdx: [37, 38, 39] }
+  ];
+
+  rows.forEach((r, idx) => {
+    const col0 = r[0]?.trim();
+    if (col0 && /^\d+$/.test(col0)) {
+      currentMonth = parseInt(col0);
+    }
+
+    const weekStr = r[1]?.trim();
+    const weekNum = parseInt(weekStr) || null;
+
+    if (!currentMonth) return;
+
+    weekdays.forEach(wd => {
+      const dayStr = r[wd.dayIdx]?.trim();
+      if (dayStr && /^\d+$/.test(dayStr)) {
+        const dayNum = parseInt(dayStr);
+        const eventRaw = r[wd.eventIdx]?.trim() || '';
+        const year = (currentMonth >= 3) ? 2026 : 2027;
+        const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+        
+        const lessonDays = wd.lessonIdx.map(i => r[i]?.trim() || '');
+        const isZeroLesson = lessonDays.length > 0 && lessonDays.every(l => l === '0');
+
+        let isHoliday = isZeroLesson || 
+                        eventRaw.includes('공휴일') || 
+                        eventRaw.includes('휴업일') || 
+                        eventRaw.includes('개교기념 재량휴업일') ||
+                        eventRaw.includes('추석') || 
+                        eventRaw.includes('설날') ||
+                        eventRaw.includes('어린이날') || 
+                        eventRaw.includes('현충일') || 
+                        eventRaw.includes('광복절') ||
+                        eventRaw.includes('개천절') || 
+                        eventRaw.includes('한글날') || 
+                        eventRaw.includes('성탄절') ||
+                        eventRaw.includes('신정') || 
+                        eventRaw.includes('삼일절') || 
+                        eventRaw.includes('노동절');
+
+        let isExam = false;
+        let examTitle = '';
+        if (eventRaw.includes('1회고사')) {
+          isExam = true;
+          examTitle = `${currentMonth <= 7 ? '1학기' : '2학기'} 1회고사 (중간고사)`;
+        } else if (eventRaw.includes('2회고사')) {
+          isExam = true;
+          examTitle = `${currentMonth <= 7 ? '1학기' : '2학기'} 2회고사 (기말고사)`;
+        } else if (eventRaw.includes('학평') || eventRaw.includes('모평')) {
+          isExam = true;
+          examTitle = '전국연합학력평가 / 모의평가';
+        } else if (eventRaw.includes('수능') && !eventRaw.includes('사진') && !eventRaw.includes('원서')) {
+          isExam = true;
+          examTitle = '대학수학능력시험';
+        }
+
+        allCalendarDays.push({
+          date: dateStr,
+          year,
+          month: currentMonth,
+          day: dayNum,
+          dayOfWeek: wd.name,
+          week: weekNum,
+          event: eventRaw,
+          isHoliday,
+          isExam,
+          examTitle
+        });
+      }
+    });
+
+    const friDayStr = r[35]?.trim();
+    const c1 = [r[48]?.trim() || '', r[49]?.trim() || '', r[50]?.trim() || ''];
+    const c2 = [r[51]?.trim() || '', r[52]?.trim() || '', r[53]?.trim() || ''];
+    const c3 = [r[54]?.trim() || '', r[55]?.trim() || '', r[56]?.trim() || ''];
+
+    if (friDayStr && /^\d+$/.test(friDayStr)) {
+      const friDay = parseInt(friDayStr);
+      const year = (currentMonth >= 3) ? 2026 : 2027;
+      const dateStr = `${year}-${String(currentMonth).padStart(2, '0')}-${String(friDay).padStart(2, '0')}`;
+      const friEvent = r[36]?.trim() || '';
+
+      if (c1.some(x => x && x !== '5' && x !== '1학년')) {
+        fridaySchedule.push({
+          date: dateStr,
+          year,
+          month: currentMonth,
+          day: friDay,
+          week: weekNum,
+          event: friEvent,
+          grade1: c1,
+          grade2: c2,
+          grade3: c3
+        });
+      }
+    }
+  });
+
+  return {
+    calendarDays: allCalendarDays,
+    fridaySchedule: fridaySchedule
+  };
+}
+
+async function syncGoogleSheetCalendar(isManual = false) {
+  try {
+    const res = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const csvText = await res.text();
+    const parsed = parseGoogleSheetCalendarCSV(csvText);
+    if (parsed && parsed.calendarDays && parsed.calendarDays.length > 0) {
+      AppState.academicCalendar = parsed;
+      AppState.lastCalendarSyncTime = new Date();
+      if (isManual) {
+        showToast('✅ 구글 시트 학사일정 동기화 완료! 최신 내용이 반영되었습니다.');
+      }
+      renderApp();
+      return true;
+    }
+  } catch (err) {
+    console.warn('Google Sheet live sync failed, using bundled cache:', err);
+    if (isManual) {
+      showToast('⚠️ 구글 시트 연결 실패. 내장된 최신 학사일정을 사용합니다.');
+    }
+    return false;
+  }
+}
+
+function getFridayChangcheByDate(dateStr) {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.fridaySchedule) return null;
+  return cal.fridaySchedule.find(f => f.date === dateStr) || null;
+}
+
+function resolveChangcheSlot(grade, classNum, period, dateStr) {
+  const changche = getFridayChangcheByDate(dateStr);
+  if (!changche) return null;
+
+  const gradeKey = `grade${grade}`;
+  const acts = changche[gradeKey];
+  if (!acts) return null;
+
+  const actIdx = period - 5;
+  if (actIdx < 0 || actIdx >= acts.length) return null;
+
+  const code = acts[actIdx];
+  const className = `${grade}-${classNum}`;
+  const homeroom = getHomeroomForClass(className);
+  const subHomeroom = getSubHomeroomForClass(className);
+
+  if (code === '동') {
+    return {
+      subject: '동아리',
+      shortSubject: '동아리',
+      teacher: '동아리 담당교사',
+      teacherName: '',
+      room: '동아리실 / 교실',
+      category: 'category-art',
+      code: '동',
+      note: '동아리 지도교사 지도'
+    };
+  } else if (code === '진') {
+    return {
+      subject: '진로',
+      shortSubject: '진로',
+      teacher: homeroom ? `${homeroom} (담임)` : '학급 담임',
+      teacherName: homeroom || '',
+      room: `${className}교실`,
+      category: 'category-career',
+      code: '진',
+      note: '학급 담임선생님 지도'
+    };
+  } else if (code === '여유' || code === '자') {
+    return {
+      subject: '여유 (자율)',
+      shortSubject: '여유',
+      teacher: subHomeroom ? `${subHomeroom} (부담임)` : '학급 부담임',
+      teacherName: subHomeroom || '',
+      room: `${className}교실`,
+      category: 'category-sub',
+      code: '여유',
+      note: '학급 부담임 선생님 지도'
+    };
+  } else if (code === '봉') {
+    return {
+      subject: '봉사활동',
+      shortSubject: '봉사',
+      teacher: homeroom ? `${homeroom} (담임)` : '담임/부담임',
+      teacherName: homeroom || '',
+      room: `${className}교실 / 교내`,
+      category: 'category-etc',
+      code: '봉',
+      note: '봉사활동 지도'
+    };
+  }
+  return null;
+}
+
+function getTeacherFridayChangche(teacher, period, dateStr) {
+  if (!teacher || period < 5 || period > 7) return null;
+  const changche = getFridayChangcheByDate(dateStr);
+  if (!changche) return null;
+
+  // 1. Check if teacher is Homeroom teacher (담임)
+  if (teacher.homeroom) {
+    const parts = teacher.homeroom.split('-');
+    if (parts.length === 2) {
+      const g = parseInt(parts[0], 10);
+      const c = parseInt(parts[1], 10);
+      const slot = resolveChangcheSlot(g, c, period, dateStr);
+      if (slot && slot.code === '진') {
+        return {
+          subject: '진로',
+          target: teacher.homeroom,
+          category: 'category-career',
+          note: `${teacher.homeroom} 담임 진로 지도`
+        };
+      }
+    }
+  }
+
+  // 2. Check if teacher is Sub-Homeroom teacher (부담임)
+  const subClass = getSubHomeroomForTeacher(teacher.name);
+  if (subClass) {
+    const parts = subClass.split('-');
+    if (parts.length === 2) {
+      const g = parseInt(parts[0], 10);
+      const c = parseInt(parts[1], 10);
+      const slot = resolveChangcheSlot(g, c, period, dateStr);
+      if (slot && (slot.code === '여유' || slot.code === '자')) {
+        return {
+          subject: '여유 (자율)',
+          target: subClass,
+          category: 'category-sub',
+          note: `${subClass} 부담임 여유 지도`
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+function getExamDDays(targetDateStr, baseDate = new Date()) {
+  const target = new Date(targetDateStr);
+  const b = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const t = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffTime = t.getTime() - b.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'D-Day (오늘)';
+  if (diffDays > 0) return `D-${diffDays}`;
+  return `D+${Math.abs(diffDays)}`;
+}
+
+function getTodayAcademicEvent(now = new Date()) {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.calendarDays) return null;
+  const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  return cal.calendarDays.find(d => d.date === dateStr) || null;
+}
+
+function renderFridayChangcheSelectorBar() {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.fridaySchedule || cal.fridaySchedule.length === 0) return '';
+  const selectedDate = AppState.selectedFridayWeekDate || '2026-09-04';
+  const curItem = cal.fridaySchedule.find(f => f.date === selectedDate) || cal.fridaySchedule[0];
+
+  return `
+    <div class="friday-changche-selector-bar">
+      <div class="changche-selector-label">
+        <span>🎯</span>
+        <span>금요일 5~7교시 창체(여유·진로·동아리) 주차 선택:</span>
+      </div>
+
+      <div class="changche-week-controls">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepFridayWeek(-1)" title="이전 주차">◀</button>
+        <select class="filter-select changche-week-select" onchange="onSelectFridayWeek(this.value)">
+          ${cal.fridaySchedule.map(f => `
+            <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
+              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금) - 1학년:${f.grade1[0]}·2학년:${f.grade2[0]}·3학년:${f.grade3[0]} ${f.date === '2026-09-04' ? '★현재' : ''}
+            </option>
+          `).join('')}
+        </select>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepFridayWeek(1)" title="다음 주차">▶</button>
+        <button type="button" class="btn btn-sm ${selectedDate === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="onSelectFridayWeek('2026-09-04')" title="현재 주차(9월 4일)로 재설정">
+          현재주차 (9/4)
+        </button>
+      </div>
+
+      ${curItem ? `
+        <div class="changche-summary-pill">
+          1학년: [${curItem.grade1.join('·')}] · 2학년: [${curItem.grade2.join('·')}] · 3학년: [${curItem.grade3.join('·')}]
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function onSelectFridayWeek(dateStr) {
+  AppState.selectedFridayWeekDate = dateStr;
+  renderApp();
+}
+
+function stepFridayWeek(step) {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.fridaySchedule || cal.fridaySchedule.length === 0) return;
+  const list = cal.fridaySchedule;
+  const curIdx = list.findIndex(f => f.date === AppState.selectedFridayWeekDate);
+  let newIdx = curIdx + step;
+  if (newIdx < 0) newIdx = 0;
+  if (newIdx >= list.length) newIdx = list.length - 1;
+  AppState.selectedFridayWeekDate = list[newIdx].date;
+  renderApp();
+}
+
+/* ==========================================================================
+   Calendar Renderers (연간, 월별, 주별 캘린더 독립 뷰)
+   ========================================================================== */
+function renderCalendarView(container) {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.calendarDays) {
+    container.innerHTML = `
+      <div class="control-card" style="text-align: center; padding: 3rem 1.5rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+        <h2>2026학년도 학사일정</h2>
+        <p style="color: var(--text-muted); margin: 0.75rem 0 1.5rem;">학사일정 데이터를 불러오는 중이거나 데이터가 없습니다.</p>
+        <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)">🔄 구글 시트에서 불러오기</button>
+      </div>
+    `;
+    return;
+  }
+
+  const now = new Date();
+  const d1 = getExamDDays('2026-10-13', now);
+  const d2 = getExamDDays('2026-12-07', now);
+  const dSuneung = getExamDDays('2026-11-19', now);
+  const dVac = getExamDDays('2026-12-30', now);
+
+  let html = `
+    <!-- Top Calendar Card -->
+    <div class="calendar-view-card">
+      <div class="calendar-header-toolbar">
+        <div class="calendar-title-group">
+          <span style="font-size: 1.6rem;">📅</span>
+          <div>
+            <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.2rem;">
+              연간 학사일정 세안 · 공휴일/고사 연동 · 금요일 5~7교시 창체(여유:부담임, 진로:담임, 동아리:지도교사)
+              ${AppState.lastCalendarSyncTime ? ` · <span style="color:var(--primary); font-weight:600;">동기화: ${formatTime(AppState.lastCalendarSyncTime)}</span>` : ''}
+            </p>
+          </div>
+        </div>
+
+        <div class="calendar-actions">
+          <!-- Mode Switcher -->
+          <div class="view-mode-switcher">
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'year' ? 'active' : ''}" onclick="setCalendarViewMode('year')">
+              🗓️ 연간 캘린더
+            </button>
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'month' ? 'active' : ''}" onclick="setCalendarViewMode('month')">
+              📆 월별 캘린더
+            </button>
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'week' ? 'active' : ''}" onclick="setCalendarViewMode('week')">
+              📋 주별 캘린더
+            </button>
+          </div>
+
+          <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 즉시 가져옵니다">
+            🔄 구글 시트 동기화
+          </button>
+          <a class="btn btn-secondary" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+            🔗 시트 원본 열기
+          </a>
+          <button class="btn btn-secondary" onclick="window.print()" title="학사일정 인쇄">
+            🖨️ 인쇄
+          </button>
+        </div>
+      </div>
+
+      <!-- Exam D-Day Banner -->
+      <div class="exam-dday-banner">
+        <div class="exam-dday-card">
+          <div class="exam-dday-info">
+            <span class="exam-dday-title">📝 2학기 1회고사 (중간고사)</span>
+            <span class="exam-dday-date">2026. 10. 13.(화) ~ 10. 19.(월)</span>
+          </div>
+          <span class="exam-dday-badge">${d1}</span>
+        </div>
+
+        <div class="exam-dday-card">
+          <div class="exam-dday-info">
+            <span class="exam-dday-title">📝 2학기 2회고사 (기말고사)</span>
+            <span class="exam-dday-date">2026. 12. 07.(월) ~ 12. 11.(금)</span>
+          </div>
+          <span class="exam-dday-badge">${d2}</span>
+        </div>
+
+        <div class="exam-dday-card">
+          <div class="exam-dday-info">
+            <span class="exam-dday-title">🎓 2027 대입 수능시험</span>
+            <span class="exam-dday-date">2026. 11. 19.(목) (예비소집 18일)</span>
+          </div>
+          <span class="exam-dday-badge" style="background: #0ea5e9;">${dSuneung}</span>
+        </div>
+
+        <div class="exam-dday-card">
+          <div class="exam-dday-info">
+            <span class="exam-dday-title">❄️ 2학기 겨울방학식</span>
+            <span class="exam-dday-date">2026. 12. 30.(수)</span>
+          </div>
+          <span class="exam-dday-badge" style="background: #10b981;">${dVac}</span>
+        </div>
+      </div>
+
+      <!-- Render Selected Mode -->
+      <div id="calendarContentArea">
+        ${AppState.calendarViewMode === 'year' ? renderCalendarYearView(cal) : ''}
+        ${AppState.calendarViewMode === 'month' ? renderCalendarMonthView(cal) : ''}
+        ${AppState.calendarViewMode === 'week' ? renderCalendarWeekView(cal) : ''}
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+// 1. Year View (연간 캘린더)
+function renderCalendarYearView(cal) {
+  const months = [
+    { y: 2026, m: 3, label: '3월' },
+    { y: 2026, m: 4, label: '4월' },
+    { y: 2026, m: 5, label: '5월' },
+    { y: 2026, m: 6, label: '6월' },
+    { y: 2026, m: 7, label: '7월' },
+    { y: 2026, m: 8, label: '8월' },
+    { y: 2026, m: 9, label: '9월' },
+    { y: 2026, m: 10, label: '10월' },
+    { y: 2026, m: 11, label: '11월' },
+    { y: 2026, m: 12, label: '12월' },
+    { y: 2027, m: 1, label: '1월' },
+    { y: 2027, m: 2, label: '2월' }
+  ];
+
+  const now = new Date();
+  const curY = now.getFullYear();
+  const curM = now.getMonth() + 1;
+
+  let html = `
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
+        🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월)
+      </h3>
+      <span style="font-size: 0.8rem; color: var(--text-muted);">
+        💡 각 월 카드를 클릭하면 해당 월별 캘린더로 이동합니다.
+      </span>
+    </div>
+
+    <div class="calendar-year-grid">
+      ${months.map(item => {
+        const isCurMonth = (item.y === curY && item.m === curM);
+        const daysInMonth = new Date(item.y, item.m, 0).getDate();
+        const firstDayDow = new Date(item.y, item.m - 1, 1).getDay();
+
+        const monthEvents = cal.calendarDays.filter(d => d.year === item.y && d.month === item.m);
+
+        return `
+          <div class="mini-month-card ${isCurMonth ? 'is-current-month' : ''}" onclick="selectCalendarMonth(${item.y}, ${item.m})">
+            <div class="mini-month-header">
+              <span>${item.y}년 ${item.label}</span>
+              ${isCurMonth ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.68rem;">이번 달</span>' : ''}
+            </div>
+
+            <div class="mini-month-grid">
+              <span class="mini-month-th">일</span>
+              <span class="mini-month-th">월</span>
+              <span class="mini-month-th">화</span>
+              <span class="mini-month-th">수</span>
+              <span class="mini-month-th">목</span>
+              <span class="mini-month-th">금</span>
+              <span class="mini-month-th">토</span>
+
+              ${Array(firstDayDow).fill(0).map(() => '<span class="mini-day-cell other-month"></span>').join('')}
+
+              ${Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+                const dayEvent = monthEvents.find(d => d.day === day);
+                const isHoliday = dayEvent && dayEvent.isHoliday;
+                const isExam = dayEvent && dayEvent.isExam;
+                const isToday = isCurMonth && (day === now.getDate());
+
+                return `
+                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${dayEvent ? `${day}일: ${dayEvent.event.replace(/\n/g, ' ')}` : `${day}일`}">
+                    ${day}
+                  </span>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  return html;
+}
+
+// 2. Month View (월별 캘린더)
+function renderCalendarMonthView(cal) {
+  const y = AppState.calendarYear || 2026;
+  const m = AppState.calendarMonth || 9;
+  const now = new Date();
+  const isCurrentMonth = (y === now.getFullYear() && m === (now.getMonth() + 1));
+
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const firstDayDow = new Date(y, m - 1, 1).getDay();
+  const totalCells = Math.ceil((firstDayDow + daysInMonth) / 7) * 7;
+
+  const monthOptions = [
+    { y: 2026, m: 3, label: '2026년 3월' },
+    { y: 2026, m: 4, label: '2026년 4월' },
+    { y: 2026, m: 5, label: '2026년 5월' },
+    { y: 2026, m: 6, label: '2026년 6월' },
+    { y: 2026, m: 7, label: '2026년 7월' },
+    { y: 2026, m: 8, label: '2026년 8월' },
+    { y: 2026, m: 9, label: '2026년 9월' },
+    { y: 2026, m: 10, label: '2026년 10월' },
+    { y: 2026, m: 11, label: '2026년 11월' },
+    { y: 2026, m: 12, label: '2026년 12월' },
+    { y: 2027, m: 1, label: '2027년 1월' },
+    { y: 2027, m: 2, label: '2027년 2월' }
+  ];
+
+  let html = `
+    <!-- Month Controls -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(-1)">◀ 이전 달</button>
+        <select class="filter-select" style="font-weight: 700; font-size: 1rem; padding: 0.4rem 0.85rem;" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);">
+          ${monthOptions.map(opt => `
+            <option value="${opt.y}-${opt.m}" ${opt.y === y && opt.m === m ? 'selected' : ''}>
+              ${opt.label}
+            </option>
+          `).join('')}
+        </select>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(1)">다음 달 ▶</button>
+        <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})">
+          오늘 (${now.getMonth() + 1}월)로 이동
+        </button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.8rem; flex-wrap: wrap;">
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#ef4444; border-radius:2px;"></span> 공휴일</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6366f1; border-radius:2px;"></span> 1·2회고사/학평</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span> 금요일 창체(여유/진/동)</span>
+      </div>
+    </div>
+
+    <!-- Month Table -->
+    <div style="overflow-x: auto;">
+      <table class="month-calendar-table">
+        <thead>
+          <tr>
+            <th class="sun">일 (Sun)</th>
+            <th>월 (Mon)</th>
+            <th>화 (Tue)</th>
+            <th>수 (Wed)</th>
+            <th>목 (Thu)</th>
+            <th>금 (Fri)</th>
+            <th class="sat">토 (Sat)</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  for (let c = 0; c < totalCells; c += 7) {
+    html += '<tr>';
+    for (let dow = 0; dow < 7; dow++) {
+      const cellIdx = c + dow;
+      const dayNum = cellIdx - firstDayDow + 1;
+      const isCurrentDay = (dayNum >= 1 && dayNum <= daysInMonth);
+
+      if (!isCurrentDay) {
+        html += '<td class="month-day-cell other-month"></td>';
+        continue;
+      }
+
+      const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+      const dayEvent = cal.calendarDays.find(d => d.date === dateStr);
+      const isToday = isCurrentMonth && (dayNum === now.getDate());
+      const isSun = (dow === 0);
+      const isSat = (dow === 6);
+      const isFri = (dow === 5);
+      const isHoliday = isSun || (dayEvent && dayEvent.isHoliday);
+      const isExam = dayEvent && dayEvent.isExam;
+
+      const friChangche = isFri ? cal.fridaySchedule.find(f => f.date === dateStr) : null;
+
+      html += `
+        <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="openCalendarDayDetailModal('${dateStr}')">
+          <div class="day-header-num ${isSun ? 'sun' : ''} ${isSat ? 'sat' : ''}">
+            <span class="day-number">${dayNum}</span>
+            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:var(--primary);">오늘</span>' : ''}
+          </div>
+
+          <div class="day-events-list">
+            ${isHoliday && !isSun ? '<span class="calendar-event-pill pill-holiday">🌴 휴일</span>' : ''}
+            ${isExam ? `<span class="calendar-event-pill pill-exam">📝 ${dayEvent.examTitle || '시험/평가'}</span>` : ''}
+            ${friChangche ? `
+              <span class="calendar-event-pill pill-changche" title="금 5~7교시 창체">
+                🎯 1:${friChangche.grade1[0]}·2:${friChangche.grade2[0]}·3:${friChangche.grade3[0]}
+              </span>
+            ` : ''}
+            ${dayEvent && dayEvent.event ? dayEvent.event.split('\n').filter(Boolean).map(e => `
+              <span class="calendar-event-pill pill-general" title="${escapeHtml(e)}">${escapeHtml(e)}</span>
+            `).join('') : ''}
+          </div>
+        </td>
+      `;
+    }
+    html += '</tr>';
+  }
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return html;
+}
+
+// 3. Week View (주별 캘린더)
+function renderCalendarWeekView(cal) {
+  const fridayList = cal.fridaySchedule || [];
+  const selectedDate = AppState.calendarWeekDate || (fridayList[0] ? fridayList[0].date : '2026-09-04');
+  const selectedFri = fridayList.find(f => f.date === selectedDate) || fridayList[0];
+
+  const friDate = new Date(selectedFri.date);
+  const weekDays = [];
+  for (let i = 4; i >= 0; i--) {
+    const d = new Date(friDate);
+    d.setDate(friDate.getDate() - i);
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    weekDays.push({
+      date: dateStr,
+      year: y,
+      month: m,
+      day: day,
+      dayOfWeek: dayNames[d.getDay()],
+      eventData: cal.calendarDays.find(cd => cd.date === dateStr)
+    });
+  }
+
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  let html = `
+    <!-- Week Controls -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(-1)">◀ 이전 주</button>
+        <select class="filter-select" style="font-weight: 700; font-size: 0.95rem; padding: 0.4rem 0.85rem;" onchange="selectCalendarWeek(this.value)">
+          ${fridayList.map(f => `
+            <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
+              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금요일) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
+            </option>
+          `).join('')}
+        </select>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(1)">다음 주 ▶</button>
+        <button type="button" class="btn btn-sm ${selectedDate === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
+          이번 주 (9월 4일)로 이동
+        </button>
+      </div>
+
+      <div class="changche-summary-pill">
+        🎯 ${selectedFri.month}월 ${selectedFri.week ? `${selectedFri.week}주차 ` : ''}금요일 창체: 
+        1학년 [${selectedFri.grade1.join('/')}] · 2학년 [${selectedFri.grade2.join('/')}] · 3학년 [${selectedFri.grade3.join('/')}]
+      </div>
+    </div>
+
+    <!-- Week Grid (5 Columns: Mon ~ Fri) -->
+    <div class="calendar-week-grid">
+      ${weekDays.map(wd => {
+        const isToday = (wd.date === todayStr);
+        const dayEvt = wd.eventData;
+        const isHoliday = dayEvt && dayEvt.isHoliday;
+        const isExam = dayEvt && dayEvt.isExam;
+        const isFri = (wd.dayOfWeek === '금');
+
+        return `
+          <div class="week-day-col ${isToday ? 'is-today' : ''}">
+            <div class="week-day-header">
+              <div>
+                <span class="week-day-title">${wd.dayOfWeek}요일</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); margin-left:0.35rem;">(${wd.month}/${wd.day})</span>
+              </div>
+              ${isToday ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.7rem;">오늘</span>' : ''}
+            </div>
+
+            <div class="week-day-body">
+              ${isHoliday ? `
+                <div class="calendar-event-pill pill-holiday" style="padding:0.4rem 0.6rem; text-align:center;">
+                  🌴 ${dayEvt.event || '공휴일 / 재량휴업일'}
+                </div>
+              ` : ''}
+
+              ${isExam ? `
+                <div class="calendar-event-pill pill-exam" style="padding:0.4rem 0.6rem;">
+                  📝 <strong>${dayEvt.examTitle || '시험/평가'}</strong>
+                </div>
+              ` : ''}
+
+              <!-- Daily Events -->
+              <div style="flex:1;">
+                <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem;">학사 행사 및 일정:</div>
+                ${dayEvt && dayEvt.event ? `
+                  <div style="font-size:0.85rem; color:var(--text-primary); line-height:1.5; white-space:pre-line;">
+                    ${escapeHtml(dayEvt.event)}
+                  </div>
+                ` : `
+                  <span style="font-size:0.8rem; color:var(--text-muted);">정규 수업 일정</span>
+                `}
+              </div>
+
+              <!-- Friday Changche Highlight -->
+              ${isFri && selectedFri ? `
+                <div class="friday-changche-highlight-card">
+                  <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.45rem;">
+                    🎯 5~7교시 창체 운영계획
+                  </div>
+                  <div class="changche-grade-row">
+                    <span><strong>1학년:</strong> ${selectedFri.grade1.join(' · ')}</span>
+                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade1[0])}</span>
+                  </div>
+                  <div class="changche-grade-row">
+                    <span><strong>2학년:</strong> ${selectedFri.grade2.join(' · ')}</span>
+                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade2[0])}</span>
+                  </div>
+                  <div class="changche-grade-row">
+                    <span><strong>3학년:</strong> ${selectedFri.grade3.join(' · ')}</span>
+                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade3[0])}</span>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  return html;
+}
+
+function getChangcheTeacherLabel(code) {
+  if (code === '동') return '동아리 담당교사';
+  if (code === '진') return '학급 담임선생님';
+  if (code === '여유' || code === '자') return '학급 부담임선생님';
+  if (code === '봉') return '담임/부담임';
+  return code || '-';
+}
+
+function setCalendarViewMode(mode) {
+  AppState.calendarViewMode = mode;
+  renderApp();
+}
+
+function selectCalendarMonth(y, m) {
+  AppState.calendarYear = y;
+  AppState.calendarMonth = m;
+  AppState.calendarViewMode = 'month';
+  renderApp();
+}
+
+function stepCalendarMonth(step) {
+  let y = AppState.calendarYear || 2026;
+  let m = (AppState.calendarMonth || 9) + step;
+  if (m < 1) {
+    m = 12;
+    y--;
+  } else if (m > 12) {
+    m = 1;
+    y++;
+  }
+  // Clamp between 2026.3 and 2027.2
+  if (y < 2026 || (y === 2026 && m < 3)) {
+    y = 2026; m = 3;
+  } else if (y > 2027 || (y === 2027 && m > 2)) {
+    y = 2027; m = 2;
+  }
+  AppState.calendarYear = y;
+  AppState.calendarMonth = m;
+  renderApp();
+}
+
+function selectCalendarWeek(dateStr) {
+  AppState.calendarWeekDate = dateStr;
+  AppState.calendarViewMode = 'week';
+  renderApp();
+}
+
+function stepCalendarWeek(step) {
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.fridaySchedule || cal.fridaySchedule.length === 0) return;
+  const list = cal.fridaySchedule;
+  const curIdx = list.findIndex(f => f.date === AppState.calendarWeekDate);
+  let newIdx = curIdx + step;
+  if (newIdx < 0) newIdx = 0;
+  if (newIdx >= list.length) newIdx = list.length - 1;
+  AppState.calendarWeekDate = list[newIdx].date;
+  renderApp();
+}
+
+function openCalendarDayDetailModal(dateStr) {
+  const cal = getAcademicCalendar();
+  if (!cal) return;
+  const dayEvt = cal.calendarDays.find(d => d.date === dateStr);
+  const friChangche = cal.fridaySchedule.find(f => f.date === dateStr);
+
+  const parts = dateStr.split('-');
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+  const dateObj = new Date(y, m - 1, d);
+  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dowName = dayNames[dateObj.getDay()];
+
+  let modalElem = document.getElementById('calendarDayDetailModal');
+  if (!modalElem) {
+    modalElem = document.createElement('div');
+    modalElem.id = 'calendarDayDetailModal';
+    document.body.appendChild(modalElem);
+  }
+
+  modalElem.innerHTML = `
+    <div class="calendar-modal-backdrop" onclick="closeCalendarDayDetailModal(event)">
+      <div class="calendar-modal-card" onclick="event.stopPropagation()">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.5rem;">📅</span>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                ${y}년 ${m}월 ${d}일 (${dowName}요일)
+              </h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">2026학년도 공식 학사일정 상세</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeCalendarDayDetailModal()" style="border-radius: 50%; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;">✕</button>
+        </div>
+
+        <div style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+          ${dayEvt && dayEvt.isHoliday ? `
+            <div class="calendar-event-pill pill-holiday" style="margin-bottom: 1rem; font-size: 0.9rem; padding: 0.5rem 0.8rem; text-align: center;">
+              🌴 공식 공휴일 / 재량휴업일
+            </div>
+          ` : ''}
+
+          ${dayEvt && dayEvt.isExam ? `
+            <div class="calendar-event-pill pill-exam" style="margin-bottom: 1rem; font-size: 0.9rem; padding: 0.5rem 0.8rem; text-align: center;">
+              📝 ${dayEvt.examTitle || '시험 / 평가'}
+            </div>
+          ` : ''}
+
+          <div style="margin-bottom: 1.25rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem;">주요 학사 행사:</div>
+            ${dayEvt && dayEvt.event ? `
+              <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); white-space: pre-line;">
+                ${escapeHtml(dayEvt.event)}
+              </div>
+            ` : `
+              <div style="color: var(--text-muted); font-size: 0.88rem; font-style: italic;">별도의 특별 학사 일정이 없는 정규 일과일입니다.</div>
+            `}
+          </div>
+
+          ${friChangche ? `
+            <div class="friday-changche-highlight-card" style="margin-top: 1rem;">
+              <div style="font-weight: 800; font-size: 0.9rem; color: #065f46; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.35rem;">
+                <span>🎯</span>
+                <span>금요일 5~7교시 창체 운영계획</span>
+              </div>
+              <div class="changche-grade-row" style="margin-bottom: 0.4rem;">
+                <span><strong>1학년:</strong> ${friChangche.grade1.join(' · ')}</span>
+                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade1[0])}</span>
+              </div>
+              <div class="changche-grade-row" style="margin-bottom: 0.4rem;">
+                <span><strong>2학년:</strong> ${friChangche.grade2.join(' · ')}</span>
+                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade2[0])}</span>
+              </div>
+              <div class="changche-grade-row">
+                <span><strong>3학년:</strong> ${friChangche.grade3.join(' · ')}</span>
+                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade3[0])}</span>
+              </div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;">
+                * 여유: 부담임 선생님 교실 입실 지도<br>
+                * 진로: 학급 담임선생님 교실 입실 지도<br>
+                * 동아리: 동아리 담당교사 지도
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div style="padding: 0.85rem 1.5rem; border-top: 1px solid var(--border-color); background: var(--bg-hover); display: flex; justify-content: flex-end;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeCalendarDayDetailModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function closeCalendarDayDetailModal(e) {
+  if (e && e.target && !e.target.classList.contains('calendar-modal-backdrop') && !e.target.classList.contains('btn')) {
+    return;
+  }
+  const modalElem = document.getElementById('calendarDayDetailModal');
+  if (modalElem) {
+    modalElem.remove();
+  }
 }
 
 /* ==========================================================================

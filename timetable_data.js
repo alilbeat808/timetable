@@ -108333,3 +108333,3493 @@ window.SCHOOL_TIMETABLE_DATA = {
     "E3라|수1|성경진": "융합과학"
   }
 };
+
+// 2026학년도 학사일정 및 금요일 창체(여유·진로·동아리) 공식 연동 데이터
+window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
+  "calendarDays": [
+    {
+      "date": "2026-03-02",
+      "year": 2026,
+      "month": 3,
+      "day": 2,
+      "dayOfWeek": "월",
+      "week": 1,
+      "event": "대체공휴일",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-03",
+      "year": 2026,
+      "month": 3,
+      "day": 3,
+      "dayOfWeek": "화",
+      "week": 1,
+      "event": "임시 교무회의\n(시업식, 입학식)\n자율교육과정",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-04",
+      "year": 2026,
+      "month": 3,
+      "day": 4,
+      "dayOfWeek": "수",
+      "week": 1,
+      "event": "다면평가위원회 16시 10분 1층 회의실",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-05",
+      "year": 2026,
+      "month": 3,
+      "day": 5,
+      "dayOfWeek": "목",
+      "week": 1,
+      "event": "신입생 O/T(1,2교시) 구암관\n심폐소생술교육 1학년(5,6교시, 각 교실)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-06",
+      "year": 2026,
+      "month": 3,
+      "day": 6,
+      "dayOfWeek": "금",
+      "week": 1,
+      "event": "국가수준성취도 평가(2학년, 2,3,4교시)\n1,2,3학년 학생도박예방교육(5교시,구암관)\n생명존중교육1,2,3학년(6교시, 구암관),<생활>\n인사위원회 13시 10분 1층 회의실\n방과후 소위원회 7교시",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-09",
+      "year": 2026,
+      "month": 3,
+      "day": 9,
+      "dayOfWeek": "월",
+      "week": 2,
+      "event": "교무회의\n26학년도 학년장 선출(1,2,3)\n2학년 현장체험학습 안전교육(1교시, 2학년 담임 전체)\n민방위 훈련 대비 비상시 행동요령(1,2,3학년 조례시간)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-10",
+      "year": 2026,
+      "month": 3,
+      "day": 10,
+      "dayOfWeek": "화",
+      "week": 2,
+      "event": "마음챙김의 날<생활>\n진로 심리 검사 1학년 (3,4교시)<진로>\n 2학년 학생,학부모 진학설명회(19:00 구암관)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-11",
+      "year": 2026,
+      "month": 3,
+      "day": 11,
+      "dayOfWeek": "수",
+      "week": 2,
+      "event": "진로 심리 검사 1학년 (4교시)<진로>\n3학년 학생,학부모 진학설명회(19:00 구암관)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-12",
+      "year": 2026,
+      "month": 3,
+      "day": 12,
+      "dayOfWeek": "목",
+      "week": 2,
+      "event": "1학년 응원가 연습(1교시, 구암관, 생안부)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-13",
+      "year": 2026,
+      "month": 3,
+      "day": 13,
+      "dayOfWeek": "금",
+      "week": 2,
+      "event": "26학년도 반장(부반장)선거 완료(1,2,3)<생활>\n동아리 NEIS 배정 완료 (5교시)\n성적지침 및 평가계획작성 교사 연수(6교시)\n창원 초등학교 교감선생님 본교 방문 \n체육관 시설 견학 14시",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-16",
+      "year": 2026,
+      "month": 3,
+      "day": 16,
+      "dayOfWeek": "월",
+      "week": 3,
+      "event": "교과협의회\n교직원인성교육(1교시)<생활>\n지함관(정독실)2,3학년 시작",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-17",
+      "year": 2026,
+      "month": 3,
+      "day": 17,
+      "dayOfWeek": "화",
+      "week": 3,
+      "event": "1학년 사진 촬영(1교시~ 동맥꿈터, 1학년부)\n09시 영화촬영팀 사전 본교 방문",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-18",
+      "year": 2026,
+      "month": 3,
+      "day": 18,
+      "dayOfWeek": "수",
+      "week": 3,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-19",
+      "year": 2026,
+      "month": 3,
+      "day": 19,
+      "dayOfWeek": "목",
+      "week": 3,
+      "event": "학부모 간담회(1,2,3)\n방과후수업 온라인신청",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-20",
+      "year": 2026,
+      "month": 3,
+      "day": 20,
+      "dayOfWeek": "금",
+      "week": 3,
+      "event": "진로페스티벌 준비 1학년 (5~7교시)<진로>\n진로버스킹 준비 2학년 (5,6교시)<진로>\n학교 속 작은 학교 2학년 (7교시)<진로>\n진로비전플러스 준비 3학년 (5, 6교시)<진로>\n후배사랑멘토링 3학년 (7교시)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-23",
+      "year": 2026,
+      "month": 3,
+      "day": 23,
+      "dayOfWeek": "월",
+      "week": 4,
+      "event": "교무회의\n평가계획서 제출 마감\n교사 사용 AI 관계부장 회의",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-24",
+      "year": 2026,
+      "month": 3,
+      "day": 24,
+      "dayOfWeek": "화",
+      "week": 4,
+      "event": "학평(1,2,3)\n친목회 회식\n학부모 상담주간",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-03-25",
+      "year": 2026,
+      "month": 3,
+      "day": 25,
+      "dayOfWeek": "수",
+      "week": 4,
+      "event": "방과후수업 시작\n학부모 상담주간\n학업성적관리위원회회의 08:00, 회의실(평가)\n학업중단예방위원회 4교시 회의실<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-26",
+      "year": 2026,
+      "month": 3,
+      "day": 26,
+      "dayOfWeek": "목",
+      "week": 4,
+      "event": "학부모 상담주간",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-27",
+      "year": 2026,
+      "month": 3,
+      "day": 27,
+      "dayOfWeek": "금",
+      "week": 4,
+      "event": "총학생회 간부수련회\n1,2학년 장애인식개선교육(5,6교시, 각교실)\n1,2학년 자원봉사소양교육(7교시, 각교실)\n학부모 상담주간\n방송실 PC 교제에 따른 타종 오류 가능<방송부>\n학업성적관리위원회회의  08:00, 회의실(평가)\n학생맞춤통합지원 위원회 2교시 회의실 <생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-30",
+      "year": 2026,
+      "month": 3,
+      "day": 30,
+      "dayOfWeek": "월",
+      "week": 5,
+      "event": "전문적 학습 공동체\n학생회 간부 임명장 수여식(08:30)\n원안작성연수(1교시) \n급식 안면인식기 회의(교감, 학년부장, 보건, 영양사) 14:20~14:40\n일반고 자기주도학습 예산 편성 회의(08:50)<진학>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-03-31",
+      "year": 2026,
+      "month": 3,
+      "day": 31,
+      "dayOfWeek": "화",
+      "week": 5,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-01",
+      "year": 2026,
+      "month": 4,
+      "day": 1,
+      "dayOfWeek": "수",
+      "week": 5,
+      "event": "2,3학년 소변검사<생안>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-02",
+      "year": 2026,
+      "month": 4,
+      "day": 2,
+      "dayOfWeek": "목",
+      "week": 5,
+      "event": "심리검사해설 1차(1) (1교시)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-03",
+      "year": 2026,
+      "month": 4,
+      "day": 3,
+      "dayOfWeek": "금",
+      "week": 5,
+      "event": "2,3학년 담임  바이브온 연수(7교시, 진학부)\n3학년 생기부 사진촬영 오전(교사 사진도 가능)\n동아리활동\n시험범위입력마감(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-06",
+      "year": 2026,
+      "month": 4,
+      "day": 6,
+      "dayOfWeek": "월",
+      "week": 6,
+      "event": "교무회의\n행복한등굣길행사 흡연예방캠페인<생활>\n기초학력 보장 책임 지도 위원회 회의(08:40)<진학>\n2학년 석식 취소<교감>\n청렴, 음주 교직원 연수<교장>\n학교운영위원회<행정실>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-07",
+      "year": 2026,
+      "month": 4,
+      "day": 7,
+      "dayOfWeek": "화",
+      "week": 6,
+      "event": "국외 현장체험학습(2)\n(1년영어듣기)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-08",
+      "year": 2026,
+      "month": 4,
+      "day": 8,
+      "dayOfWeek": "수",
+      "week": 6,
+      "event": "국외 현장체험학습(2)\n(2년영어듣기)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-09",
+      "year": 2026,
+      "month": 4,
+      "day": 9,
+      "dayOfWeek": "목",
+      "week": 6,
+      "event": "국외 현장체험학습(2)\n(3년영어듣기)\n정서행동특성검사(1학년2반)\n청소년  미디어이용습관 진단조사(1)<정보>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-10",
+      "year": 2026,
+      "month": 4,
+      "day": 10,
+      "dayOfWeek": "금",
+      "week": 6,
+      "event": "마음챙김의 날<생활>\n국외 현장체험학습(2)\n진로요구분석조사 및 안내 1학년(5~7교시)<진로>\n진로비전플러스 3학년 (6, 7교시)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-13",
+      "year": 2026,
+      "month": 4,
+      "day": 13,
+      "dayOfWeek": "월",
+      "week": 7,
+      "event": "전문적 학습 공동체\n원안마감(평가)\n생명존중교육(1,2,3)(1교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-14",
+      "year": 2026,
+      "month": 4,
+      "day": 14,
+      "dayOfWeek": "화",
+      "week": 7,
+      "event": "행복한등굣길행사<생활>\n흡연예방캠페인<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-15",
+      "year": 2026,
+      "month": 4,
+      "day": 15,
+      "dayOfWeek": "수",
+      "week": 7,
+      "event": "담임 장학사 방문 장학 10시 부장 모임<교감>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-16",
+      "year": 2026,
+      "month": 4,
+      "day": 16,
+      "dayOfWeek": "목",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-17",
+      "year": 2026,
+      "month": 4,
+      "day": 17,
+      "dayOfWeek": "금",
+      "week": 7,
+      "event": "개교기념식\n약물오남용예방교육 1, 2, 3학년(5교시, 구암관)<생활>, 결핵검사 홀수년 교직원, 2~3학년(6, 7교시, 운동장)<생활>\n1학년 정서행동검사(6,7교시)<생활>\n성적관리위원회 14시<평가>\n기출문제공개(~24)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-20",
+      "year": 2026,
+      "month": 4,
+      "day": 20,
+      "dayOfWeek": "월",
+      "week": 8,
+      "event": "교무회의\n고사감독연수(1교시)(평가)\n자전거 및 개인형 이동장치(PM) 교육(1교시)<생활>\n성인지 감수성 교직원 연수<교장>\n원안최종마감(평가)\n2학년 현장체험학습 답사<2학년부>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-21",
+      "year": 2026,
+      "month": 4,
+      "day": 21,
+      "dayOfWeek": "화",
+      "week": 8,
+      "event": "원안인쇄(~22)(평가)\n찾아가는 A+++ 디지털직무연수<정보>\n위클래스 구축 협의회-교감,상담,코크리 14시 zoom<교감>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-22",
+      "year": 2026,
+      "month": 4,
+      "day": 22,
+      "dayOfWeek": "수",
+      "week": 8,
+      "event": "원안봉인(~23)(평가)\n1학년 현장체험학습 답사<1학년부>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-23",
+      "year": 2026,
+      "month": 4,
+      "day": 23,
+      "dayOfWeek": "목",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-24",
+      "year": 2026,
+      "month": 4,
+      "day": 24,
+      "dayOfWeek": "금",
+      "week": 8,
+      "event": "고사이동연습(5교시) (평가)\n학교폭력 예방교육 전학년(6, 7교시, 교실)<생활>\n학교장과 운동부 학부모 간담회 17시<생활> 4월위기관리위원회 5교시<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-04-27",
+      "year": 2026,
+      "month": 4,
+      "day": 27,
+      "dayOfWeek": "월",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-04-28",
+      "year": 2026,
+      "month": 4,
+      "day": 28,
+      "dayOfWeek": "화",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-04-29",
+      "year": 2026,
+      "month": 4,
+      "day": 29,
+      "dayOfWeek": "수",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-04-30",
+      "year": 2026,
+      "month": 4,
+      "day": 30,
+      "dayOfWeek": "목",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-05-01",
+      "year": 2026,
+      "month": 5,
+      "day": 1,
+      "dayOfWeek": "금",
+      "week": 9,
+      "event": "노동절",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-04",
+      "year": 2026,
+      "month": 5,
+      "day": 4,
+      "dayOfWeek": "월",
+      "week": 10,
+      "event": "개교기념 재량휴업일",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-05",
+      "year": 2026,
+      "month": 5,
+      "day": 5,
+      "dayOfWeek": "화",
+      "week": 10,
+      "event": "어린이날",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-06",
+      "year": 2026,
+      "month": 5,
+      "day": 6,
+      "dayOfWeek": "수",
+      "week": 10,
+      "event": "임시 교무회의(08시)-교생 소개\n생명존중교육(I LOVE YOU) 1학년, (5,6,7,교시, 각 교실)<생활>\n성적이의신청기간(~13일)(평가)남부2 자율 장학 가야고\n학업성적관리위원회(08시 회의실)<평가>\n에듀테크 공문 담당부서 회의<교감>\n졸업생진로특강(58기,정도현) 19시<과중,영재>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-07",
+      "year": 2026,
+      "month": 5,
+      "day": 7,
+      "dayOfWeek": "목",
+      "week": 10,
+      "event": "학평(3)\n교과목선택 캠프 사전검사(1학년)(1교시)",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-05-08",
+      "year": 2026,
+      "month": 5,
+      "day": 8,
+      "dayOfWeek": "금",
+      "week": 10,
+      "event": "문화체험(1,2)\n3학년 졸업앨범 사진촬영(신라대)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-11",
+      "year": 2026,
+      "month": 5,
+      "day": 11,
+      "dayOfWeek": "월",
+      "week": 11,
+      "event": "교무회의\n사회정서교육주간(~15일)<생활>\n마음챙김이 날(10일)<생활> 방송 10분 8시~8시10분\n약물오남용예방교육(1교시)<생활> 전학년 40분 8시 20분~\n영어단어시험<영어> 전학년 20분",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-12",
+      "year": 2026,
+      "month": 5,
+      "day": 12,
+      "dayOfWeek": "화",
+      "week": 11,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-13",
+      "year": 2026,
+      "month": 5,
+      "day": 13,
+      "dayOfWeek": "수",
+      "week": 11,
+      "event": "위클래스 리모델링 논의 8교시(유니세프)(교감,상담,재학생 6명, 코크리에이션)\n육군사관학교 입시설명회<3학년>(8교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-14",
+      "year": 2026,
+      "month": 5,
+      "day": 14,
+      "dayOfWeek": "목",
+      "week": 11,
+      "event": "성적확인완료(평가)\n급식공개의 날(급식소위원 4명 모두 참석)\n학교급식소위원회 학부모위원 연수(비대면)\n위클래스 재건축 논의 8교시\n(유니세프)(교감,상담,재학생 6명, 코크리에이션)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-15",
+      "year": 2026,
+      "month": 5,
+      "day": 15,
+      "dayOfWeek": "금",
+      "week": 11,
+      "event": "스승의 날\n체육 한마당",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-18",
+      "year": 2026,
+      "month": 5,
+      "day": 18,
+      "dayOfWeek": "월",
+      "week": 12,
+      "event": "전문적학습공동체\n생기부 연수<도서관, 교무부>\n6월 모의고사 듣기평가 시범  안내방송 1차 정검(점심)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-19",
+      "year": 2026,
+      "month": 5,
+      "day": 19,
+      "dayOfWeek": "화",
+      "week": 12,
+      "event": "성균관대 고교방문 설명회<3학년>(8교시)(1,2,3)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-20",
+      "year": 2026,
+      "month": 5,
+      "day": 20,
+      "dayOfWeek": "수",
+      "week": 12,
+      "event": "수업나눔(2교시,음악,배수경교사,음악실)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-21",
+      "year": 2026,
+      "month": 5,
+      "day": 21,
+      "dayOfWeek": "목",
+      "week": 12,
+      "event": "사회정서교육 컨설턴트(동래여고 김라영)\n 15:00시 예정 (교감,상담교사)\n6월 모의고사 듣기평가 시범  안내방송 2차 정검(점심)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-22",
+      "year": 2026,
+      "month": 5,
+      "day": 22,
+      "dayOfWeek": "금",
+      "week": 12,
+      "event": "동아리활동\n부산과학전람회 발표대회 참가(6팀 15명)<과중>\n 5월위기관리위원회 1교시<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-25",
+      "year": 2026,
+      "month": 5,
+      "day": 25,
+      "dayOfWeek": "월",
+      "week": 13,
+      "event": "대체공휴일",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-26",
+      "year": 2026,
+      "month": 5,
+      "day": 26,
+      "dayOfWeek": "화",
+      "week": 13,
+      "event": "학부모대상공개수업(6,7교시)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-27",
+      "year": 2026,
+      "month": 5,
+      "day": 27,
+      "dayOfWeek": "수",
+      "week": 13,
+      "event": "1학년 학부모 교육과정설명회 19시 주차는 중학교<학점>\n학부모 생기부 연수<교무>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-28",
+      "year": 2026,
+      "month": 5,
+      "day": 28,
+      "dayOfWeek": "목",
+      "week": 13,
+      "event": "수업나눔\n(1교시, 고급물리학, 박주현교사, 물리실)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-05-29",
+      "year": 2026,
+      "month": 5,
+      "day": 29,
+      "dayOfWeek": "금",
+      "week": 13,
+      "event": "미니진로박람회 1차 1, 2학년(5~7교시)<진로>\n교사대상 생명존중교육5,6,7교시(도서관)<생활>\n중앙대 고교방문 설명회 동맥꿈터<3학년>(6교시)(1,2,3)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-01",
+      "year": 2026,
+      "month": 6,
+      "day": 1,
+      "dayOfWeek": "월",
+      "week": 14,
+      "event": "교과협의회\n원안작성연수(1교시)(평가)\n수업나눔(6교시,공통수학1,황정환교사,102)(평가)\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n학교운영위원회 17시",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-02",
+      "year": 2026,
+      "month": 6,
+      "day": 2,
+      "dayOfWeek": "화",
+      "week": 14,
+      "event": "학업성적관리위원회(15:45~)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-03",
+      "year": 2026,
+      "month": 6,
+      "day": 3,
+      "dayOfWeek": "수",
+      "week": 14,
+      "event": "지방선거일",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-04",
+      "year": 2026,
+      "month": 6,
+      "day": 4,
+      "dayOfWeek": "목",
+      "week": 14,
+      "event": "학평(1,2), 모평(3)\n학교홍보회의(3교시, 1층 회의실)<교감>\n방과후 회의 (5교시, 1층 회의실)<인문>",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-06-05",
+      "year": 2026,
+      "month": 6,
+      "day": 5,
+      "dayOfWeek": "금",
+      "week": 14,
+      "event": "동아리활동\n중대재해처벌법 연수 14:50 동맥꿈터(관리자, 교무, 보건, 행정실, 영양사)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-08",
+      "year": 2026,
+      "month": 6,
+      "day": 8,
+      "dayOfWeek": "월",
+      "week": 15,
+      "event": "교무회의\n생명존중교육(1,2,3)(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-09",
+      "year": 2026,
+      "month": 6,
+      "day": 9,
+      "dayOfWeek": "화",
+      "week": 15,
+      "event": "위클래스 공동디자인(온라인화상 회의) 상담교사 <생활>\n09:30~11:30",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-10",
+      "year": 2026,
+      "month": 6,
+      "day": 10,
+      "dayOfWeek": "수",
+      "week": 15,
+      "event": "마음챙김의 날<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-11",
+      "year": 2026,
+      "month": 6,
+      "day": 11,
+      "dayOfWeek": "목",
+      "week": 15,
+      "event": "심리검사해설 2차(1) (1교시)<진로>\n방과후회의소위원회 (5교시)<인문>\n학부모대의원회<교무>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-12",
+      "year": 2026,
+      "month": 6,
+      "day": 12,
+      "dayOfWeek": "금",
+      "week": 15,
+      "event": "교직원 심폐소생술 교육(5,6,7교시, 구암관) <생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-15",
+      "year": 2026,
+      "month": 6,
+      "day": 15,
+      "dayOfWeek": "월",
+      "week": 16,
+      "event": "전문적 학습 공동체\n원안마감(평가)\n선도위원회 16:10 <생활> 회의실",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-16",
+      "year": 2026,
+      "month": 6,
+      "day": 16,
+      "dayOfWeek": "화",
+      "week": 16,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-17",
+      "year": 2026,
+      "month": 6,
+      "day": 17,
+      "dayOfWeek": "수",
+      "week": 16,
+      "event": "탄소중립 실천 캠페인(5층)(과중)\n기출문제공개(~24)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-18",
+      "year": 2026,
+      "month": 6,
+      "day": 18,
+      "dayOfWeek": "목",
+      "week": 16,
+      "event": "원안최종마감(~16시)<평가>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-19",
+      "year": 2026,
+      "month": 6,
+      "day": 19,
+      "dayOfWeek": "금",
+      "week": 16,
+      "event": "고사이동연습(5,6교시)(평가)\n 6월위기관리위원회13:00<생활>\n부산대학교 고교방문 입시설명회(3)(7교시, 도서관)\n수행평가최종마감(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-22",
+      "year": 2026,
+      "month": 6,
+      "day": 22,
+      "dayOfWeek": "월",
+      "week": 17,
+      "event": "교무회의\n고사감독연수(1교시),원안봉인(~23)(평가)\n급식소위원회(12:30)\n행복한등굣길행사<생활>\n화재안전교육(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-23",
+      "year": 2026,
+      "month": 6,
+      "day": 23,
+      "dayOfWeek": "화",
+      "week": 17,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-24",
+      "year": 2026,
+      "month": 6,
+      "day": 24,
+      "dayOfWeek": "수",
+      "week": 17,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-06-25",
+      "year": 2026,
+      "month": 6,
+      "day": 25,
+      "dayOfWeek": "목",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-06-26",
+      "year": 2026,
+      "month": 6,
+      "day": 26,
+      "dayOfWeek": "금",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-06-29",
+      "year": 2026,
+      "month": 6,
+      "day": 29,
+      "dayOfWeek": "월",
+      "week": 18,
+      "event": "2회고사\n학업성적관리위원회의(08:30,1층회의실)(평가)",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-06-30",
+      "year": 2026,
+      "month": 6,
+      "day": 30,
+      "dayOfWeek": "화",
+      "week": 18,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-07-01",
+      "year": 2026,
+      "month": 7,
+      "day": 1,
+      "dayOfWeek": "수",
+      "week": 18,
+      "event": "2회고사\n학업성적관리위원회의(10:30,1층회의실)(평가)\n방역실시 15시~",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "1학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-07-02",
+      "year": 2026,
+      "month": 7,
+      "day": 2,
+      "dayOfWeek": "목",
+      "week": 18,
+      "event": "생기부 작성 집중 기간(~20)\n성적이의신청기간(~8일)(평가)\n학교운영위원회(17시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-03",
+      "year": 2026,
+      "month": 7,
+      "day": 3,
+      "dayOfWeek": "금",
+      "week": 18,
+      "event": "대학생 멘토링 특강 1, 2학년(5~7교시)<진로>\n전포1동재개발 교육환경 관련회의 14:00<교무>\n교육과정위원회 15:30<학점>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-06",
+      "year": 2026,
+      "month": 7,
+      "day": 6,
+      "dayOfWeek": "월",
+      "week": 19,
+      "event": "전문적 학습 공동체, 임시 교무회의",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-07",
+      "year": 2026,
+      "month": 7,
+      "day": 7,
+      "dayOfWeek": "화",
+      "week": 19,
+      "event": "선도협의회(16시10분)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-08",
+      "year": 2026,
+      "month": 7,
+      "day": 8,
+      "dayOfWeek": "수",
+      "week": 19,
+      "event": "생활기록부 컨설팅(10시) 컨설턴트 본교방문\n학평(3)\n시교육청 박민섭 장학사 본교 방문(운동부 점검) 10시30분",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-07-09",
+      "year": 2026,
+      "month": 7,
+      "day": 9,
+      "dayOfWeek": "목",
+      "week": 19,
+      "event": "사회정서교육(1,2)교과담임임장<생활>2,3,4교시\n성적최종확인(~15)(평가)\n도서토론연계문화체험(17시~21시30분) KNN씨어터",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-10",
+      "year": 2026,
+      "month": 7,
+      "day": 10,
+      "dayOfWeek": "금",
+      "week": 19,
+      "event": "마음챙김의 날<생활>\n3학년 수능원서용 증명사진 촬영(1~4교시)\n동아리 사진 촬영(점심~7교시)\n동아리활동\n'한림원 석학과의 만남' 강연14시-16시<과중>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-13",
+      "year": 2026,
+      "month": 7,
+      "day": 13,
+      "dayOfWeek": "월",
+      "week": 20,
+      "event": "교무회의\n딥페이크 성범죄예방교육(1교시)<생활>\n학교장과의 대화(14시20분)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-14",
+      "year": 2026,
+      "month": 7,
+      "day": 14,
+      "dayOfWeek": "화",
+      "week": 20,
+      "event": "(자율교육과정)\n메이커체험(1,2)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-15",
+      "year": 2026,
+      "month": 7,
+      "day": 15,
+      "dayOfWeek": "수",
+      "week": 20,
+      "event": "(자율교육과정)\n대학교 전공체험(1,2학년)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-16",
+      "year": 2026,
+      "month": 7,
+      "day": 16,
+      "dayOfWeek": "목",
+      "week": 20,
+      "event": "(자율교육과정)\n교과목선택  캠프 (1학년) (1~4교시)\n\"헌혈의 날\" 장소: 홈베이스, 동맥꿈터(2곳)\n 7월위기관리위원회 3교시<생활>해당교사\n동아리활동(5,6,7교시)\n학기말성적최종확인마감(평가)\n고신대학교 입시설명회(3학년)(6~7교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-17",
+      "year": 2026,
+      "month": 7,
+      "day": 17,
+      "dayOfWeek": "금",
+      "week": 20,
+      "event": "제헌절",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-20",
+      "year": 2026,
+      "month": 7,
+      "day": 20,
+      "dayOfWeek": "월",
+      "week": 21,
+      "event": "(자율교육과정)\n교무회의\n진로버스킹\n학기말성적교과확인마감,성적통지표출력안내(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-21",
+      "year": 2026,
+      "month": 7,
+      "day": 21,
+      "dayOfWeek": "화",
+      "week": 21,
+      "event": "(자율교육과정)\n08:10 -학업성적관리위원회(최소성취수준보장지도관련)\n방학식\n교통안전교육\n여름철 물놀이 안전",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-22",
+      "year": 2026,
+      "month": 7,
+      "day": 22,
+      "dayOfWeek": "수",
+      "week": 21,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-23",
+      "year": 2026,
+      "month": 7,
+      "day": 23,
+      "dayOfWeek": "목",
+      "week": 21,
+      "event": "재개발 회의(교장, 교감, 교무, 행정실장) 14시 30분 회의실",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-24",
+      "year": 2026,
+      "month": 7,
+      "day": 24,
+      "dayOfWeek": "금",
+      "week": 21,
+      "event": "중국 신양고 원격회의(교장, 교감) 10시",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-27",
+      "year": 2026,
+      "month": 7,
+      "day": 27,
+      "dayOfWeek": "월",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-28",
+      "year": 2026,
+      "month": 7,
+      "day": 28,
+      "dayOfWeek": "화",
+      "week": 7,
+      "event": "진주 동명고 본교 방문(급식 안면인식 견학) 12시",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-29",
+      "year": 2026,
+      "month": 7,
+      "day": 29,
+      "dayOfWeek": "수",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-30",
+      "year": 2026,
+      "month": 7,
+      "day": 30,
+      "dayOfWeek": "목",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-31",
+      "year": 2026,
+      "month": 7,
+      "day": 31,
+      "dayOfWeek": "금",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-03",
+      "year": 2026,
+      "month": 7,
+      "day": 3,
+      "dayOfWeek": "월",
+      "week": 8,
+      "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-04",
+      "year": 2026,
+      "month": 7,
+      "day": 4,
+      "dayOfWeek": "화",
+      "week": 8,
+      "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류\n방과후학교 마지막 수업일",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-05",
+      "year": 2026,
+      "month": 7,
+      "day": 5,
+      "dayOfWeek": "수",
+      "week": 8,
+      "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-06",
+      "year": 2026,
+      "month": 7,
+      "day": 6,
+      "dayOfWeek": "목",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-07",
+      "year": 2026,
+      "month": 7,
+      "day": 7,
+      "dayOfWeek": "금",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-10",
+      "year": 2026,
+      "month": 7,
+      "day": 10,
+      "dayOfWeek": "월",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-11",
+      "year": 2026,
+      "month": 7,
+      "day": 11,
+      "dayOfWeek": "화",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-12",
+      "year": 2026,
+      "month": 7,
+      "day": 12,
+      "dayOfWeek": "수",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-13",
+      "year": 2026,
+      "month": 7,
+      "day": 13,
+      "dayOfWeek": "목",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-07-14",
+      "year": 2026,
+      "month": 7,
+      "day": 14,
+      "dayOfWeek": "금",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-17",
+      "year": 2026,
+      "month": 8,
+      "day": 17,
+      "dayOfWeek": "월",
+      "week": 1,
+      "event": "대체공휴일",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-18",
+      "year": 2026,
+      "month": 8,
+      "day": 18,
+      "dayOfWeek": "화",
+      "week": 1,
+      "event": "임시 교무회의\n(자율교육과정)\n생기부 학생 방송 점검<교무>\n현혈 봉사(1학년, 오전)<보건>\n부산혈액원 협약식(11시, 교장실)<생안>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-19",
+      "year": 2026,
+      "month": 8,
+      "day": 19,
+      "dayOfWeek": "수",
+      "week": 1,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-20",
+      "year": 2026,
+      "month": 8,
+      "day": 20,
+      "dayOfWeek": "목",
+      "week": 1,
+      "event": "민방위훈련(14:00~14:20)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-21",
+      "year": 2026,
+      "month": 8,
+      "day": 21,
+      "dayOfWeek": "금",
+      "week": 1,
+      "event": "성희롱, 성폭력 예방교육 1, 2, 3학년\n( 5, 6교시, 구암관)<생활>\n학교폭력예방교육1,2,3학년\n(7교시, 교실)<생활>\nBeAT활용찾아가는연수(심화)(13:30~15:30)(평가)\n경성대학교 입시설명회(3학년)(7교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-24",
+      "year": 2026,
+      "month": 8,
+      "day": 24,
+      "dayOfWeek": "월",
+      "week": 2,
+      "event": "교무회의\n신라대학교 입시설명회(3학년)(8교시)\n소방훈련 10시 20분~\n3학년 학부모회 간담회(16시, 1층 회의실)<교감>\n찾아가는 AI 연수(교사AI동아리), 3층 사회과실< 정보>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-25",
+      "year": 2026,
+      "month": 8,
+      "day": 25,
+      "dayOfWeek": "화",
+      "week": 2,
+      "event": "학업성적관리위원회(08:05)<교무>\n동아대학교 입시설명회(3학년)(6교시)\n대명여고 배드민턴부 본교 체육관 훈련(4명)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-26",
+      "year": 2026,
+      "month": 8,
+      "day": 26,
+      "dayOfWeek": "수",
+      "week": 2,
+      "event": "방과후 수업 온라인 신청\n대명여고 배드민턴부 본교 체육관 훈련(4명)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-27",
+      "year": 2026,
+      "month": 8,
+      "day": 27,
+      "dayOfWeek": "목",
+      "week": 2,
+      "event": "대명여고 배드민턴부 본교 체육관 훈련(4명)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-28",
+      "year": 2026,
+      "month": 8,
+      "day": 28,
+      "dayOfWeek": "금",
+      "week": 2,
+      "event": "진로 페스티벌 1차 1학년 (5~7교시)<진로>\n8월 위기관리위원회(13:00~)\n2학기교수학습및평가계획제출마감(평가)\n동서대학교 입시설명회(3학년)(6교시)\n진주 경상국립대학교 입시설명회(3학년)(7교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-08-31",
+      "year": 2026,
+      "month": 8,
+      "day": 31,
+      "dayOfWeek": "월",
+      "week": 3,
+      "event": "교과협의회\n방과후 수업 시작\n진로 페스티벌 2차 1학년 (7:30~8:10) <진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-01",
+      "year": 2026,
+      "month": 9,
+      "day": 1,
+      "dayOfWeek": "화",
+      "week": 3,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-02",
+      "year": 2026,
+      "month": 9,
+      "day": 2,
+      "dayOfWeek": "수",
+      "week": 3,
+      "event": "학업성적관리위원회회의(08:00,1층회의실,평가계획 심의건)(평가)\n학평(1,2), 모평(3)\n방역(17:30)<행정실>",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-09-03",
+      "year": 2026,
+      "month": 9,
+      "day": 3,
+      "dayOfWeek": "목",
+      "week": 3,
+      "event": "수능원서 작성<3학년>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-04",
+      "year": 2026,
+      "month": 9,
+      "day": 4,
+      "dayOfWeek": "금",
+      "week": 3,
+      "event": "동아리활동\n동의대학교 입시설명회(3학년)(5교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-07",
+      "year": 2026,
+      "month": 9,
+      "day": 7,
+      "dayOfWeek": "월",
+      "week": 4,
+      "event": "교무회의\n자전거 및 개인형 이동장치(PM) 교육(1교시)<생활>\n대입수시전형 원서접수(~9/11)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-08",
+      "year": 2026,
+      "month": 9,
+      "day": 8,
+      "dayOfWeek": "화",
+      "week": 4,
+      "event": "(1년영어듣기)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-09",
+      "year": 2026,
+      "month": 9,
+      "day": 9,
+      "dayOfWeek": "수",
+      "week": 4,
+      "event": "(2년영어듣기)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-10",
+      "year": 2026,
+      "month": 9,
+      "day": 10,
+      "dayOfWeek": "목",
+      "week": 4,
+      "event": "(3년영어듣기)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-11",
+      "year": 2026,
+      "month": 9,
+      "day": 11,
+      "dayOfWeek": "금",
+      "week": 4,
+      "event": "양성평등교육 1, 2, 3학년(5교시, 교실)<생활>\n생명존중교육 1,2,3(6교시 교실)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-14",
+      "year": 2026,
+      "month": 9,
+      "day": 14,
+      "dayOfWeek": "월",
+      "week": 5,
+      "event": "전문적 학습 공동체\n원안작성연수(1교시)\n행복한등굣길행사 흡연예방캠페인<생활>\n학교운영위원회<행정실>\n원안작성연수(평가)\n전국체전 대비 배드민턴부 오후 운동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-15",
+      "year": 2026,
+      "month": 9,
+      "day": 15,
+      "dayOfWeek": "화",
+      "week": 5,
+      "event": "진로 페스티벌 3차 1학년 (7:30~8:10) <진로>\n전국체전 대비 배드민턴부 오후 운동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-16",
+      "year": 2026,
+      "month": 9,
+      "day": 16,
+      "dayOfWeek": "수",
+      "week": 5,
+      "event": "학부모 상담주간(9/16-9/22)\n전국체전 대비 배드민턴부 전지 훈련(광주)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-17",
+      "year": 2026,
+      "month": 9,
+      "day": 17,
+      "dayOfWeek": "목",
+      "week": 5,
+      "event": "1,2학년 진학설명회 예정\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-18",
+      "year": 2026,
+      "month": 9,
+      "day": 18,
+      "dayOfWeek": "금",
+      "week": 5,
+      "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-21",
+      "year": 2026,
+      "month": 9,
+      "day": 21,
+      "dayOfWeek": "월",
+      "week": 6,
+      "event": "교무회의\n학부모 상담주간\n　딥페이크 성범죄예방교육(1교시)<생활>\n전국체전 대비 배드민턴부 오후 운동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-22",
+      "year": 2026,
+      "month": 9,
+      "day": 22,
+      "dayOfWeek": "화",
+      "week": 6,
+      "event": "학부모 상담주간\n전국체전 대비 배드민턴부 오후 운동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-23",
+      "year": 2026,
+      "month": 9,
+      "day": 23,
+      "dayOfWeek": "수",
+      "week": 6,
+      "event": "시험범위취합마감(평가)\n전국체전 대비 배드민턴부 오후 운동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-24",
+      "year": 2026,
+      "month": 9,
+      "day": 24,
+      "dayOfWeek": "목",
+      "week": 6,
+      "event": "추석연휴",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-25",
+      "year": 2026,
+      "month": 9,
+      "day": 25,
+      "dayOfWeek": "금",
+      "week": 6,
+      "event": "추석연휴",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-28",
+      "year": 2026,
+      "month": 9,
+      "day": 28,
+      "dayOfWeek": "월",
+      "week": 7,
+      "event": "배드민턴 전국체전 출정 인사(임시 교무회의)\n전문적 학습 공동체\n원안마감\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-09-29",
+      "year": 2026,
+      "month": 9,
+      "day": 29,
+      "dayOfWeek": "화",
+      "week": 7,
+      "event": "학부모대상공개수업(6,7교시)\n찾아가는 A+++ 디지털직무연수<정보>\n부별 협의회(~9/19)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-30",
+      "year": 2026,
+      "month": 9,
+      "day": 30,
+      "dayOfWeek": "수",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-01",
+      "year": 2026,
+      "month": 9,
+      "day": 1,
+      "dayOfWeek": "목",
+      "week": 7,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-02",
+      "year": 2026,
+      "month": 9,
+      "day": 2,
+      "dayOfWeek": "금",
+      "week": 7,
+      "event": "동아리활동\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-05",
+      "year": 2026,
+      "month": 9,
+      "day": 5,
+      "dayOfWeek": "월",
+      "week": 8,
+      "event": "대체공휴일",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-06",
+      "year": 2026,
+      "month": 9,
+      "day": 6,
+      "dayOfWeek": "화",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-07",
+      "year": 2026,
+      "month": 9,
+      "day": 7,
+      "dayOfWeek": "수",
+      "week": 8,
+      "event": "추정분할공지,원안봉인(~8)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-08",
+      "year": 2026,
+      "month": 9,
+      "day": 8,
+      "dayOfWeek": "목",
+      "week": 8,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-09-09",
+      "year": 2026,
+      "month": 9,
+      "day": 9,
+      "dayOfWeek": "금",
+      "week": 8,
+      "event": "한글날",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-12",
+      "year": 2026,
+      "month": 10,
+      "day": 12,
+      "dayOfWeek": "월",
+      "week": 9,
+      "event": "교무회의\n고사감독연수(1교시)\n생명존중교육주간(~16일)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-13",
+      "year": 2026,
+      "month": 10,
+      "day": 13,
+      "dayOfWeek": "화",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-10-14",
+      "year": 2026,
+      "month": 10,
+      "day": 14,
+      "dayOfWeek": "수",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-10-15",
+      "year": 2026,
+      "month": 10,
+      "day": 15,
+      "dayOfWeek": "목",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-10-16",
+      "year": 2026,
+      "month": 10,
+      "day": 16,
+      "dayOfWeek": "금",
+      "week": 9,
+      "event": "1회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-10-19",
+      "year": 2026,
+      "month": 10,
+      "day": 19,
+      "dayOfWeek": "월",
+      "week": 10,
+      "event": "1회고사\n방역(15:00)<행정실>",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 1회고사 (중간고사)"
+    },
+    {
+      "date": "2026-10-20",
+      "year": 2026,
+      "month": 10,
+      "day": 20,
+      "dayOfWeek": "화",
+      "week": 10,
+      "event": "학평(1,2,3)\n성적이의신청기간(~26일)",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "전국연합학력평가 / 모의평가"
+    },
+    {
+      "date": "2026-10-21",
+      "year": 2026,
+      "month": 10,
+      "day": 21,
+      "dayOfWeek": "수",
+      "week": 10,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-22",
+      "year": 2026,
+      "month": 10,
+      "day": 22,
+      "dayOfWeek": "목",
+      "week": 10,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-23",
+      "year": 2026,
+      "month": 10,
+      "day": 23,
+      "dayOfWeek": "금",
+      "week": 10,
+      "event": "진로 페스티벌 5차 1학년 (5~7교시)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-26",
+      "year": 2026,
+      "month": 10,
+      "day": 26,
+      "dayOfWeek": "월",
+      "week": 11,
+      "event": "교무회의\n생명존중교육(1,2,3)(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-27",
+      "year": 2026,
+      "month": 10,
+      "day": 27,
+      "dayOfWeek": "화",
+      "week": 11,
+      "event": "성적최종확인(~28)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-28",
+      "year": 2026,
+      "month": 10,
+      "day": 28,
+      "dayOfWeek": "수",
+      "week": 11,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-29",
+      "year": 2026,
+      "month": 10,
+      "day": 29,
+      "dayOfWeek": "목",
+      "week": 11,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-10-30",
+      "year": 2026,
+      "month": 10,
+      "day": 30,
+      "dayOfWeek": "금",
+      "week": 11,
+      "event": "오픈랩(과중)\n동아리활동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-02",
+      "year": 2026,
+      "month": 11,
+      "day": 2,
+      "dayOfWeek": "월",
+      "week": 12,
+      "event": "교무회의",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-03",
+      "year": 2026,
+      "month": 11,
+      "day": 3,
+      "dayOfWeek": "화",
+      "week": 12,
+      "event": "성적통지표출력공지(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-04",
+      "year": 2026,
+      "month": 11,
+      "day": 4,
+      "dayOfWeek": "수",
+      "week": 12,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-05",
+      "year": 2026,
+      "month": 11,
+      "day": 5,
+      "dayOfWeek": "목",
+      "week": 12,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-06",
+      "year": 2026,
+      "month": 11,
+      "day": 6,
+      "dayOfWeek": "금",
+      "week": 12,
+      "event": "교직원 성희롱, 성폭력, 성매매 예방교육(5교시, 도서관)<생활>\n1,2학년 교내백일장(5,6,7교시, 각교실)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-09",
+      "year": 2026,
+      "month": 11,
+      "day": 9,
+      "dayOfWeek": "월",
+      "week": 13,
+      "event": "전문적 학습 공동체\n아동학대예방교육(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-10",
+      "year": 2026,
+      "month": 11,
+      "day": 10,
+      "dayOfWeek": "화",
+      "week": 13,
+      "event": "마음챙김의 날<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-11",
+      "year": 2026,
+      "month": 11,
+      "day": 11,
+      "dayOfWeek": "수",
+      "week": 13,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-12",
+      "year": 2026,
+      "month": 11,
+      "day": 12,
+      "dayOfWeek": "목",
+      "week": 13,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-13",
+      "year": 2026,
+      "month": 11,
+      "day": 13,
+      "dayOfWeek": "금",
+      "week": 13,
+      "event": "진로 페스티벌 1학년 (5~7교시)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-16",
+      "year": 2026,
+      "month": 11,
+      "day": 16,
+      "dayOfWeek": "월",
+      "week": 14,
+      "event": "교과 협의회\n원안작성연수(1교시)\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-17",
+      "year": 2026,
+      "month": 11,
+      "day": 17,
+      "dayOfWeek": "화",
+      "week": 14,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-18",
+      "year": 2026,
+      "month": 11,
+      "day": 18,
+      "dayOfWeek": "수",
+      "week": 14,
+      "event": "수능 예비소집",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "대학수학능력시험"
+    },
+    {
+      "date": "2026-11-19",
+      "year": 2026,
+      "month": 11,
+      "day": 19,
+      "dayOfWeek": "목",
+      "week": 14,
+      "event": "대학수학능력시험일",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-20",
+      "year": 2026,
+      "month": 11,
+      "day": 20,
+      "dayOfWeek": "금",
+      "week": 14,
+      "event": "동아리활동",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-23",
+      "year": 2026,
+      "month": 11,
+      "day": 23,
+      "dayOfWeek": "월",
+      "week": 15,
+      "event": "교무회의\n생명존중교육(1,2,3)(1교시)<생활>\n행복한등굣길행사<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-24",
+      "year": 2026,
+      "month": 11,
+      "day": 24,
+      "dayOfWeek": "화",
+      "week": 15,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-25",
+      "year": 2026,
+      "month": 11,
+      "day": 25,
+      "dayOfWeek": "수",
+      "week": 15,
+      "event": "원안마감(16:00)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-26",
+      "year": 2026,
+      "month": 11,
+      "day": 26,
+      "dayOfWeek": "목",
+      "week": 15,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-27",
+      "year": 2026,
+      "month": 11,
+      "day": 27,
+      "dayOfWeek": "금",
+      "week": 15,
+      "event": "시험범위취합마감(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-11-30",
+      "year": 2026,
+      "month": 11,
+      "day": 30,
+      "dayOfWeek": "월",
+      "week": 16,
+      "event": "다모임\n원안최종마감(16:00),시험범위공지,고사감독연수(1교시)(평가)\n　재난안전교육(1교시)<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-01",
+      "year": 2026,
+      "month": 12,
+      "day": 1,
+      "dayOfWeek": "화",
+      "week": 16,
+      "event": "생기부 작성 집중 기간(~27)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-02",
+      "year": 2026,
+      "month": 12,
+      "day": 2,
+      "dayOfWeek": "수",
+      "week": 16,
+      "event": "추정분할공지,원안봉인(~3)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-03",
+      "year": 2026,
+      "month": 12,
+      "day": 3,
+      "dayOfWeek": "목",
+      "week": 16,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-04",
+      "year": 2026,
+      "month": 12,
+      "day": 4,
+      "dayOfWeek": "금",
+      "week": 16,
+      "event": "고사이동연습(5,6교시)(평가)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-07",
+      "year": 2026,
+      "month": 12,
+      "day": 7,
+      "dayOfWeek": "월",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-12-08",
+      "year": 2026,
+      "month": 12,
+      "day": 8,
+      "dayOfWeek": "화",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-12-09",
+      "year": 2026,
+      "month": 12,
+      "day": 9,
+      "dayOfWeek": "수",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-12-10",
+      "year": 2026,
+      "month": 12,
+      "day": 10,
+      "dayOfWeek": "목",
+      "week": 17,
+      "event": "마음챙김의 날\n2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-12-11",
+      "year": 2026,
+      "month": 12,
+      "day": 11,
+      "dayOfWeek": "금",
+      "week": 17,
+      "event": "2회고사",
+      "isHoliday": false,
+      "isExam": true,
+      "examTitle": "2학기 2회고사 (기말고사)"
+    },
+    {
+      "date": "2026-12-14",
+      "year": 2026,
+      "month": 12,
+      "day": 14,
+      "dayOfWeek": "월",
+      "week": 18,
+      "event": "교무회의\n성적이의신청기간(~18일)\n학교운영위원회<행정실>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-15",
+      "year": 2026,
+      "month": 12,
+      "day": 15,
+      "dayOfWeek": "화",
+      "week": 18,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-16",
+      "year": 2026,
+      "month": 12,
+      "day": 16,
+      "dayOfWeek": "수",
+      "week": 18,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-17",
+      "year": 2026,
+      "month": 12,
+      "day": 17,
+      "dayOfWeek": "목",
+      "week": 18,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-18",
+      "year": 2026,
+      "month": 12,
+      "day": 18,
+      "dayOfWeek": "금",
+      "week": 18,
+      "event": "진로 포트폴리오 점검 1,2,3학년 (5~7교시)<진로>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-21",
+      "year": 2026,
+      "month": 12,
+      "day": 21,
+      "dayOfWeek": "월",
+      "week": 19,
+      "event": "전문적 학습 공동체\n(자율교육과정)\n아동학대예방교육(1교시)<생활>\n성적최종확인(~29일)(평가)\n고시외과목수강(1~4교시)(2학년29명)<학점>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-22",
+      "year": 2026,
+      "month": 12,
+      "day": 22,
+      "dayOfWeek": "화",
+      "week": 19,
+      "event": "동맥제",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-23",
+      "year": 2026,
+      "month": 12,
+      "day": 23,
+      "dayOfWeek": "수",
+      "week": 19,
+      "event": "(자율교육과정)\n고시외과목수강(1~4교시)(2학년29명)<학점>\n사회정서교육(5~7교시)(1,2)학급담임임장<생활>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-24",
+      "year": 2026,
+      "month": 12,
+      "day": 24,
+      "dayOfWeek": "목",
+      "week": 19,
+      "event": "(자율교육과정)\n1학년 문화체험",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-25",
+      "year": 2026,
+      "month": 12,
+      "day": 25,
+      "dayOfWeek": "금",
+      "week": 19,
+      "event": "성탄절",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-28",
+      "year": 2026,
+      "month": 12,
+      "day": 28,
+      "dayOfWeek": "월",
+      "week": 20,
+      "event": "교무회의\n(자율교육과정)\n고시외과목수강(1~4교시)(2학년29명)<학점>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-29",
+      "year": 2026,
+      "month": 12,
+      "day": 29,
+      "dayOfWeek": "화",
+      "week": 20,
+      "event": "(자율교육과정)\n성적통지표출력공지(평가)\n고시외과목수강(1~4교시)(2학년29명)<학점>\n헌혈의 날(전교생)<보건>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-30",
+      "year": 2026,
+      "month": 12,
+      "day": 30,
+      "dayOfWeek": "수",
+      "week": 20,
+      "event": "(방학식)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-31",
+      "year": 2026,
+      "month": 12,
+      "day": 31,
+      "dayOfWeek": "목",
+      "week": 20,
+      "event": "방학",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2026-12-01",
+      "year": 2026,
+      "month": 12,
+      "day": 1,
+      "dayOfWeek": "금",
+      "week": 20,
+      "event": "신정",
+      "isHoliday": true,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2027-02-01",
+      "year": 2027,
+      "month": 2,
+      "day": 1,
+      "dayOfWeek": "월",
+      "week": 21,
+      "event": "교무회의\n(개학식)\n생기부 기재 최종 완료<교무>",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2027-02-02",
+      "year": 2027,
+      "month": 2,
+      "day": 2,
+      "dayOfWeek": "화",
+      "week": 21,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2027-02-03",
+      "year": 2027,
+      "month": 2,
+      "day": 3,
+      "dayOfWeek": "수",
+      "week": 21,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2027-02-04",
+      "year": 2027,
+      "month": 2,
+      "day": 4,
+      "dayOfWeek": "목",
+      "week": 21,
+      "event": "",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    },
+    {
+      "date": "2027-02-05",
+      "year": 2027,
+      "month": 2,
+      "day": 5,
+      "dayOfWeek": "금",
+      "week": 21,
+      "event": "(졸업식, 종업식)",
+      "isHoliday": false,
+      "isExam": false,
+      "examTitle": ""
+    }
+  ],
+  "fridaySchedule": [
+    {
+      "date": "2026-03-06",
+      "year": 2026,
+      "month": 3,
+      "day": 6,
+      "week": 1,
+      "event": "국가수준성취도 평가(2학년, 2,3,4교시)\n1,2,3학년 학생도박예방교육(5교시,구암관)\n생명존중교육1,2,3학년(6교시, 구암관),<생활>\n인사위원회 13시 10분 1층 회의실\n방과후 소위원회 7교시",
+      "grade1": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade2": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade3": [
+        "여유",
+        "진",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-03-13",
+      "year": 2026,
+      "month": 3,
+      "day": 13,
+      "week": 2,
+      "event": "26학년도 반장(부반장)선거 완료(1,2,3)<생활>\n동아리 NEIS 배정 완료 (5교시)\n성적지침 및 평가계획작성 교사 연수(6교시)\n창원 초등학교 교감선생님 본교 방문 \n체육관 시설 견학 14시",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-03-20",
+      "year": 2026,
+      "month": 3,
+      "day": 20,
+      "week": 3,
+      "event": "진로페스티벌 준비 1학년 (5~7교시)<진로>\n진로버스킹 준비 2학년 (5,6교시)<진로>\n학교 속 작은 학교 2학년 (7교시)<진로>\n진로비전플러스 준비 3학년 (5, 6교시)<진로>\n후배사랑멘토링 3학년 (7교시)<진로>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "year": 2026,
+      "month": 3,
+      "day": 27,
+      "week": 4,
+      "event": "총학생회 간부수련회\n1,2학년 장애인식개선교육(5,6교시, 각교실)\n1,2학년 자원봉사소양교육(7교시, 각교실)\n학부모 상담주간\n방송실 PC 교제에 따른 타종 오류 가능<방송부>\n학업성적관리위원회회의  08:00, 회의실(평가)\n학생맞춤통합지원 위원회 2교시 회의실 <생활>",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "year": 2026,
+      "month": 4,
+      "day": 3,
+      "week": 5,
+      "event": "2,3학년 담임  바이브온 연수(7교시, 진학부)\n3학년 생기부 사진촬영 오전(교사 사진도 가능)\n동아리활동\n시험범위입력마감(평가)",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "year": 2026,
+      "month": 4,
+      "day": 10,
+      "week": 6,
+      "event": "마음챙김의 날<생활>\n국외 현장체험학습(2)\n진로요구분석조사 및 안내 1학년(5~7교시)<진로>\n진로비전플러스 3학년 (6, 7교시)<진로>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "여유",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-04-17",
+      "year": 2026,
+      "month": 4,
+      "day": 17,
+      "week": 7,
+      "event": "개교기념식\n약물오남용예방교육 1, 2, 3학년(5교시, 구암관)<생활>, 결핵검사 홀수년 교직원, 2~3학년(6, 7교시, 운동장)<생활>\n1학년 정서행동검사(6,7교시)<생활>\n성적관리위원회 14시<평가>\n기출문제공개(~24)(평가)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "봉",
+        "봉",
+        "봉"
+      ]
+    },
+    {
+      "date": "2026-04-24",
+      "year": 2026,
+      "month": 4,
+      "day": 24,
+      "week": 8,
+      "event": "고사이동연습(5교시) (평가)\n학교폭력 예방교육 전학년(6, 7교시, 교실)<생활>\n학교장과 운동부 학부모 간담회 17시<생활> 4월위기관리위원회 5교시<생활>",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-05-08",
+      "year": 2026,
+      "month": 5,
+      "day": 8,
+      "week": 10,
+      "event": "문화체험(1,2)\n3학년 졸업앨범 사진촬영(신라대)",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "year": 2026,
+      "month": 5,
+      "day": 15,
+      "week": 11,
+      "event": "스승의 날\n체육 한마당",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-05-22",
+      "year": 2026,
+      "month": 5,
+      "day": 22,
+      "week": 12,
+      "event": "동아리활동\n부산과학전람회 발표대회 참가(6팀 15명)<과중>\n 5월위기관리위원회 1교시<생활>",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "여유",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-05-29",
+      "year": 2026,
+      "month": 5,
+      "day": 29,
+      "week": 13,
+      "event": "미니진로박람회 1차 1, 2학년(5~7교시)<진로>\n교사대상 생명존중교육5,6,7교시(도서관)<생활>\n중앙대 고교방문 설명회 동맥꿈터<3학년>(6교시)(1,2,3)",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "자",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-06-05",
+      "year": 2026,
+      "month": 6,
+      "day": 5,
+      "week": 14,
+      "event": "동아리활동\n중대재해처벌법 연수 14:50 동맥꿈터(관리자, 교무, 보건, 행정실, 영양사)",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "자",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-06-12",
+      "year": 2026,
+      "month": 6,
+      "day": 12,
+      "week": 15,
+      "event": "교직원 심폐소생술 교육(5,6,7교시, 구암관) <생활>",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "자",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "year": 2026,
+      "month": 6,
+      "day": 19,
+      "week": 16,
+      "event": "고사이동연습(5,6교시)(평가)\n 6월위기관리위원회13:00<생활>\n부산대학교 고교방문 입시설명회(3)(7교시, 도서관)\n수행평가최종마감(평가)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-06-26",
+      "year": 2026,
+      "month": 6,
+      "day": 26,
+      "week": 17,
+      "event": "2회고사",
+      "grade1": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade2": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "year": 2026,
+      "month": 7,
+      "day": 3,
+      "week": 18,
+      "event": "대학생 멘토링 특강 1, 2학년(5~7교시)<진로>\n전포1동재개발 교육환경 관련회의 14:00<교무>\n교육과정위원회 15:30<학점>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "여유",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-07-10",
+      "year": 2026,
+      "month": 7,
+      "day": 10,
+      "week": 19,
+      "event": "마음챙김의 날<생활>\n3학년 수능원서용 증명사진 촬영(1~4교시)\n동아리 사진 촬영(점심~7교시)\n동아리활동\n'한림원 석학과의 만남' 강연14시-16시<과중>",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "자",
+        "자"
+      ]
+    },
+    {
+      "date": "2026-08-21",
+      "year": 2026,
+      "month": 8,
+      "day": 21,
+      "week": 1,
+      "event": "성희롱, 성폭력 예방교육 1, 2, 3학년\n( 5, 6교시, 구암관)<생활>\n학교폭력예방교육1,2,3학년\n(7교시, 교실)<생활>\nBeAT활용찾아가는연수(심화)(13:30~15:30)(평가)\n경성대학교 입시설명회(3학년)(7교시)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "year": 2026,
+      "month": 8,
+      "day": 28,
+      "week": 2,
+      "event": "진로 페스티벌 1차 1학년 (5~7교시)<진로>\n8월 위기관리위원회(13:00~)\n2학기교수학습및평가계획제출마감(평가)\n동서대학교 입시설명회(3학년)(6교시)\n진주 경상국립대학교 입시설명회(3학년)(7교시)",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "year": 2026,
+      "month": 9,
+      "day": 4,
+      "week": 3,
+      "event": "동아리활동\n동의대학교 입시설명회(3학년)(5교시)",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "year": 2026,
+      "month": 9,
+      "day": 11,
+      "week": 4,
+      "event": "양성평등교육 1, 2, 3학년(5교시, 교실)<생활>\n생명존중교육 1,2,3(6교시 교실)<생활>",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-09-18",
+      "year": 2026,
+      "month": 9,
+      "day": 18,
+      "week": 5,
+      "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-09-02",
+      "year": 2026,
+      "month": 9,
+      "day": 2,
+      "week": 7,
+      "event": "동아리활동\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "year": 2026,
+      "month": 10,
+      "day": 23,
+      "week": 10,
+      "event": "진로 페스티벌 5차 1학년 (5~7교시)<진로>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "year": 2026,
+      "month": 10,
+      "day": 30,
+      "week": 11,
+      "event": "오픈랩(과중)\n동아리활동",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "year": 2026,
+      "month": 11,
+      "day": 6,
+      "week": 12,
+      "event": "교직원 성희롱, 성폭력, 성매매 예방교육(5교시, 도서관)<생활>\n1,2학년 교내백일장(5,6,7교시, 각교실)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "year": 2026,
+      "month": 11,
+      "day": 13,
+      "week": 13,
+      "event": "진로 페스티벌 1학년 (5~7교시)",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "year": 2026,
+      "month": 11,
+      "day": 20,
+      "week": 14,
+      "event": "동아리활동",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "year": 2026,
+      "month": 11,
+      "day": 27,
+      "week": 15,
+      "event": "시험범위취합마감(평가)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "진",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-12-04",
+      "year": 2026,
+      "month": 12,
+      "day": 4,
+      "week": 16,
+      "event": "고사이동연습(5,6교시)(평가)",
+      "grade1": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade2": [
+        "여유",
+        "여유",
+        "여유"
+      ],
+      "grade3": [
+        "여유",
+        "여유",
+        "여유"
+      ]
+    },
+    {
+      "date": "2026-12-11",
+      "year": 2026,
+      "month": 12,
+      "day": 11,
+      "week": 17,
+      "event": "2회고사",
+      "grade1": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade2": [
+        "여유",
+        "진",
+        "동"
+      ],
+      "grade3": [
+        "여유",
+        "진",
+        "동"
+      ]
+    },
+    {
+      "date": "2026-12-18",
+      "year": 2026,
+      "month": 12,
+      "day": 18,
+      "week": 18,
+      "event": "진로 포트폴리오 점검 1,2,3학년 (5~7교시)<진로>",
+      "grade1": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade2": [
+        "진",
+        "진",
+        "진"
+      ],
+      "grade3": [
+        "진",
+        "진",
+        "진"
+      ]
+    },
+    {
+      "date": "2026-12-25",
+      "year": 2026,
+      "month": 12,
+      "day": 25,
+      "week": 19,
+      "event": "성탄절",
+      "grade1": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade2": [
+        "동",
+        "동",
+        "동"
+      ],
+      "grade3": [
+        "동",
+        "동",
+        "동"
+      ]
+    }
+  ]
+};
