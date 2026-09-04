@@ -777,6 +777,24 @@ function onSelectSearchStudent(studentId) {
 }
 
 function switchTab(tab) {
+  // Clear active searches when navigating to any menu
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  closeSearchDropdown();
+
+  // Clear student search
+  AppState.studentSearchQuery = '';
+  const studentSearchInput = document.getElementById('studentSearchInput');
+  if (studentSearchInput) studentSearchInput.value = '';
+  const studentClearBtn = document.getElementById('studentSearchClearBtn');
+  if (studentClearBtn) studentClearBtn.style.display = 'none';
+
+  // Note: AppState.meetingSelectedTeachers (공강 교집합 선택 교사 목록) is intentionally
+  // preserved as requested, allowing users to keep their mutual free period intersection setup.
+
   AppState.currentTab = tab;
   
   document.querySelectorAll('.nav-tab-btn').forEach(btn => {
