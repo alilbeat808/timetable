@@ -257,6 +257,47 @@ body {
   user-select: none;
 }
 
+.brand-logo-container {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .brand-logo-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-logo-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.5px;
+  border-radius: 10px;
+}
+
 .brand-icon {
   width: 42px;
   height: 42px;
@@ -271,18 +312,50 @@ body {
 }
 
 .brand-info h1 {
-  font-size: 1.2rem;
+  font-size: 1.22rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin: 0;
 }
 
 .brand-title-full {
-  display: inline;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
+  gap: 0.4rem;
+}
+
+.brand-school-name {
+  font-weight: 800;
+  font-size: 1.18rem;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.brand-title-divider {
+  color: var(--text-muted);
+  font-weight: 300;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.brand-system-name {
+  font-weight: 700;
+  font-size: 1.12rem;
+  background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .brand-system-name {
+  background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .brand-title-short {
@@ -291,27 +364,36 @@ body {
 
 .brand-badge {
   font-size: 0.72rem;
-  padding: 0.15rem 0.5rem;
+  padding: 0.16rem 0.55rem;
   border-radius: var(--radius-full);
-  background: var(--primary-light);
-  color: var(--primary-text);
+  background: rgba(79, 70, 229, 0.08);
+  color: #4338ca;
+  border: 1px solid rgba(79, 70, 229, 0.22);
   font-weight: 600;
   white-space: nowrap;
 }
 
+[data-theme="dark"] .brand-badge {
+  background: rgba(129, 140, 248, 0.15);
+  color: #a5b4fc;
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
 .brand-author {
   font-size: 0.72rem;
-  padding: 0.15rem 0.5rem;
+  padding: 0.16rem 0.55rem;
   border-radius: var(--radius-full);
   background: var(--bg-hover);
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-weight: 500;
   white-space: nowrap;
 }
 
-.brand-info p {
-  font-size: 0.8rem;
+.brand-info p,
+.brand-subtext {
+  font-size: 0.78rem;
   color: var(--text-secondary);
+  margin-top: 0.15rem;
 }
 
 /* Header Actions */
@@ -2494,6 +2576,19 @@ body {
     min-width: 0;
   }
   
+  .brand-logo-container {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .brand-logo-fallback {
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
   .brand-icon {
     width: 34px;
     height: 34px;
@@ -4279,6 +4374,70 @@ body {
   border-color: rgba(52, 211, 153, 0.35);
 }
 
+.changche-grade-box {
+  padding: 0.42rem 0;
+  border-bottom: 1px dashed rgba(16, 185, 129, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.changche-grade-box:last-child {
+  border-bottom: none;
+  padding-bottom: 0.1rem;
+}
+
+.changche-grade-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.changche-grade-num {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.changche-teacher-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #065f46;
+  white-space: nowrap;
+  word-break: keep-all;
+  flex-shrink: 0;
+  padding: 0.12rem 0.45rem;
+  background: rgba(16, 185, 129, 0.14);
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  letter-spacing: -0.2px;
+}
+
+[data-theme="dark"] .changche-teacher-tag {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.22);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.changche-activity-subrow {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #047857;
+  padding-left: 0.25rem;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+[data-theme="dark"] .changche-activity-subrow {
+  color: #6ee7b7;
+}
+
 .changche-grade-row {
   display: flex;
   align-items: center;
@@ -4286,6 +4445,8 @@ body {
   padding: 0.35rem 0;
   border-bottom: 1px dashed rgba(16, 185, 129, 0.25);
   font-size: 0.82rem;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .changche-grade-row:last-child {
@@ -4296,9 +4457,9 @@ body {
 .friday-changche-selector-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.6rem 1rem;
+  justify-content: flex-start;
+  gap: 0.85rem;
+  padding: 0.55rem 0.95rem;
   background: rgba(16, 185, 129, 0.08);
   border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: var(--radius-md);
@@ -4318,19 +4479,26 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .changche-week-controls {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .changche-week-select {
-  padding: 0.35rem 0.65rem;
+  width: 235px;
+  min-width: 235px;
+  max-width: 235px;
+  padding: 0.35rem 1.8rem 0.35rem 0.65rem;
   font-size: 0.84rem;
   border-radius: var(--radius-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .changche-summary-pill {

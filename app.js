@@ -5296,7 +5296,7 @@ function triggerDongleEasterEgg(event) {
   AppState.teacherViewMode = AppState.teacherViewMode || 'table';
 
   renderApp();
-  showToast('🥚 [이스터에그] 동글동글(정동걸 선생님) 시간표로 이동했습니다! ✨');
+  showToast('👨‍🏫 정동걸 교사 시간표로 이동했습니다.');
 }
 
 function formatTime(date) {
@@ -6102,7 +6102,7 @@ function resolveChangcheSlot(grade, classNum, period, dateStr) {
       room: `${className}교실`,
       category: 'category-career',
       code: '진',
-      note: '학급 담임선생님 지도'
+      note: '학급 담임교사 지도'
     };
   } else if (code === '여유' || code === '자') {
     return {
@@ -6113,7 +6113,7 @@ function resolveChangcheSlot(grade, classNum, period, dateStr) {
       room: `${className}교실`,
       category: 'category-sub',
       code: '여유',
-      note: '학급 부담임 선생님 지도'
+      note: '학급 부담임교사 지도'
     };
   } else if (code === '봉') {
     return {
@@ -6197,13 +6197,12 @@ function renderFridayChangcheSelectorBar() {
   const cal = getAcademicCalendar();
   if (!cal || !cal.fridaySchedule || cal.fridaySchedule.length === 0) return '';
   const selectedDate = AppState.selectedFridayWeekDate || '2026-09-04';
-  const curItem = cal.fridaySchedule.find(f => f.date === selectedDate) || cal.fridaySchedule[0];
 
   return `
     <div class="friday-changche-selector-bar">
       <div class="changche-selector-label">
         <span>🎯</span>
-        <span>금요일 5~7교시 창체(여유·진로·동아리) 주차 선택:</span>
+        <span>금요일 5~7교시 창체 주차 선택:</span>
       </div>
 
       <div class="changche-week-controls">
@@ -6211,7 +6210,7 @@ function renderFridayChangcheSelectorBar() {
         <select class="filter-select changche-week-select" onchange="onSelectFridayWeek(this.value)">
           ${cal.fridaySchedule.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금) - 1학년:${f.grade1[0]}·2학년:${f.grade2[0]}·3학년:${f.grade3[0]} ${f.date === '2026-09-04' ? '★현재' : ''}
+              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금)${f.date === '2026-09-04' ? ' ★현재' : ''}
             </option>
           `).join('')}
         </select>
@@ -6220,12 +6219,6 @@ function renderFridayChangcheSelectorBar() {
           현재주차 (9/4)
         </button>
       </div>
-
-      ${curItem ? `
-        <div class="changche-summary-pill">
-          1학년: [${curItem.grade1.join('·')}] · 2학년: [${curItem.grade2.join('·')}] · 3학년: [${curItem.grade3.join('·')}]
-        </div>
-      ` : ''}
     </div>
   `;
 }
@@ -6319,7 +6312,7 @@ function renderCalendarView(container) {
           <div>
             <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
             <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.2rem;">
-              연간 학사일정 세안 · 공휴일/고사 연동 · 금요일 5~7교시 창체(여유:부담임, 진로:담임, 동아리:지도교사)
+              연간 학사일정 세안 · 공휴일/고사 연동 · 금요일 5~7교시 창체(여유:학급 부담임교사, 진로:학급 담임교사, 동아리:동아리 담당교사)
               ${AppState.lastCalendarSyncTime ? ` · <span style="color:var(--primary); font-weight:600;">동기화: ${formatTime(AppState.lastCalendarSyncTime)}</span>` : ''}
             </p>
           </div>
@@ -6721,20 +6714,36 @@ function renderCalendarWeekView(cal) {
               <!-- Friday Changche Highlight -->
               ${isFri && selectedFri ? `
                 <div class="friday-changche-highlight-card">
-                  <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.45rem;">
-                    🎯 5~7교시 창체 운영계획
+                  <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
+                    <span>🎯</span>
+                    <span>5~7교시 창체 운영계획</span>
                   </div>
-                  <div class="changche-grade-row">
-                    <span><strong>1학년:</strong> ${selectedFri.grade1.join(' · ')}</span>
-                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade1[0])}</span>
+                  <div class="changche-grade-box">
+                    <div class="changche-grade-top">
+                      <span class="changche-grade-num">1학년 :</span>
+                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade1)}</span>
+                    </div>
+                    <div class="changche-activity-subrow">
+                      ${formatChangcheActivityLine(selectedFri.grade1)}
+                    </div>
                   </div>
-                  <div class="changche-grade-row">
-                    <span><strong>2학년:</strong> ${selectedFri.grade2.join(' · ')}</span>
-                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade2[0])}</span>
+                  <div class="changche-grade-box">
+                    <div class="changche-grade-top">
+                      <span class="changche-grade-num">2학년 :</span>
+                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade2)}</span>
+                    </div>
+                    <div class="changche-activity-subrow">
+                      ${formatChangcheActivityLine(selectedFri.grade2)}
+                    </div>
                   </div>
-                  <div class="changche-grade-row">
-                    <span><strong>3학년:</strong> ${selectedFri.grade3.join(' · ')}</span>
-                    <span style="color:#047857; font-weight:600;">${getChangcheTeacherLabel(selectedFri.grade3[0])}</span>
+                  <div class="changche-grade-box">
+                    <div class="changche-grade-top">
+                      <span class="changche-grade-num">3학년 :</span>
+                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade3)}</span>
+                    </div>
+                    <div class="changche-activity-subrow">
+                      ${formatChangcheActivityLine(selectedFri.grade3)}
+                    </div>
                   </div>
                 </div>
               ` : ''}
@@ -6748,11 +6757,36 @@ function renderCalendarWeekView(cal) {
   return html;
 }
 
-function getChangcheTeacherLabel(code) {
+function formatChangcheActivityLine(arr) {
+  if (!arr || !Array.isArray(arr) || arr.length === 0) return '-';
+  const nameMap = {
+    '동': '동아리',
+    '진': '진로',
+    '여유': '여유',
+    '자': '자율',
+    '봉': '봉사'
+  };
+  return arr.map(code => nameMap[code] || code).join(' · ');
+}
+
+function getChangcheTeacherLabel(val) {
+  if (Array.isArray(val)) {
+    const roles = Array.from(new Set(val.map(c => {
+      if (c === '동') return '동아리 담당교사';
+      if (c === '진') return '학급 담임교사';
+      if (c === '여유' || c === '자') return '학급 부담임교사';
+      if (c === '봉') return '학급 담임교사';
+      return c;
+    })));
+    if (roles.length === 1) return roles[0];
+    if (roles.length > 1) return '교시별 담당교사';
+    return '-';
+  }
+  const code = val;
   if (code === '동') return '동아리 담당교사';
-  if (code === '진') return '학급 담임선생님';
-  if (code === '여유' || code === '자') return '학급 부담임선생님';
-  if (code === '봉') return '담임/부담임';
+  if (code === '진') return '학급 담임교사';
+  if (code === '여유' || code === '자') return '학급 부담임교사';
+  if (code === '봉') return '학급 담임교사';
   return code || '-';
 }
 
@@ -6876,21 +6910,36 @@ function openCalendarDayDetailModal(dateStr) {
                 <span>🎯</span>
                 <span>금요일 5~7교시 창체 운영계획</span>
               </div>
-              <div class="changche-grade-row" style="margin-bottom: 0.4rem;">
-                <span><strong>1학년:</strong> ${friChangche.grade1.join(' · ')}</span>
-                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade1[0])}</span>
+              <div class="changche-grade-box">
+                <div class="changche-grade-top">
+                  <span class="changche-grade-num">1학년 :</span>
+                  <span class="changche-teacher-tag">${getChangcheTeacherLabel(friChangche.grade1)}</span>
+                </div>
+                <div class="changche-activity-subrow">
+                  ${formatChangcheActivityLine(friChangche.grade1)}
+                </div>
               </div>
-              <div class="changche-grade-row" style="margin-bottom: 0.4rem;">
-                <span><strong>2학년:</strong> ${friChangche.grade2.join(' · ')}</span>
-                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade2[0])}</span>
+              <div class="changche-grade-box">
+                <div class="changche-grade-top">
+                  <span class="changche-grade-num">2학년 :</span>
+                  <span class="changche-teacher-tag">${getChangcheTeacherLabel(friChangche.grade2)}</span>
+                </div>
+                <div class="changche-activity-subrow">
+                  ${formatChangcheActivityLine(friChangche.grade2)}
+                </div>
               </div>
-              <div class="changche-grade-row">
-                <span><strong>3학년:</strong> ${friChangche.grade3.join(' · ')}</span>
-                <span style="color:#047857; font-weight:700;">${getChangcheTeacherLabel(friChangche.grade3[0])}</span>
+              <div class="changche-grade-box">
+                <div class="changche-grade-top">
+                  <span class="changche-grade-num">3학년 :</span>
+                  <span class="changche-teacher-tag">${getChangcheTeacherLabel(friChangche.grade3)}</span>
+                </div>
+                <div class="changche-activity-subrow">
+                  ${formatChangcheActivityLine(friChangche.grade3)}
+                </div>
               </div>
-              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4;">
-                * 여유: 부담임 선생님 교실 입실 지도<br>
-                * 진로: 학급 담임선생님 교실 입실 지도<br>
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.6rem; line-height: 1.5; border-top: 1px dashed rgba(16,185,129,0.25); padding-top: 0.5rem;">
+                * 여유: 학급 부담임교사 교실 입실 지도<br>
+                * 진로: 학급 담임교사 교실 입실 지도<br>
                 * 동아리: 동아리 담당교사 지도
               </div>
             </div>
