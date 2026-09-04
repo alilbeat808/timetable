@@ -8,9 +8,11 @@ const OFFICIAL_DEPARTMENTS = {
   '국어과': ['최호성', '황영애', '전순옥', '이동훈', '전아린', '김지원', '이혜나'],
   '외국어과': ['정동걸', '신인철', '장충걸', '정용', '김형도', '김정은', '이상환'],
   '수학과': ['최진화', '이우석', '김주영', '황정환', '김혜정', '강정아', '박상율'],
-  '사회과': ['하정우', '강연선', '정환웅', '안경철', '박태언', '정석원', '임종옥', '정종혁'],
+  '사회과': ['하정우', '강연선', '정환웅', '안경철', '박태언', '정석원', '임종옥'],
   '과학과': ['양우석', '성경진', '김정현', '박성훈', '유연정', '박주현', '김은영', '박지영'],
-  '예체능과': ['김동민', '강봉수', '이장훈', '배수경', '김정열', '이옥임', '정복순', '장성호']
+  '예체능과': ['김동민', '강봉수', '이장훈', '배수경', '김정열', '이옥임', '정복순', '장성호'],
+  '진로과': ['정종혁'],
+  '정보과': ['오정훈']
 };
 
 const DEPT_ICONS = {
@@ -19,7 +21,9 @@ const DEPT_ICONS = {
   '수학과': '📐',
   '사회과': '🏛️',
   '과학과': '🧪',
-  '예체능과': '🎨'
+  '예체능과': '🎨',
+  '진로과': '🎯',
+  '정보과': '💻'
 };
 
 // 1-1. Detailed Subject Names per Teacher (교사별 세부 담당 과목)
@@ -41,12 +45,15 @@ const OFFICIAL_TEACHER_SUBJECTS = {
   '정복순': '체육',
   '배수경': '음악',
   '김정열': '미술',
+  // 진로
+  '정종혁': '진로',
   // 교육정보부
   '오정훈': '정보'
 };
 
 const SUBJ_ICONS = {
   '국어': '📚',
+  '외국어': '🌐',
   '영어': '🌐',
   '일본어': '🗾',
   '수학': '📐',
@@ -56,6 +63,7 @@ const SUBJ_ICONS = {
   '음악': '🎵',
   '미술': '🎨',
   '예체능': '🎨',
+  '진로': '🎯',
   '정보': '💻'
 };
 
@@ -120,6 +128,64 @@ const ADMIN_DEPT_ICONS = {
   '2학년부': '🌿',
   '3학년부': '🌳'
 };
+
+// 5. Official Assistant Homeroom Teachers (학급별 부담임 교사 명단 20명)
+const CLASS_SUB_HOMEROOMS = {
+  // 1학년 (6개 학급)
+  '1-1': '이장훈',
+  '1-2': '이동훈',
+  '1-3': '강정아',
+  '1-4': '김정은',
+  '1-5': '안경철',
+  '1-6': '정종혁',
+  // 2학년 (7개 학급)
+  '2-1': '김형도',
+  '2-2': '정복순',
+  '2-3': '전아린',
+  '2-4': '이상환',
+  '2-5': '성경진',
+  '2-6': '하정우',
+  '2-7': '이우석',
+  // 3학년 (7개 학급)
+  '3-1': '오정훈',
+  '3-2': '최진화',
+  '3-3': '황영애',
+  '3-4': '박성훈',
+  '3-5': '김정현',
+  '3-6': '박주현',
+  '3-7': '전순옥'
+};
+
+const TEACHER_SUB_HOMEROOMS = {
+  '이장훈': '1-1',
+  '이동훈': '1-2',
+  '강정아': '1-3',
+  '김정은': '1-4',
+  '안경철': '1-5',
+  '정종혁': '1-6',
+  '김형도': '2-1',
+  '정복순': '2-2',
+  '전아린': '2-3',
+  '이상환': '2-4',
+  '성경진': '2-5',
+  '하정우': '2-6',
+  '이우석': '2-7',
+  '오정훈': '3-1',
+  '최진화': '3-2',
+  '황영애': '3-3',
+  '박성훈': '3-4',
+  '김정현': '3-5',
+  '박주현': '3-6',
+  '전순옥': '3-7'
+};
+
+function getSubHomeroomForClass(className) {
+  return CLASS_SUB_HOMEROOMS[className] || '';
+}
+
+function getSubHomeroomForTeacher(teacherName) {
+  return TEACHER_SUB_HOMEROOMS[teacherName] || '';
+}
 
 function getTeacherDepartment(teacherName) {
   if (!teacherName) return '';
@@ -456,10 +522,12 @@ function searchEntities(query) {
     const admin = getTeacherAdminInfo(t.name);
     const chosung = getChosung(t.name);
     const fullChosung = getFullChosung(t.name);
+    const subH = getSubHomeroomForTeacher(t.name);
     return t.name.toLowerCase().includes(q) ||
            chosung.includes(q) ||
            fullChosung.includes(q) ||
            (t.homeroom && t.homeroom.toLowerCase().includes(q)) ||
+           (subH && (subH.toLowerCase().includes(q) || `${subH} 부담임`.includes(q) || (q.includes('부담임') && subH))) ||
            (subj && subj.toLowerCase().includes(q)) ||
            (dept && dept.toLowerCase().includes(q)) ||
            (admin && admin.label.toLowerCase().includes(q)) ||
@@ -469,9 +537,11 @@ function searchEntities(query) {
   // 2. Classes Match
   const normalizedClassQuery = q.replace(/학년\s*/, '-').replace(/반$/, '');
   const matchedClasses = AppState.data.classes.filter(c => {
+    const subH = getSubHomeroomForClass(c.name);
     return c.name.toLowerCase().includes(q) ||
            c.name.toLowerCase().includes(normalizedClassQuery) ||
-           (c.homeroom && c.homeroom.toLowerCase().includes(q));
+           (c.homeroom && c.homeroom.toLowerCase().includes(q)) ||
+           (subH && subH.toLowerCase().includes(q));
   });
 
   // 3. Subjects Match
@@ -590,6 +660,7 @@ function handleSearchInput(e) {
               <span class="badge-subj-${subj}" style="font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 4px;">${subj}</span>
               ${admin && admin.position ? `<span class="chip-badge" style="font-size: 0.7rem;">${admin.dept ? admin.dept + ' ' : ''}${admin.position}</span>` : ''}
               ${t.homeroom ? `<span class="chip-badge" style="font-size: 0.7rem;">${t.homeroom} 담임</span>` : ''}
+              ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size: 0.7rem; background:#f0fdf4; color:#166534; border-color:#86efac;">${getSubHomeroomForTeacher(t.name)} 부담임</span>` : ''}
             </div>
             <span class="search-item-desc" style="white-space: nowrap;">시간표 ➔</span>
           </div>
@@ -609,10 +680,11 @@ function handleSearchInput(e) {
   if (results.classes.length > 0) {
     html += `<div class="search-category-title">🏫 학반 (${results.classes.length})</div>`;
     html += results.classes.slice(0, 4).map(c => {
+      const subH = getSubHomeroomForClass(c.name);
       return `
         <div class="search-item" onclick="onSelectSearchClass('${c.name}')">
           <span class="search-item-title">${c.name}반</span>
-          <span class="search-item-desc">담임: ${c.homeroom || '-'} ➔</span>
+          <span class="search-item-desc">담임: ${c.homeroom || '-'}${subH ? ` / 부담임: ${subH}` : ''} ➔</span>
         </div>
       `;
     }).join('');
@@ -993,6 +1065,7 @@ function renderTeacherView(container) {
             <span>👨‍🏫</span>
             <span><strong>${currentTeacher ? `${currentTeacher.name} 선생님` : '교사별'}</strong> 시간표</span>
             ${currentTeacher && currentTeacher.homeroom ? `<span class="chip-badge">${currentTeacher.homeroom} 담임</span>` : ''}
+            ${currentTeacher && getSubHomeroomForTeacher(currentTeacher.name) ? `<span class="chip-badge" style="background: #f0fdf4; color: #166534; border-color: #86efac;">${getSubHomeroomForTeacher(currentTeacher.name)} 부담임</span>` : ''}
             ${currentTeacher ? `
               <button class="icon-btn" onclick="toggleFavorite('${currentTeacher.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
                 ${isFavorite ? '⭐' : '☆'}
@@ -1001,7 +1074,7 @@ function renderTeacherView(container) {
           </div>
           <div class="control-tools">
             <button type="button" class="btn ${AppState.teacherSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleTeacherSubmenu()" title="교사 선택 및 부서/초성 메뉴 펼치기/접기">
-              ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 교사 선택 / 목록 펼치기 ▾'}
+              ${AppState.teacherSubmenuOpen ? '▲ 교사 목록 닫기' : '👥 교사 목록 펼치기 ▾'}
             </button>
             <div class="view-mode-switcher">
               <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
@@ -1109,6 +1182,7 @@ function renderTeacherView(container) {
                     ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
                     ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
                     ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
+                    ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size:0.68rem; background:#f0fdf4; color:#166534; border: 1px solid #86efac;">${getSubHomeroomForTeacher(t.name)} 부</span>` : ''}
                   </button>
                 `;
               }).join('')}
@@ -1166,6 +1240,13 @@ function renderTeacherView(container) {
                     🏫 ${currentTeacher.homeroom} 담임 ➔
                   </button>
                 ` : ''}
+
+                <!-- Sub-Homeroom Badge -->
+                ${getSubHomeroomForTeacher(currentTeacher.name) ? `
+                  <button class="entity-tag badge-grade-${getGradeFromHomeroom(getSubHomeroomForTeacher(currentTeacher.name))}" style="background: #f0fdf4; color: #166534; border: 1px solid #86efac; cursor: pointer;" onclick="navigateToClass('${getSubHomeroomForTeacher(currentTeacher.name)}')">
+                    🏫 ${getSubHomeroomForTeacher(currentTeacher.name)} 부담임 ➔
+                  </button>
+                ` : ''}
               </div>
             </div>
           </div>
@@ -1190,7 +1271,7 @@ function renderTeacherView(container) {
         <!-- 5. Bottom quick toggle button -->
         <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
           <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
-            ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 다른 선생님 선택하기 ▾'}
+            ${AppState.teacherSubmenuOpen ? '▲ 교사 목록 닫기' : '👥 교사 목록 펼치기 ▾'}
           </button>
         </div>
       `;
@@ -1200,10 +1281,10 @@ function renderTeacherView(container) {
           <div class="empty-selection-icon">👨‍🏫</div>
           <div class="empty-selection-title">선택된 선생님이 없습니다</div>
           <div class="empty-selection-desc">
-            상단 검색창에서 교사 이름을 검색하시거나, 아래 <strong>[교사 선택 / 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 선생님을 선택해 주세요.
+            상단 검색창에서 교사 이름을 검색하시거나, 아래 <strong>[교사 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 선생님을 선택해 주세요.
           </div>
           <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleTeacherSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
-            ${AppState.teacherSubmenuOpen ? '▲ 교사 선택 닫기' : '👥 교사 선택 / 목록 펼치기 ▾'}
+            ${AppState.teacherSubmenuOpen ? '▲ 교사 목록 닫기' : '👥 교사 목록 펼치기 ▾'}
           </button>
         </div>
       `;
@@ -1686,6 +1767,7 @@ function renderTeacherLiveHeroCard(teacher, todayName, state, now, liveStatus) {
           <div class="student-hero-sub">
             <span>담당: <strong>${subj || '교과'}</strong></span>
             ${teacher.homeroom ? `<span>•</span><span><strong>${teacher.homeroom} 담임</strong></span>` : ''}
+            ${getSubHomeroomForTeacher(teacher.name) ? `<span>•</span><span style="color:#166534;"><strong>${getSubHomeroomForTeacher(teacher.name)} 부담임</strong></span>` : ''}
             ${admin && admin.position ? `<span>•</span><span>${admin.dept ? admin.dept + ' ' : ''}${admin.position}</span>` : ''}
             <span>•</span>
             <span>${liveStatus.subNote}</span>
@@ -2062,6 +2144,7 @@ function renderClassView(container) {
           <span>🏫</span>
           <span><strong>${currentClass ? currentClass.name : '학반별'}</strong> 시간표</span>
           ${currentClass && currentClass.homeroom ? `<span class="chip-badge">담임: ${currentClass.homeroom} 선생님</span>` : ''}
+          ${currentClass && getSubHomeroomForClass(currentClass.name) ? `<span class="chip-badge" style="background: #f0fdf4; color: #166534; border-color: #86efac;">부담임: ${getSubHomeroomForClass(currentClass.name)} 선생님</span>` : ''}
           ${currentClass ? `
             <button class="icon-btn" onclick="toggleFavorite('${currentClass.id}')" title="즐겨찾기" style="font-size: 1.1rem; padding: 0.1rem 0.35rem;">
               ${isFavorite ? '⭐' : '☆'}
@@ -2070,7 +2153,7 @@ function renderClassView(container) {
         </div>
         <div class="control-tools">
           <button type="button" class="btn ${AppState.classSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleClassSubmenu()" title="학반 선택 메뉴 펼치기/접기">
-            ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 다른 학반 선택 ▾'}
+            ${AppState.classSubmenuOpen ? '▲ 학반 목록 닫기' : '🏫 학반 목록 펼치기 ▾'}
           </button>
           <div class="view-mode-switcher">
             <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
@@ -2132,6 +2215,7 @@ function renderClassView(container) {
             <button class="chip-btn ${c.id === AppState.selectedClassId ? 'active' : ''}" onclick="selectClass('${c.id}')">
               ${c.name}
               ${c.homeroom ? `<span class="chip-badge">${c.homeroom}</span>` : ''}
+              ${getSubHomeroomForClass(c.name) ? `<span class="chip-badge" style="background:#f0fdf4; color:#166534; font-size:0.68rem; border:1px solid #86efac;">부: ${getSubHomeroomForClass(c.name)}</span>` : ''}
             </button>
           `).join('')}
         </div>
@@ -2159,6 +2243,11 @@ function renderClassView(container) {
               ${currentClass.homeroom ? `
                 <button class="entity-tag" style="background: #eef2ff; color: #4338ca; border: none; cursor: pointer;" onclick="navigateToTeacher('${currentClass.homeroom}')">
                   👨‍🏫 담임: ${currentClass.homeroom} 선생님 ➔
+                </button>
+              ` : ''}
+              ${getSubHomeroomForClass(currentClass.name) ? `
+                <button class="entity-tag" style="background: #f0fdf4; color: #166534; border: 1px solid #86efac; cursor: pointer;" onclick="navigateToTeacher('${getSubHomeroomForClass(currentClass.name)}')">
+                  👨‍🏫 부담임: ${getSubHomeroomForClass(currentClass.name)} 선생님 ➔
                 </button>
               ` : ''}
             </div>
@@ -2190,7 +2279,7 @@ function renderClassView(container) {
       <!-- Bottom Quick Navigation Toggle -->
       <div style="text-align: center; margin: 1.75rem 0 0.5rem 0;">
         <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleClassSubmenu();" style="font-size: 0.92rem; padding: 0.6rem 1.4rem; border-radius: 9999px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
-          ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 다른 학반 선택하기 ▾'}
+          ${AppState.classSubmenuOpen ? '▲ 학반 목록 닫기' : '🏫 학반 목록 펼치기 ▾'}
         </button>
       </div>
     `;
@@ -2200,10 +2289,10 @@ function renderClassView(container) {
         <div class="empty-selection-icon">🏫</div>
         <div class="empty-selection-title">선택된 학반이 없습니다</div>
         <div class="empty-selection-desc">
-          상단 검색창에서 학반을 검색하시거나, 아래 <strong>[학반 선택 / 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학급을 선택해 주세요.
+          상단 검색창에서 학반을 검색하시거나, 아래 <strong>[학반 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학급을 선택해 주세요.
         </div>
         <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleClassSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
-          ${AppState.classSubmenuOpen ? '▲ 학반 선택 닫기' : '🏫 학반 선택 / 목록 펼치기 ▾'}
+          ${AppState.classSubmenuOpen ? '▲ 학반 목록 닫기' : '🏫 학반 목록 펼치기 ▾'}
         </button>
       </div>
     `;
@@ -2727,7 +2816,7 @@ function renderStudentView(container) {
 
         <div class="control-tools">
           <button type="button" class="btn ${AppState.studentSubmenuOpen ? 'btn-primary' : 'btn-secondary'} toggle-submenu-btn" onclick="toggleStudentSubmenu()" title="학생 목록 및 학반/초성 필터 펼치기/접기">
-            ${AppState.studentSubmenuOpen ? '▲ 학생 선택 닫기' : '👥 다른 학생 선택 ▾'}
+            ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 펼치기 ▾'}
           </button>
           <div class="view-mode-switcher">
             <button class="view-mode-btn ${AppState.viewMode === 'card' ? 'active' : ''}" onclick="setViewMode('card')">
@@ -2841,7 +2930,7 @@ function renderStudentView(container) {
       <!-- 3. Bottom Quick Toggle Button -->
       <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
         <button type="button" class="btn btn-secondary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: var(--radius-full);">
-          ${AppState.studentSubmenuOpen ? '▲ 학생 선택 닫기' : '👥 다른 학생 선택하기 ▾'}
+          ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 펼치기 ▾'}
         </button>
       </div>
     `;
@@ -2851,10 +2940,10 @@ function renderStudentView(container) {
         <div class="empty-selection-icon">🎓</div>
         <div class="empty-selection-title">선택된 학생이 없습니다</div>
         <div class="empty-selection-desc">
-          상단 검색창에서 학생 이름을 검색하시거나, 아래 <strong>[학생 목록 / 필터 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학생을 선택해 주세요.
+          상단 검색창에서 학생 이름을 검색하시거나, 아래 <strong>[학생 목록 펼치기]</strong> 버튼을 눌러 시간표를 확인하실 학생을 선택해 주세요.
         </div>
         <button type="button" class="btn btn-primary toggle-submenu-btn" onclick="toggleStudentSubmenu()" style="font-size: 0.95rem; padding: 0.65rem 1.4rem;">
-          ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 / 학반·초성 필터 ▾'}
+          ${AppState.studentSubmenuOpen ? '▲ 학생 목록 닫기' : '👥 학생 목록 펼치기 ▾'}
         </button>
       </div>
     `;
@@ -3644,6 +3733,7 @@ function renderMeetingView(container) {
                   ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="margin-left:0.15rem;">${admin.duty}</span>` : ''}
                   ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.68rem; margin-left:0.2rem;">${subj}</span>` : ''}
                   ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.68rem; margin-left:0.2rem;">${t.homeroom}</span>` : ''}
+                  ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size:0.68rem; margin-left:0.2rem; background:#f0fdf4; color:#166534; border:1px solid #86efac;">${getSubHomeroomForTeacher(t.name)} 부</span>` : ''}
                   <button class="selected-tag-remove" onclick="removeMeetingTeacher('${t.id}')">✕</button>
                 </span>
               `;
@@ -3674,6 +3764,7 @@ function renderMeetingView(container) {
               ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}">${admin.duty}</span>` : ''}
               ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.7rem;">${subj}</span>` : ''}
               ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.7rem;">${t.homeroom}</span>` : ''}
+              ${getSubHomeroomForTeacher(t.name) ? `<span class="chip-badge" style="font-size:0.7rem; background:#f0fdf4; color:#166534; border:1px solid #86efac;">${getSubHomeroomForTeacher(t.name)} 부</span>` : ''}
             </button>
           `;
         }).join('')}
@@ -3889,11 +3980,20 @@ function getCategorizedPresets(category) {
     const g1 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('1-'))).map(t => t.id);
     if (g1.length > 0) presets.push({ name: 'grade1', label: '1학년 담임', icon: '🌱', teacherIds: g1 });
 
+    const g1sub = sortTeachersList(teachers.filter(t => getSubHomeroomForTeacher(t.name) && getSubHomeroomForTeacher(t.name).startsWith('1-'))).map(t => t.id);
+    if (g1sub.length > 0) presets.push({ name: 'grade1_sub', label: '1학년 부담임', icon: '🌱', teacherIds: g1sub });
+
     const g2 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('2-'))).map(t => t.id);
     if (g2.length > 0) presets.push({ name: 'grade2', label: '2학년 담임', icon: '🌿', teacherIds: g2 });
 
+    const g2sub = sortTeachersList(teachers.filter(t => getSubHomeroomForTeacher(t.name) && getSubHomeroomForTeacher(t.name).startsWith('2-'))).map(t => t.id);
+    if (g2sub.length > 0) presets.push({ name: 'grade2_sub', label: '2학년 부담임', icon: '🌿', teacherIds: g2sub });
+
     const g3 = sortTeachersList(teachers.filter(t => t.homeroom && t.homeroom.startsWith('3-'))).map(t => t.id);
     if (g3.length > 0) presets.push({ name: 'grade3', label: '3학년 담임', icon: '🌳', teacherIds: g3 });
+
+    const g3sub = sortTeachersList(teachers.filter(t => getSubHomeroomForTeacher(t.name) && getSubHomeroomForTeacher(t.name).startsWith('3-'))).map(t => t.id);
+    if (g3sub.length > 0) presets.push({ name: 'grade3_sub', label: '3학년 부담임', icon: '🌳', teacherIds: g3sub });
   } else {
     // All (가나다순)
     presets.push({ name: 'all_teachers', label: '전체 교사', icon: '👥', teacherIds: sortTeachersList(teachers).map(t => t.id) });
@@ -4353,10 +4453,12 @@ function renderMatrixView(container) {
           <button class="matrix-filter-chip ${currentFilter === 'grade3' ? 'active' : ''}" onclick="setMatrixFilter('grade3')">3학년</button>
           <button class="matrix-filter-chip ${currentFilter === '국어과' ? 'active' : ''}" onclick="setMatrixFilter('국어과')">국어</button>
           <button class="matrix-filter-chip ${currentFilter === '수학과' ? 'active' : ''}" onclick="setMatrixFilter('수학과')">수학</button>
-          <button class="matrix-filter-chip ${currentFilter === '외국어과' ? 'active' : ''}" onclick="setMatrixFilter('외국어과')">영어</button>
+          <button class="matrix-filter-chip ${currentFilter === '외국어과' ? 'active' : ''}" onclick="setMatrixFilter('외국어과')">외국어</button>
           <button class="matrix-filter-chip ${currentFilter === '사회과' ? 'active' : ''}" onclick="setMatrixFilter('사회과')">사회</button>
           <button class="matrix-filter-chip ${currentFilter === '과학과' ? 'active' : ''}" onclick="setMatrixFilter('과학과')">과학</button>
           <button class="matrix-filter-chip ${currentFilter === '예체능과' ? 'active' : ''}" onclick="setMatrixFilter('예체능과')">예체능</button>
+          <button class="matrix-filter-chip ${currentFilter === '진로과' ? 'active' : ''}" onclick="setMatrixFilter('진로과')">진로</button>
+          <button class="matrix-filter-chip ${currentFilter === '정보과' ? 'active' : ''}" onclick="setMatrixFilter('정보과')">정보</button>
         ` : `
           <button class="matrix-filter-chip ${currentFilter === 'all' ? 'active' : ''}" onclick="setMatrixFilter('all')">전체 학반 (${AppState.data.classes.length})</button>
           <button class="matrix-filter-chip ${currentFilter === '1' ? 'active' : ''}" onclick="setMatrixFilter('1')">1학년 (1-1~1-6)</button>

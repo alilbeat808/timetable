@@ -1603,7 +1603,8 @@ body {
 .badge-subj-체육 { background: #fef3c7 !important; color: #92400e !important; border: 1px solid #f59e0b !important; font-weight: 700; }
 .badge-subj-음악 { background: #ffe4e6 !important; color: #881337 !important; border: 1px solid #fb7185 !important; font-weight: 700; }
 .badge-subj-미술 { background: #ede9fe !important; color: #5b21b6 !important; border: 1px solid #a78bfa !important; font-weight: 700; }
-.badge-subj-정보 { background: #cffafe !important; color: #155e75 !important; border: 1px solid #22d3ee !important; font-weight: 700; }
+.badge-subj-정보, .badge-subj-정보과 { background: #cffafe !important; color: #155e75 !important; border: 1px solid #22d3ee !important; font-weight: 700; }
+.badge-subj-진로, .badge-subj-진로과 { background: #fdf4ff !important; color: #7e22ce !important; border: 1px solid #d8b4fe !important; font-weight: 700; }
 
 [data-theme="dark"] .badge-subj-국어, [data-theme="dark"] .badge-subj-국어과 { background: rgba(239, 68, 68, 0.25) !important; color: #fca5a5 !important; border-color: rgba(239, 68, 68, 0.5) !important; }
 [data-theme="dark"] .badge-subj-외국어, [data-theme="dark"] .badge-subj-외국어과, [data-theme="dark"] .badge-subj-영어 { background: rgba(99, 102, 241, 0.25) !important; color: #a5b4fc !important; border-color: rgba(99, 102, 241, 0.5) !important; }
@@ -1615,7 +1616,8 @@ body {
 [data-theme="dark"] .badge-subj-체육 { background: rgba(245, 158, 11, 0.25) !important; color: #fde68a !important; border-color: rgba(245, 158, 11, 0.5) !important; }
 [data-theme="dark"] .badge-subj-음악 { background: rgba(244, 63, 94, 0.25) !important; color: #fecdd3 !important; border-color: rgba(244, 63, 94, 0.5) !important; }
 [data-theme="dark"] .badge-subj-미술 { background: rgba(139, 92, 246, 0.25) !important; color: #c4b5fd !important; border-color: rgba(139, 92, 246, 0.5) !important; }
-[data-theme="dark"] .badge-subj-정보 { background: rgba(6, 182, 212, 0.25) !important; color: #67e8f9 !important; border-color: rgba(6, 182, 212, 0.5) !important; }
+[data-theme="dark"] .badge-subj-정보, [data-theme="dark"] .badge-subj-정보과 { background: rgba(6, 182, 212, 0.25) !important; color: #67e8f9 !important; border-color: rgba(6, 182, 212, 0.5) !important; }
+[data-theme="dark"] .badge-subj-진로, [data-theme="dark"] .badge-subj-진로과 { background: rgba(168, 85, 247, 0.25) !important; color: #d8b4fe !important; border-color: rgba(168, 85, 247, 0.5) !important; }
 
 /* 3. 🏫 Homeroom Grade Badges (담임 학년별 고유 식별 색상) */
 .badge-grade-1 { background: #ccfbf1 !important; color: #115e59 !important; border: 1.5px solid #2dd4bf !important; font-weight: 800; border-radius: var(--radius-full); }

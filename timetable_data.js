@@ -450,7 +450,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-2"
     },
     {
       "id": "T_김지원",
@@ -778,7 +779,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_전아린",
@@ -1106,7 +1108,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-3"
     },
     {
       "id": "T_이혜나",
@@ -1440,7 +1443,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_황영애",
@@ -1759,7 +1763,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-3"
     },
     {
       "id": "T_전순옥",
@@ -2081,7 +2086,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-7"
     },
     {
       "id": "T_최호성",
@@ -2415,7 +2421,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_최진화",
@@ -2731,7 +2738,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-2"
     },
     {
       "id": "T_이우석",
@@ -3047,7 +3055,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-7"
     },
     {
       "id": "T_김혜정",
@@ -3381,7 +3390,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_박상율",
@@ -3712,7 +3722,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_강정아",
@@ -4043,7 +4054,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-3"
     },
     {
       "id": "T_황정환",
@@ -4380,7 +4392,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김주영",
@@ -4708,7 +4721,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_신인철",
@@ -5039,7 +5053,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김정은",
@@ -5358,7 +5373,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-4"
     },
     {
       "id": "T_장충걸",
@@ -5692,7 +5708,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김형도",
@@ -6020,7 +6037,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-1"
     },
     {
       "id": "T_정동걸",
@@ -6351,7 +6369,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_정용",
@@ -6679,7 +6698,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_정환웅",
@@ -7010,7 +7030,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_강연선",
@@ -7341,7 +7362,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_하정우",
@@ -7666,7 +7688,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-6"
     },
     {
       "id": "T_임종옥",
@@ -7982,7 +8005,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_안경철",
@@ -8316,7 +8340,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-5"
     },
     {
       "id": "T_박태언",
@@ -8656,7 +8681,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_정석원",
@@ -8996,7 +9022,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_성경진",
@@ -9318,7 +9345,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-5"
     },
     {
       "id": "T_박주현",
@@ -9640,7 +9668,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-6"
     },
     {
       "id": "T_양우석",
@@ -9968,7 +9997,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_박지영",
@@ -10284,7 +10314,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_박성훈",
@@ -10606,7 +10637,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-4"
     },
     {
       "id": "T_김은영",
@@ -10922,7 +10954,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김정현",
@@ -11244,7 +11277,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-5"
     },
     {
       "id": "T_유연정",
@@ -11572,7 +11606,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_이장훈",
@@ -11882,7 +11917,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-1"
     },
     {
       "id": "T_장성호",
@@ -12177,7 +12213,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김동민",
@@ -12511,7 +12548,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_강봉수",
@@ -12833,7 +12871,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_배수경",
@@ -13164,7 +13203,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_김정열",
@@ -13492,7 +13532,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": ""
     },
     {
       "id": "T_오정훈",
@@ -13820,7 +13861,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "3-1"
     },
     {
       "id": "T_이상환",
@@ -14151,7 +14193,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "2-4"
     },
     {
       "id": "T_정종혁",
@@ -14449,7 +14492,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             "lines": []
           }
         }
-      }
+      },
+      "subHomeroom": "1-6"
     }
   ],
   "classes": [
@@ -14830,7 +14874,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "이장훈"
     },
     {
       "id": "C_1-2",
@@ -15209,7 +15254,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "이동훈"
     },
     {
       "id": "C_1-3",
@@ -15588,7 +15634,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "강정아"
     },
     {
       "id": "C_1-4",
@@ -15967,7 +16014,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "김정은"
     },
     {
       "id": "C_1-5",
@@ -16346,7 +16394,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "안경철"
     },
     {
       "id": "C_1-6",
@@ -16725,7 +16774,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "정종혁"
     },
     {
       "id": "C_2-1",
@@ -17104,7 +17154,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "김형도"
     },
     {
       "id": "C_2-2",
@@ -17481,7 +17532,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "정복순"
     },
     {
       "id": "C_2-3",
@@ -17860,7 +17912,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "전아린"
     },
     {
       "id": "C_2-4",
@@ -18239,7 +18292,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "이상환"
     },
     {
       "id": "C_2-5",
@@ -18631,7 +18685,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "성경진"
     },
     {
       "id": "C_2-6",
@@ -19010,7 +19065,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "하정우"
     },
     {
       "id": "C_2-7",
@@ -19388,7 +19444,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "이우석"
     },
     {
       "id": "C_3-1",
@@ -19767,7 +19824,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "오정훈"
     },
     {
       "id": "C_3-2",
@@ -20146,7 +20204,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "최진화"
     },
     {
       "id": "C_3-3",
@@ -20522,7 +20581,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "황영애"
     },
     {
       "id": "C_3-4",
@@ -20898,7 +20958,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "박성훈"
     },
     {
       "id": "C_3-5",
@@ -21286,7 +21347,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "김정현"
     },
     {
       "id": "C_3-6",
@@ -21661,7 +21723,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "박주현"
     },
     {
       "id": "C_3-7",
@@ -22037,7 +22100,8 @@ window.SCHOOL_TIMETABLE_DATA = {
             ]
           }
         }
-      }
+      },
+      "subHomeroom": "전순옥"
     }
   ],
   "studentCount": 311,
