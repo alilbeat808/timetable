@@ -197,6 +197,7 @@ const AppState = {
   selectedDay: '월',
   selectedPeriod: '1',
   matrixType: 'teacher', // 'teacher' | 'class'
+  matrixFilter: 'all',
   searchQuery: '',
   theme: localStorage.getItem('timetable_theme') || 'light',
   favorites: JSON.parse(localStorage.getItem('timetable_favorites') || '[]'),
@@ -791,6 +792,9 @@ function switchTab(tab) {
   if (studentSearchInput) studentSearchInput.value = '';
   const studentClearBtn = document.getElementById('studentSearchClearBtn');
   if (studentClearBtn) studentClearBtn.style.display = 'none';
+
+  // Reset matrix filter
+  AppState.matrixFilter = 'all';
 
   // Note: AppState.meetingSelectedTeachers (공강 교집합 선택 교사 목록) is intentionally
   // preserved as requested, allowing users to keep their mutual free period intersection setup.
@@ -3682,8 +3686,158 @@ function showToast(msg) {
 /* ==========================================================================
    4. 전체 종합 현황판 뷰 (Matrix Overview)
    ========================================================================== */
+
+// Teacher grade caching helper
+const _teacherGradeCache = {};
+function isTeacherInGrade(t, gradeStr) {
+  if (!_teacherGradeCache[t.name]) {
+    const grades = new Set();
+    if (t.homeroom && /^[123]-/.test(t.homeroom)) {
+      grades.add(t.homeroom[0]);
+    }
+    if (t.schedule) {
+      for (const day of Object.values(t.schedule)) {
+        for (const s of Object.values(day)) {
+          if (!s) continue;
+          if (s.target && /^[123]-/.test(s.target)) grades.add(s.target[0]);
+          if (s.subject && /[123]/.test(s.subject)) {
+            const m = s.subject.match(/([123])/);
+            if (m) grades.add(m[1]);
+          }
+        }
+      }
+    }
+    if (AppState.data && AppState.data.students) {
+      AppState.data.students.forEach(st => {
+        const g = String(st.grade);
+        if (grades.has(g)) return;
+        const hasT = Object.values(st.schedule || {}).some(d =>
+          Object.values(d || {}).some(slot => slot && slot.teacher === t.name)
+        );
+        if (hasT) grades.add(g);
+      });
+    }
+    _teacherGradeCache[t.name] = grades;
+  }
+  return _teacherGradeCache[t.name].has(String(gradeStr));
+}
+
+// Compact Short Subject Name Helper for Mobile (Max 2~3 characters)
+function getMatrixShortSubject(realSubject) {
+  if (!realSubject) return '';
+  const s = realSubject.trim();
+  
+  const map = {
+    '독서와 작문': '독서',
+    '실용 국어': '실국',
+    '심화 국어': '심국',
+    '현대문학 감상': '현문',
+    '고전 읽기': '고전',
+    '수학과제 탐구': '수탐',
+    '미적분Ⅰ': '미적Ⅰ',
+    '미적분': '미적',
+    '확률과 통계': '확통',
+    '심화 수학Ⅰ': '심수Ⅰ',
+    '영어Ⅱ': '영Ⅱ',
+    '영어Ⅰ': '영Ⅰ',
+    '영어권 문화': '영문',
+    '진로 영어': '진영',
+    '심화 영어Ⅱ': '심영Ⅱ',
+    '법과 사회': '법사',
+    '고전과 윤리': '고윤',
+    '사회문제 탐구': '사탐',
+    '한국지리 탐구': '한지',
+    '여행지리': '여지',
+    '한국사': '한사',
+    '한국사1': '한사',
+    '윤리와 사상': '윤사',
+    '역학과 에너지': '역학',
+    '생활과 과학': '생과',
+    '물질과 에너지': '물질',
+    '고급 화학': '고화',
+    '생명과학Ⅱ': '생Ⅱ',
+    '생명과학Ⅰ': '생Ⅰ',
+    '생명과학': '생명',
+    '세포와 물질대사': '세포',
+    '지구과학Ⅱ': '지Ⅱ',
+    '지구과학Ⅰ': '지Ⅰ',
+    '지구과학': '지학',
+    '행성우주과학': '우주',
+    '융합과학': '융과',
+    '기초 체육 전공 실기': '체전',
+    '체육 전공 실기 심화': '체전',
+    '체전실기A': '체전',
+    '기초체육전공실기': '체전',
+    '운동과 건강': '운건',
+    '운동과건강': '운건',
+    '스포츠 생활': '스포츠',
+    '스포츠생활': '스포츠',
+    '음악과 미디어': '음악',
+    '음악과미디어': '음악',
+    '미술과 매체': '미술',
+    '미술과매체': '미술',
+    '창의 경영': '창경',
+    '일본 문화': '일문',
+    '일본문화': '일문',
+    '일본문화B': '일문',
+    '일본어Ⅰ': '일어',
+    '일본어': '일어',
+    '과탐실': '과탐',
+    '자율·자치활동': '자율',
+    '자율활동': '자율',
+    '봉사활동': '봉사',
+    '자율/공강': '자율',
+    '이동수업': '이동',
+    '1층감독': '감독',
+    '2층감독': '감독',
+    '홈베이스+동맥꿈터': '홈베',
+    '홈베이스': '홈베'
+  };
+
+  if (map[s]) return map[s];
+
+  if (/^자율/.test(s)) return '자율';
+  if (/^봉사/.test(s)) return '봉사';
+  if (/^창체/.test(s)) return '창체';
+  if (/^융합/.test(s)) return '융합';
+  if (/^세포/.test(s)) return '세포';
+  if (/^홈베/.test(s)) return '홈베';
+  if (/감독/.test(s)) return '감독';
+
+  return s.length > 3 ? s.slice(0, 3) : s;
+}
+
+// Compact Short Room/Target Helper for Mobile
+function getMatrixShortRoom(target, actualRoom) {
+  const displayRoom = actualRoom || target || '';
+  if (!displayRoom) return '';
+  const roomMap = {
+    '운동장': '운동장',
+    '3층 미술실': '미술실',
+    '5층 음악실': '음악실',
+    '5층 생물실': '생물실',
+    '5층 화학실': '화학실',
+    '5층 지구과학실': '지학실',
+    '5층 물리실': '물리실',
+    '4층 컴퓨터실': '컴터실',
+    '4층 무한상상실': '상상실',
+    '3층 수학실': '수학실',
+    '4층 수학전용실': '수학실',
+    '3층 영어전용실': '영어실',
+    '무상실': '상상실',
+    '물리실': '물리실',
+    '지구실': '지학실',
+    '컴터실': '컴터실',
+    '영어실': '영어실'
+  };
+  if (roomMap[displayRoom]) return roomMap[displayRoom];
+  return displayRoom;
+}
+
 function renderMatrixView(container) {
   if (!AppState.data) return;
+
+  const currentFilter = AppState.matrixFilter || 'all';
 
   const html = `
     <div class="control-card">
@@ -3712,12 +3866,33 @@ function renderMatrixView(container) {
         </div>
       </div>
 
+      <div class="matrix-filter-bar">
+        ${AppState.matrixType === 'teacher' ? `
+          <button class="matrix-filter-chip ${currentFilter === 'all' ? 'active' : ''}" onclick="setMatrixFilter('all')">전체 (${AppState.data.teachers.length})</button>
+          <button class="matrix-filter-chip ${currentFilter === 'grade1' ? 'active' : ''}" onclick="setMatrixFilter('grade1')">1학년</button>
+          <button class="matrix-filter-chip ${currentFilter === 'grade2' ? 'active' : ''}" onclick="setMatrixFilter('grade2')">2학년</button>
+          <button class="matrix-filter-chip ${currentFilter === 'grade3' ? 'active' : ''}" onclick="setMatrixFilter('grade3')">3학년</button>
+          <button class="matrix-filter-chip ${currentFilter === '국어과' ? 'active' : ''}" onclick="setMatrixFilter('국어과')">국어</button>
+          <button class="matrix-filter-chip ${currentFilter === '수학과' ? 'active' : ''}" onclick="setMatrixFilter('수학과')">수학</button>
+          <button class="matrix-filter-chip ${currentFilter === '외국어과' ? 'active' : ''}" onclick="setMatrixFilter('외국어과')">영어</button>
+          <button class="matrix-filter-chip ${currentFilter === '사회과' ? 'active' : ''}" onclick="setMatrixFilter('사회과')">사회</button>
+          <button class="matrix-filter-chip ${currentFilter === '과학과' ? 'active' : ''}" onclick="setMatrixFilter('과학과')">과학</button>
+          <button class="matrix-filter-chip ${currentFilter === '예체능과' ? 'active' : ''}" onclick="setMatrixFilter('예체능과')">예체능</button>
+        ` : `
+          <button class="matrix-filter-chip ${currentFilter === 'all' ? 'active' : ''}" onclick="setMatrixFilter('all')">전체 학반 (${AppState.data.classes.length})</button>
+          <button class="matrix-filter-chip ${currentFilter === '1' ? 'active' : ''}" onclick="setMatrixFilter('1')">1학년 (1-1~1-6)</button>
+          <button class="matrix-filter-chip ${currentFilter === '2' ? 'active' : ''}" onclick="setMatrixFilter('2')">2학년 (2-1~2-7)</button>
+          <button class="matrix-filter-chip ${currentFilter === '3' ? 'active' : ''}" onclick="setMatrixFilter('3')">3학년 (3-1~3-7)</button>
+        `}
+      </div>
+
       <div class="matrix-container">
         <table class="matrix-table">
           <thead>
             <tr>
-              <th style="min-width: 140px; text-align: left; padding-left: 1rem;">
-                ${AppState.matrixType === 'teacher' ? '교사명 (직책/시수)' : '학반명 (담임)'}
+              <th class="entity-col">
+                <span class="matrix-header-desktop">${AppState.matrixType === 'teacher' ? '교사명 (직책/시수)' : '학반명 (담임)'}</span>
+                <span class="matrix-header-mobile">${AppState.matrixType === 'teacher' ? '교사' : '학반'}</span>
               </th>
               ${PERIODS.map(p => `<th>${p}교시</th>`).join('')}
             </tr>
@@ -3735,36 +3910,74 @@ function renderMatrixView(container) {
 
 function renderTeacherMatrixRows() {
   const day = AppState.selectedDay;
-  const teachers = sortTeachersList(AppState.data.teachers);
+  let teachers = sortTeachersList(AppState.data.teachers);
+
+  const filter = AppState.matrixFilter || 'all';
+  if (filter === 'grade1') {
+    teachers = teachers.filter(t => isTeacherInGrade(t, '1'));
+  } else if (filter === 'grade2') {
+    teachers = teachers.filter(t => isTeacherInGrade(t, '2'));
+  } else if (filter === 'grade3') {
+    teachers = teachers.filter(t => isTeacherInGrade(t, '3'));
+  } else if (OFFICIAL_DEPARTMENTS[filter]) {
+    const deptNames = OFFICIAL_DEPARTMENTS[filter];
+    teachers = teachers.filter(t => deptNames.includes(t.name));
+  }
+
+  if (teachers.length === 0) {
+    return `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          선택된 조건에 해당하는 교사가 없습니다.
+        </td>
+      </tr>
+    `;
+  }
+
   return teachers.map(t => {
     const dept = getTeacherDepartment(t.name);
     const subj = getTeacherSubject(t.name);
     const admin = getTeacherAdminInfo(t.name);
+    const dayHours = t.hoursByDay[day] || 0;
     return `
       <tr>
         <td class="entity-col">
-          <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToTeacher('${t.name}')">${t.name}</span>
-          ${admin && admin.isHead ? `<span class="role-badge-head" style="font-size:0.65rem;">부장</span>` : ''}
-          ${admin && admin.isPlan ? `<span class="role-badge-plan" style="font-size:0.65rem;">기획</span>` : ''}
-          ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="font-size:0.65rem;">${admin.duty}</span>` : ''}
-          ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${subj}</span>` : ''}
-          ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${t.homeroom}</span>` : ''}
-          <span style="font-size: 0.72rem; color: var(--text-muted);">(${t.hoursByDay[day] || 0}h)</span>
+          <div class="matrix-entity-desktop">
+            <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToTeacher('${t.name}')">${t.name}</span>
+            ${admin && admin.isHead ? `<span class="role-badge-head" style="font-size:0.65rem;">부장</span>` : ''}
+            ${admin && admin.isPlan ? `<span class="role-badge-plan" style="font-size:0.65rem;">기획</span>` : ''}
+            ${admin && admin.isDuty ? `<span class="role-badge-duty badge-admin-${admin.dept}" style="font-size:0.65rem;">${admin.duty}</span>` : ''}
+            ${subj ? `<span class="chip-badge badge-subj-${subj}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${subj}</span>` : ''}
+            ${t.homeroom ? `<span class="chip-badge badge-grade-${getGradeFromHomeroom(t.homeroom)}" style="font-size:0.65rem; padding:0.1rem 0.35rem;">${t.homeroom}</span>` : ''}
+            <span style="font-size: 0.72rem; color: var(--text-muted);">(${dayHours}h)</span>
+          </div>
+          <div class="matrix-entity-mobile">
+            <span class="matrix-name-mobile" onclick="navigateToTeacher('${t.name}')">${t.name}</span>
+            <span class="matrix-meta-mobile">${t.homeroom ? t.homeroom : (dayHours > 0 ? `${dayHours}h` : '공강')}</span>
+          </div>
         </td>
         ${PERIODS.map(p => {
           const cell = t.schedule[day] ? t.schedule[day][p.toString()] : null;
           if (!cell || cell.isFree) {
-            return `<td style="color: var(--text-muted); background: var(--bg-surface);">-</td>`;
+            return `<td class="matrix-cell-free" style="color: var(--text-muted); background: var(--bg-surface);">-</td>`;
           }
           const actualRoom = !cell.isFree ? getTeacherActualRoom(t.name, day, p, cell) : null;
           const hasDiffRoom = actualRoom && isDifferentFromTimetable(cell.target, actualRoom);
           const trackInfo = resolveTrackSubject(cell.subject, t.name, cell.target, day, p);
           const cat = getSubjectCategory(trackInfo.realSubject);
           const displaySubj = trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject;
+          const shortSubj = getMatrixShortSubject(trackInfo.realSubject);
+          const shortRoom = getMatrixShortRoom(cell.target, actualRoom);
           return `
-            <td>
-              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToClass('${cell.target}')" title="${displaySubj}${hasDiffRoom ? ` (실제 장소: ${actualRoom})` : ''}">
-                ${displaySubj} ${cell.target ? `(${cell.target})` : ''}${hasDiffRoom ? ` (${actualRoom})` : ''}
+            <td class="matrix-period-cell">
+              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToClass('${cell.target}')" title="${displaySubj}${hasDiffRoom ? ` (실제 장소: ${actualRoom})` : ''}">
+                <span class="matrix-desktop-text">
+                  ${displaySubj} ${cell.target ? `(${cell.target})` : ''}${hasDiffRoom ? ` (${actualRoom})` : ''}
+                </span>
+                <span class="matrix-mobile-compact">
+                  <span class="matrix-short-subj">${shortSubj}</span>
+                  <span class="matrix-short-room">${shortRoom}</span>
+                </span>
               </span>
             </td>
           `;
@@ -3776,25 +3989,60 @@ function renderTeacherMatrixRows() {
 
 function renderClassMatrixRows() {
   const day = AppState.selectedDay;
-  return AppState.data.classes.map(c => {
+  let classes = AppState.data.classes;
+
+  const filter = AppState.matrixFilter || 'all';
+  if (filter === '1') {
+    classes = classes.filter(c => c.name.startsWith('1-'));
+  } else if (filter === '2') {
+    classes = classes.filter(c => c.name.startsWith('2-'));
+  } else if (filter === '3') {
+    classes = classes.filter(c => c.name.startsWith('3-'));
+  }
+
+  if (classes.length === 0) {
+    return `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          선택된 조건에 해당하는 학반이 없습니다.
+        </td>
+      </tr>
+    `;
+  }
+
+  return classes.map(c => {
     return `
       <tr>
         <td class="entity-col">
-          <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToClass('${c.name}')">${c.name}</span>
-          <span style="font-size: 0.72rem; color: var(--text-muted);">(${c.homeroom || ''})</span>
+          <div class="matrix-entity-desktop">
+            <span style="font-weight: 700; cursor: pointer; color: var(--primary);" onclick="navigateToClass('${c.name}')">${c.name}</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">(${c.homeroom || ''})</span>
+          </div>
+          <div class="matrix-entity-mobile">
+            <span class="matrix-name-mobile" onclick="navigateToClass('${c.name}')">${c.name}</span>
+            <span class="matrix-meta-mobile">${c.homeroom || ''}</span>
+          </div>
         </td>
         ${PERIODS.map(p => {
           const cell = c.schedule[day] ? c.schedule[day][p.toString()] : null;
           if (!cell || cell.isFree) {
-            return `<td style="color: var(--text-muted); background: var(--bg-surface);">-</td>`;
+            return `<td class="matrix-cell-free" style="color: var(--text-muted); background: var(--bg-surface);">-</td>`;
           }
           const trackInfo = resolveTrackSubject(cell.subject, cell.target, c.name, day, p);
           const cat = getSubjectCategory(trackInfo.realSubject);
           const displaySubj = trackInfo.isCoded ? `${trackInfo.realSubject} (${trackInfo.groupCode})` : trackInfo.realSubject;
+          const shortSubj = getMatrixShortSubject(trackInfo.realSubject);
+          const shortRoom = getMatrixShortRoom(cell.target, null);
           return `
-            <td>
-              <span class="subject-pill ${cat}" style="font-size: 0.75rem; padding: 0.15rem 0.4rem;" onclick="navigateToTeacher('${cell.target}')" title="${displaySubj}">
-                ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
+            <td class="matrix-period-cell">
+              <span class="subject-pill ${cat} matrix-cell-pill" onclick="navigateToTeacher('${cell.target}')" title="${displaySubj}">
+                <span class="matrix-desktop-text">
+                  ${displaySubj} ${cell.target ? `(${cell.target})` : ''}
+                </span>
+                <span class="matrix-mobile-compact">
+                  <span class="matrix-short-subj">${shortSubj}</span>
+                  <span class="matrix-short-room">${shortRoom}</span>
+                </span>
               </span>
             </td>
           `;
@@ -3806,6 +4054,12 @@ function renderClassMatrixRows() {
 
 function setMatrixType(type) {
   AppState.matrixType = type;
+  AppState.matrixFilter = 'all';
+  renderApp();
+}
+
+function setMatrixFilter(filter) {
+  AppState.matrixFilter = filter;
   renderApp();
 }
 

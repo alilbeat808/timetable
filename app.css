@@ -1810,10 +1810,17 @@ body {
   border: 1px solid var(--border-color);
 }
 
-/* Matrix Overview Table */
+/* ==========================================================================
+   Matrix Overview Table & Sticky Headers
+   ========================================================================== */
 .matrix-container {
   overflow-x: auto;
-  max-height: 700px;
+  overflow-y: auto;
+  max-height: 720px;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
   scrollbar-width: thin;
 }
 
@@ -1821,33 +1828,117 @@ body {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  background: var(--bg-surface);
 }
 
 .matrix-table th,
 .matrix-table td {
-  border: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
   padding: 0.55rem 0.45rem;
   text-align: center;
   font-size: 0.82rem;
+  box-sizing: border-box;
 }
 
+/* Regular th: sticky to top */
 .matrix-table th {
   position: sticky;
   top: 0;
   background: var(--bg-surface-elevated);
-  z-index: 10;
+  z-index: 20;
   box-shadow: 0 1px 0 var(--border-color);
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
+/* Regular td */
+.matrix-table td {
+  background: var(--bg-surface);
+}
+
+/* Entity column in body: sticky to left */
 .matrix-table td.entity-col {
   position: sticky;
   left: 0;
   background: var(--bg-surface-elevated);
   font-weight: 700;
-  z-index: 5;
+  z-index: 10;
+  text-align: left;
+  padding-left: 0.85rem;
+  box-shadow: 1px 0 0 var(--border-color);
+  white-space: nowrap;
+}
+
+/* Top-Left Corner Header Cell: STICKY ON BOTH TOP AND LEFT */
+.matrix-table th.entity-col {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 35;
+  background: var(--bg-surface-elevated);
+  box-shadow: 1px 1px 0 var(--border-color);
   text-align: left;
   padding-left: 0.85rem;
   white-space: nowrap;
+}
+
+/* Desktop vs Mobile Matrix View Visibility (Default: Desktop) */
+.matrix-header-desktop {
+  display: block;
+}
+.matrix-header-mobile {
+  display: none;
+}
+.matrix-entity-desktop {
+  display: block;
+}
+.matrix-entity-mobile {
+  display: none;
+}
+.matrix-desktop-text {
+  display: inline;
+}
+.matrix-mobile-compact {
+  display: none;
+}
+
+/* Universal Matrix Filter Bar */
+.matrix-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.25rem;
+}
+
+.matrix-filter-chip {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.matrix-filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.matrix-filter-chip.active {
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  border-color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 /* Free Teachers / Substitute Finder */
@@ -3178,6 +3269,150 @@ body {
   .room-pill {
     font-size: 0.72rem !important;
     padding: 0.12rem 0.38rem !important;
+  }
+
+  /* Mobile Matrix Optimization: Fits 1~7 periods at a single glance */
+  .matrix-header-desktop {
+    display: none !important;
+  }
+  .matrix-header-mobile {
+    display: block !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+  }
+
+  .matrix-entity-desktop {
+    display: none !important;
+  }
+  .matrix-entity-mobile {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.1rem !important;
+    text-align: center !important;
+    line-height: 1.15 !important;
+  }
+  .matrix-name-mobile {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.5px !important;
+  }
+  .matrix-meta-mobile {
+    font-size: 0.65rem !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap !important;
+  }
+
+  .matrix-desktop-text {
+    display: none !important;
+  }
+  .matrix-mobile-compact {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.05rem !important;
+    width: 100% !important;
+    line-height: 1.1 !important;
+  }
+  .matrix-short-subj {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.5px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 38px !important;
+  }
+  .matrix-short-room {
+    font-size: 0.62rem !important;
+    opacity: 0.85 !important;
+    white-space: nowrap !important;
+    letter-spacing: -0.5px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 38px !important;
+  }
+
+  /* Table structure on mobile: table-layout fixed so column widths are strictly enforced */
+  .matrix-container {
+    max-height: 75vh !important;
+    border-radius: var(--radius-sm) !important;
+  }
+
+  .matrix-table {
+    table-layout: fixed !important;
+    width: 100% !important;
+    min-width: 356px !important;
+  }
+
+  /* Entity Column: 62px fixed */
+  .matrix-table th.entity-col,
+  .matrix-table td.entity-col {
+    width: 62px !important;
+    min-width: 62px !important;
+    max-width: 62px !important;
+    padding: 0.3rem 0.2rem !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 7 Period Columns: 42px each -> 7 * 42 = 294px */
+  .matrix-table th:not(.entity-col),
+  .matrix-table td:not(.entity-col) {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    padding: 0.2rem 0.05rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .matrix-table th:not(.entity-col) {
+    font-size: 0.72rem !important;
+    padding: 0.4rem 0.05rem !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  /* Subject pill inside cell */
+  .matrix-cell-pill {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0.2rem 0.05rem !important;
+    min-height: 34px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+  }
+
+  .matrix-cell-free {
+    font-size: 0.72rem !important;
+    text-align: center !important;
+  }
+
+  /* Horizontal swipe filter bar on mobile */
+  .matrix-filter-bar {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 0.35rem !important;
+    padding: 0.25rem 0.15rem 0.55rem !important;
+    scrollbar-width: none !important;
+  }
+  .matrix-filter-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+  .matrix-filter-chip {
+    flex-shrink: 0 !important;
+    font-size: 0.78rem !important;
+    padding: 0.35rem 0.65rem !important;
   }
 }
 
