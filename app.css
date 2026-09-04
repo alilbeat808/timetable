@@ -3773,6 +3773,43 @@ body {
   white-space: nowrap;
   user-select: none;
   box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+#headerClockDateText {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+#headerClockTimeText {
+  display: inline-block;
+  min-width: 68px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-weight: 700;
+  color: var(--primary);
+  margin-left: 0.25rem;
+}
+
+/* Easter Egg: by 동글동글 Button */
+.brand-author.clickable-easter-egg {
+  cursor: pointer;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  transition: all var(--transition-fast);
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-author.clickable-easter-egg:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--primary);
+  transform: scale(1.08);
 }
 
 @media (max-width: 900px) {

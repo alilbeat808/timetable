@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>2026학년도 2학기 부산동고등학교 시간표 종합 시스템</title>
+  <title>2026학년도 2학기 부산동고등학교 시간표 & 학사일정 시스템</title>
   
   <!-- Pretendard Korean Font -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="app.css?v=4.4">
+  <link rel="stylesheet" href="app.css?v=4.5">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
 </head>
 <body>
@@ -21,28 +21,30 @@
         <div class="brand-icon">📅</div>
         <div class="brand-info">
           <h1>
-            <span class="brand-title-full">부산동고등학교 시간표 시스템</span>
-            <span class="brand-title-short">부산동고 시간표</span>
+            <span class="brand-title-full">부산동고등학교 시간표 & 학사일정 시스템</span>
+            <span class="brand-title-short">시간표 & 학사일정</span>
             <span class="brand-badge">2026 2학기</span>
-            <span class="brand-author">by 동글동글</span>
+            <span class="brand-author clickable-easter-egg" onclick="triggerDongleEasterEgg(event)" title="🥚 클릭해보세요!">by 동글동글</span>
           </h1>
-          <p>교사별 · 학반별 반응형 시간표 & 공강/회의 추천</p>
+          <p>학사일정 캘린더 · 교사별/학반별 시간표 & 공강/회의 추천</p>
         </div>
       </div>
 
-      <!-- Header Search & Tools -->
+      <!-- Header Search & Tools (Clock Swapped to Left of Search) -->
       <div class="header-actions">
+        <!-- Live Date & Clock Display -->
+        <div class="header-live-clock" id="headerLiveClock" title="오늘 날짜 및 현재 시각">
+          <span>📅</span>
+          <span id="headerClockDateText">2026. 9. 4. (금)</span>
+          <span id="headerClockTimeText">19:00:00</span>
+        </div>
+
+        <!-- Global Search Container -->
         <div class="search-container" id="globalSearchContainer">
           <span class="search-icon">🔍</span>
           <input type="text" id="globalSearchInput" class="search-input" placeholder="교사, 학반, 학생 검색..." autocomplete="off">
           <button type="button" id="globalSearchClearBtn" class="search-clear-btn" style="display: none;" title="검색어 지우기 / 전체 목록 복원">✕</button>
           <div id="globalSearchDropdown" class="search-dropdown" style="display: none;"></div>
-        </div>
-
-        <div class="header-live-clock" id="headerLiveClock" title="오늘 날짜 및 현재 시각">
-          <span>📅</span>
-          <span id="headerClockDateText">2026. 9. 4. (금)</span>
-          <span id="headerClockTimeText" style="opacity: 0.85; margin-left: 0.2rem;">19:00</span>
         </div>
 
         <div class="header-tool-btns">
@@ -139,13 +141,13 @@
 
   <!-- Footer -->
   <footer class="app-footer">
-    <p>2026학년도 2학기 부산동고등학교 시간표 시스템 &copy; 모바일 & 데스크톱 반응형 웹앱</p>
+    <p>2026학년도 2학기 부산동고등학교 시간표 & 학사일정 시스템 &copy; 모바일 & 데스크톱 반응형 웹앱</p>
     <p style="font-size: 0.75rem; margin-top: 0.25rem;">교사 공강 교집합 분석 · HML 파서 내장 · 오프라인 단독 구동</p>
   </footer>
 
   <!-- Timetable Data Script (Rapid standalone load) -->
-  <script src="timetable_data.js?v=4.4"></script>
+  <script src="timetable_data.js?v=4.5"></script>
   <!-- Application Core Script -->
-  <script src="app.js?v=4.4"></script>
+  <script src="app.js?v=4.5"></script>
 </body>
 </html>

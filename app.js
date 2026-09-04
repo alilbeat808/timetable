@@ -5279,6 +5279,26 @@ function getCurrentPeriodInfo(date = new Date()) {
   return null;
 }
 
+/* ==========================================================================
+   Easter Egg: "by 동글동글" -> 정동걸 교사 시간표 바로가기
+   ========================================================================== */
+function triggerDongleEasterEgg(event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  // Switch to teacher tab
+  switchTab('teacher');
+
+  // Select teacher 정동걸 (T_정동걸)
+  AppState.selectedTeacherId = 'T_정동걸';
+  AppState.teacherViewMode = AppState.teacherViewMode || 'table';
+
+  renderApp();
+  showToast('🥚 [이스터에그] 동글동글(정동걸 선생님) 시간표로 이동했습니다! ✨');
+}
+
 function formatTime(date) {
   return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
 }
