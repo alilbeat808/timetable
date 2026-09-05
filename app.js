@@ -443,6 +443,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 300);
 
+  // Pre-fetch today's meal from NEIS in background on startup
+  setTimeout(() => {
+    if (typeof loadTodayMealInfo === 'function') {
+      loadTodayMealInfo();
+    }
+  }, 350);
+
   // Auto-sync on window focus if > 5 minutes passed
   window.addEventListener('focus', () => {
     if (AppState.lastCalendarSyncTime && (Date.now() - AppState.lastCalendarSyncTime.getTime() > 5 * 60 * 1000)) {
@@ -1652,7 +1659,6 @@ function renderTeacherView(container) {
     }
 
   container.innerHTML = html;
-  loadTodayMealInfo();
 }
 
 /* ==========================================================================
@@ -6748,22 +6754,27 @@ function renderCalendarView(container) {
           </button>
 
           <!-- NEIS School Meal Menu Widget (Right of Print Button, Split Lunch/Dinner) -->
-          <div class="calendar-meal-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 메뉴 및 상세 확인)">
-            <div class="meal-box lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
-              <div class="meal-box-header">
-                <span class="meal-box-tag lunch">🍱 점심</span>
-                <span class="meal-box-cal" id="mealLunchCal"></span>
+          ${(() => {
+            const sm = getCachedTodayMealSummary();
+            return `
+              <div class="calendar-meal-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 메뉴 및 상세 확인)">
+                <div class="meal-box lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
+                  <div class="meal-box-header">
+                    <span class="meal-box-tag lunch">🍱 점심</span>
+                    <span class="meal-box-cal" id="mealLunchCal">${sm.lunchCal}</span>
+                  </div>
+                  <div class="meal-box-menu" id="mealLunchMenu">${sm.lunchText}</div>
+                </div>
+                <div class="meal-box dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
+                  <div class="meal-box-header">
+                    <span class="meal-box-tag dinner">🌙 저녁</span>
+                    <span class="meal-box-cal" id="mealDinnerCal">${sm.dinnerCal}</span>
+                  </div>
+                  <div class="meal-box-menu" id="mealDinnerMenu">${sm.dinnerText}</div>
+                </div>
               </div>
-              <div class="meal-box-menu" id="mealLunchMenu">식단 불러오는 중...</div>
-            </div>
-            <div class="meal-box dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
-              <div class="meal-box-header">
-                <span class="meal-box-tag dinner">🌙 저녁</span>
-                <span class="meal-box-cal" id="mealDinnerCal"></span>
-              </div>
-              <div class="meal-box-menu" id="mealDinnerMenu">식단 불러오는 중...</div>
-            </div>
-          </div>
+            `;
+          })()}
         </div>
       </div>
 
@@ -6777,6 +6788,7 @@ function renderCalendarView(container) {
   `;
 
   container.innerHTML = html;
+  loadTodayMealInfo();
 }
 
 // 1. Year View (연간 캘린더)
@@ -7591,43 +7603,64 @@ function closeCalendarDayDetailModal(e) {
    NEIS School Meal Service Integration (부산동고등학교 급식 식단 실시간 연동)
    ========================================================================== */
 const NEIS_CONFIG = {
-  ATPT_OFCDC_SC_CODE: 'C10',       // 부산광역시교육청
-  SD_SCHUL_CODE: '7150138',         // 부산동고등학교
+  ATPT_OFCDC_SC_CODE: 'C10',                            // 부산광역시교육청
+  SD_SCHUL_CODE: '7150138',                              // 부산동고등학교
   SCHUL_NM: '부산동고등학교',
+  API_KEY: 'ff357fd0b9b646788ef7fe2c12088a9c',           // 부산동고등학교 NEIS Open API 인증키
   API_BASE_URL: 'https://open.neis.go.kr/hub/mealServiceDietInfo'
 };
 
-function getNeisApiKey() {
-  return localStorage.getItem('NEIS_API_KEY') || '';
+/**
+ * Calculates today's target date for meal service (auto-adjusts weekend to Friday/Monday)
+ */
+function getTodayMealTargetDate(baseDate = new Date()) {
+  const dow = baseDate.getDay(); // 0=Sun, 6=Sat
+  let target = new Date(baseDate);
+  let isWeekend = false;
+
+  if (dow === 6) { // Saturday -> check Friday
+    target.setDate(baseDate.getDate() - 1);
+    isWeekend = true;
+  } else if (dow === 0) { // Sunday -> check Friday
+    target.setDate(baseDate.getDate() - 2);
+    isWeekend = true;
+  }
+
+  const y = target.getFullYear();
+  const m = String(target.getMonth() + 1).padStart(2, '0');
+  const d = String(target.getDate()).padStart(2, '0');
+
+  return {
+    ymd: `${y}${m}${d}`,
+    dateStr: `${y}-${m}-${d}`,
+    isWeekend,
+    dow: target.getDay()
+  };
 }
 
-function setNeisApiKey(key) {
-  if (key === null) return;
-  key = (key || '').trim();
-  if (key) {
-    localStorage.setItem('NEIS_API_KEY', key);
-    showToast('🔑 NEIS API 인증키가 정상 등록되었습니다.');
-  } else {
-    localStorage.removeItem('NEIS_API_KEY');
-    showToast('ℹ️ NEIS 기본 공개 모드로 전환되었습니다.');
+/**
+ * Returns cached meal summary string for instant zero-delay rendering in toolbar
+ */
+function getCachedTodayMealSummary() {
+  const target = getTodayMealTargetDate();
+  const cached = AppState.mealCache && AppState.mealCache[target.ymd];
+  if (cached) {
+    const lunchText = cached.lunch && cached.lunch.dishes.length > 0
+      ? cached.lunch.dishes.map(x => x.name).slice(0, 2).join(', ')
+      : (target.isWeekend ? '주말 급식 없음' : '급식 없음');
+    const lunchCal = cached.lunch && cached.lunch.cal ? cached.lunch.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+    const dinnerText = cached.dinner && cached.dinner.dishes.length > 0
+      ? cached.dinner.dishes.map(x => x.name).slice(0, 2).join(', ')
+      : (target.isWeekend ? '주말 급식 없음' : '급식 없음');
+    const dinnerCal = cached.dinner && cached.dinner.cal ? cached.dinner.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+    return { lunchText, lunchCal, dinnerText, dinnerCal };
   }
-  if (!AppState.mealCache) AppState.mealCache = {};
-  AppState.mealCache = {};
-  loadTodayMealInfo(true);
-}
-
-function promptNeisApiKey() {
-  const currentKey = getNeisApiKey();
-  const input = prompt(
-    '🔑 NEIS Open API 인증키 설정 (부산동고 급식 연동):\n\n발급받으신 인증키(32자리)를 붙여넣으시면 일일 호출량 제한 없이 안정적으로 조회할 수 있습니다.\n(비워두시면 기본 공개 모드로 동작합니다)',
-    currentKey
-  );
-  if (input !== null) {
-    setNeisApiKey(input);
-    if (AppState.mealModalActiveDate) {
-      openMealDetailModal('refresh', AppState.mealModalActiveDate);
-    }
-  }
+  return {
+    lunchText: '식단 불러오는 중...',
+    lunchCal: '',
+    dinnerText: '식단 불러오는 중...',
+    dinnerCal: ''
+  };
 }
 
 /**
@@ -7646,7 +7679,7 @@ function parseMealDishes(rawText) {
 }
 
 /**
- * Fetch meal data for YYYY-MM-DD or YYYYMMDD from NEIS API
+ * Fetch meal data for YYYY-MM-DD or YYYYMMDD from NEIS API using authenticated API key
  */
 async function fetchNeisMeal(dateStr) {
   if (!AppState.mealCache) AppState.mealCache = {};
@@ -7655,11 +7688,7 @@ async function fetchNeisMeal(dateStr) {
     return AppState.mealCache[ymd];
   }
 
-  const key = getNeisApiKey();
-  let url = `${NEIS_CONFIG.API_BASE_URL}?Type=json&pIndex=1&pSize=10&ATPT_OFCDC_SC_CODE=${NEIS_CONFIG.ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${NEIS_CONFIG.SD_SCHUL_CODE}&MLSV_YMD=${ymd}`;
-  if (key) {
-    url += `&KEY=${encodeURIComponent(key)}`;
-  }
+  const url = `${NEIS_CONFIG.API_BASE_URL}?Type=json&pIndex=1&pSize=10&KEY=${NEIS_CONFIG.API_KEY}&ATPT_OFCDC_SC_CODE=${NEIS_CONFIG.ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${NEIS_CONFIG.SD_SCHUL_CODE}&MLSV_YMD=${ymd}`;
 
   try {
     const res = await fetch(url);
@@ -7705,7 +7734,7 @@ async function fetchNeisMeal(dateStr) {
 }
 
 /**
- * Loads today's meal info and updates the header meal boxes
+ * Loads today's meal info and updates the header meal boxes in real-time
  */
 async function loadTodayMealInfo(force = false) {
   const lunchMenuEl = document.getElementById('mealLunchMenu');
@@ -7713,30 +7742,11 @@ async function loadTodayMealInfo(force = false) {
   const lunchCalEl = document.getElementById('mealLunchCal');
   const dinnerCalEl = document.getElementById('mealDinnerCal');
 
+  const target = getTodayMealTargetDate();
+  const mealData = await fetchNeisMeal(target.ymd);
+
   if (!lunchMenuEl || !dinnerMenuEl) return;
 
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, '0');
-  const d = String(now.getDate()).padStart(2, '0');
-  let targetYmd = `${y}${m}${d}`;
-  const dow = now.getDay(); // 0=Sun, 6=Sat
-
-  let isWeekendFallback = false;
-  if (dow === 6) { // Saturday -> Friday
-    const fri = new Date(now);
-    fri.setDate(now.getDate() - 1);
-    targetYmd = `${fri.getFullYear()}${String(fri.getMonth() + 1).padStart(2, '0')}${String(fri.getDate()).padStart(2, '0')}`;
-    isWeekendFallback = true;
-  } else if (dow === 0) { // Sunday -> Friday
-    const fri = new Date(now);
-    fri.setDate(now.getDate() - 2);
-    targetYmd = `${fri.getFullYear()}${String(fri.getMonth() + 1).padStart(2, '0')}${String(fri.getDate()).padStart(2, '0')}`;
-    isWeekendFallback = true;
-  }
-
-  const mealData = await fetchNeisMeal(targetYmd);
-  
   // Update lunch
   if (mealData.lunch && mealData.lunch.dishes.length > 0) {
     const preview = mealData.lunch.dishes.map(x => x.name).slice(0, 2).join(', ');
@@ -7744,8 +7754,8 @@ async function loadTodayMealInfo(force = false) {
     lunchMenuEl.title = `점심: ${mealData.lunch.dishes.map(x => x.name).join(', ')} (${mealData.lunch.cal || ''})`;
     if (lunchCalEl) lunchCalEl.textContent = mealData.lunch.cal ? mealData.lunch.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
   } else {
-    lunchMenuEl.textContent = isWeekendFallback ? '주말 급식 없음' : '급식 없음';
-    lunchMenuEl.title = isWeekendFallback ? '주말에는 급식이 운영되지 않습니다.' : '오늘 점심 급식 일정이 없습니다.';
+    lunchMenuEl.textContent = target.isWeekend ? '주말 급식 없음' : '급식 없음';
+    lunchMenuEl.title = target.isWeekend ? '주말에는 급식이 운영되지 않습니다.' : '오늘 점심 급식 일정이 없습니다.';
     if (lunchCalEl) lunchCalEl.textContent = '';
   }
 
@@ -7756,14 +7766,14 @@ async function loadTodayMealInfo(force = false) {
     dinnerMenuEl.title = `저녁: ${mealData.dinner.dishes.map(x => x.name).join(', ')} (${mealData.dinner.cal || ''})`;
     if (dinnerCalEl) dinnerCalEl.textContent = mealData.dinner.cal ? mealData.dinner.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
   } else {
-    dinnerMenuEl.textContent = isWeekendFallback ? '주말 급식 없음' : '급식 없음';
-    dinnerMenuEl.title = isWeekendFallback ? '주말에는 급식이 운영되지 않습니다.' : '오늘 저녁 급식 일정이 없습니다.';
+    dinnerMenuEl.textContent = target.isWeekend ? '주말 급식 없음' : '급식 없음';
+    dinnerMenuEl.title = target.isWeekend ? '주말에는 급식이 운영되지 않습니다.' : '오늘 저녁 급식 일정이 없습니다.';
     if (dinnerCalEl) dinnerCalEl.textContent = '';
   }
 }
 
 /**
- * Open Meal Detail Modal with Date Navigation and API Key Setting
+ * Open Meal Detail Modal with Date Navigation
  */
 async function openMealDetailModal(initialType = 'lunch', specificDateStr = null) {
   let targetDate = specificDateStr ? new Date(specificDateStr + 'T00:00:00') : new Date();
@@ -7787,7 +7797,6 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
 
   const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
   const dowName = dayNames[targetDate.getDay()];
-  const hasKey = !!getNeisApiKey();
 
   modalElem.innerHTML = `
     <div class="calendar-modal-backdrop" onclick="closeMealDetailModal(event)">
@@ -7800,9 +7809,8 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
               <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
                 부산동고등학교 급식 식단
               </h3>
-              <p style="font-size: 0.72rem; color: var(--text-secondary); margin: 0.1rem 0 0;">
-                교육부 NEIS 개방포털 실시간 연동
-                ${hasKey ? '· <span style="color:#10b981; font-weight:700;">인증키 적용됨</span>' : '· <span style="color:var(--text-muted);">기본 공개 모드</span>'}
+              <p style="font-size: 0.72rem; color: #10b981; font-weight: 700; margin: 0.1rem 0 0;">
+                교육부 NEIS 개방포털 실시간 연동 (인증 완료)
               </p>
             </div>
           </div>
@@ -7826,11 +7834,8 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
           </div>
         </div>
 
-        <!-- Footer with API Key Setting -->
-        <div class="meal-modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="promptNeisApiKey()" style="font-size: 0.74rem;">
-            🔑 NEIS 인증키 설정
-          </button>
+        <!-- Clean Footer (No Key Prompt) -->
+        <div class="meal-modal-footer" style="display: flex; justify-content: flex-end;">
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()">닫기</button>
         </div>
       </div>
