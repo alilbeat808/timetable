@@ -503,20 +503,20 @@ body {
 /* Quick Search Bar */
 .search-container {
   position: relative;
-  width: 290px;
+  width: 310px;
   transition: width var(--transition-normal);
 }
 
 .search-container:focus-within {
-  width: 350px;
+  width: 360px;
 }
 
 @media (min-width: 1200px) {
   .search-container {
-    width: 320px;
+    width: 340px;
   }
   .search-container:focus-within {
-    width: 380px;
+    width: 400px;
   }
 }
 
@@ -4849,3 +4849,45 @@ body {
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* Search Result Highlight Pulse for Calendar Day Column (통합검색 클릭 시 해당 요일 강조 애니메이션) */
+@keyframes calendarColPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+    border-color: var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0.25);
+    border-color: var(--primary);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+@keyframes calendarColPulseDark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.8);
+    border-color: #818cf8;
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(129, 140, 248, 0.3);
+    border-color: #818cf8;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0);
+  }
+}
+
+.week-day-col.search-highlight-pulse {
+  animation: calendarColPulse 1.2s ease-in-out 2;
+  border-color: var(--primary) !important;
+  background: var(--bg-hover) !important;
+}
+
+[data-theme="dark"] .week-day-col.search-highlight-pulse {
+  animation: calendarColPulseDark 1.2s ease-in-out 2;
+  border-color: #818cf8 !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+

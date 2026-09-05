@@ -573,12 +573,137 @@ function setupEventListeners() {
 }
 
 /* ==========================================================================
-   Global Search Engine (교사 · 학반 · 과목 검색 및 즉각 반응 / 엔터 이동)
+   Global Search Engine (교사 · 학반 · 과목 · 학사일정 행사 검색 및 즉각 반응 / 엔터 이동)
    ========================================================================== */
-function searchEntities(query) {
-  if (!query || !AppState.data) return { teachers: [], classes: [], subjects: [] };
+
+function getEventDDayBadge(dateStr, baseDate = new Date()) {
+  const target = new Date(dateStr + 'T00:00:00');
+  const b = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+  const t = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffTime = t.getTime() - b.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'D-Day 오늘';
+  if (diffDays > 0) return `D-${diffDays}`;
+  return `D+${Math.abs(diffDays)}`;
+}
+
+function searchCalendarEvents(query) {
+  if (!query) return [];
   const q = query.trim().toLowerCase();
-  if (!q) return { teachers: [], classes: [], subjects: [] };
+  if (!q) return [];
+
+  const cal = getAcademicCalendar();
+  if (!cal || !cal.calendarDays) return [];
+
+  const matched = [];
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  cal.calendarDays.forEach(d => {
+    const rawEvent = d.event || '';
+    const isHoliday = d.isHoliday;
+    const lines = rawEvent.split('\n').map(l => l.trim()).filter(Boolean);
+
+    // If day is holiday and query matches holiday keywords
+    if (isHoliday && (q.includes('공휴일') || q.includes('휴업') || q.includes('휴일') || q === '쉬는날')) {
+      const dDayText = getEventDDayBadge(d.date, today);
+      matched.push({
+        date: d.date,
+        year: d.year,
+        month: d.month,
+        day: d.day,
+        dayOfWeek: d.dayOfWeek,
+        week: d.week,
+        semester: (d.month >= 3 && d.month <= 7) ? '1학기' : '2학기',
+        title: rawEvent || '공휴일 / 재량휴업일',
+        originalLine: rawEvent,
+        categoryBadge: { text: '공휴일', className: 'calendar-event-pill pill-holiday' },
+        deptBadges: [],
+        dDay: dDayText
+      });
+      return;
+    }
+
+    lines.forEach(line => {
+      let isMatch = false;
+      const lower = line.toLowerCase();
+      const chosung = (typeof getChosung === 'function') ? getChosung(line) : '';
+      const fullChosung = (typeof getFullChosung === 'function') ? getFullChosung(line) : '';
+
+      if (lower.includes(q) || (chosung && chosung.includes(q)) || (fullChosung && fullChosung.includes(q))) {
+        isMatch = true;
+      } else if (q.includes('수능') && (lower.includes('대학수학능력시험') || lower.includes('수능'))) {
+        isMatch = true;
+      } else if ((q === '학평' || q === '모평' || q === '모의고사') && (lower.includes('학력평가') || lower.includes('모의평가') || lower.includes('학평') || lower.includes('모평'))) {
+        isMatch = true;
+      } else if ((q === '방학' || q === '방학식') && (lower.includes('방학') || lower.includes('방학식'))) {
+        isMatch = true;
+      } else if ((q === '개학' || q === '개학식') && (lower.includes('개학') || lower.includes('개학식') || lower.includes('시업식'))) {
+        isMatch = true;
+      } else if ((q === '졸업' || q === '졸업식') && (lower.includes('졸업') || lower.includes('종업'))) {
+        isMatch = true;
+      } else if (q === '고사' && (lower.includes('1회고사') || lower.includes('2회고사') || lower.includes('고사'))) {
+        isMatch = true;
+      } else if (q === '회의' && (lower.includes('교무회의') || lower.includes('협의회') || lower.includes('위원회') || lower.includes('학습공동체'))) {
+        isMatch = true;
+      }
+
+      if (isMatch) {
+        // Extract dept badges
+        const deptBadges = (typeof extractDepartmentTagsFromText === 'function') ? extractDepartmentTagsFromText(line) : [];
+        let cleanTitle = line.replace(/<[^>]+>/g, '').trim();
+
+        // Determine category badge
+        let catBadge = null;
+        if (cleanTitle.includes('1회고사') || cleanTitle.includes('2회고사')) {
+          catBadge = { text: '1·2회고사', className: 'calendar-event-pill pill-exam' };
+        } else if (cleanTitle.includes('수능') || cleanTitle.includes('대학수학능력시험') || cleanTitle.includes('학력평가') || cleanTitle.includes('모의평가')) {
+          catBadge = { text: '모의고사/수능', className: 'calendar-event-pill pill-exam-mock' };
+        } else if (cleanTitle.includes('방학식') || cleanTitle.includes('개학식') || cleanTitle.includes('입학식') || cleanTitle.includes('졸업식') || cleanTitle.includes('시업식')) {
+          catBadge = { text: '학사의식', className: 'school-ceremony-badge' };
+        } else if (cleanTitle.includes('회의') || cleanTitle.includes('위원회') || cleanTitle.includes('협의회') || cleanTitle.includes('전학공')) {
+          catBadge = { text: '교원회의', className: 'monday-meeting-badge' };
+        } else if (isHoliday) {
+          catBadge = { text: '공휴일', className: 'calendar-event-pill pill-holiday' };
+        }
+
+        const dDayText = getEventDDayBadge(d.date, today);
+
+        matched.push({
+          date: d.date,
+          year: d.year,
+          month: d.month,
+          day: d.day,
+          dayOfWeek: d.dayOfWeek,
+          week: d.week,
+          semester: (d.month >= 3 && d.month <= 7) ? '1학기' : '2학기',
+          title: cleanTitle,
+          originalLine: line,
+          categoryBadge: catBadge,
+          deptBadges: deptBadges,
+          dDay: dDayText
+        });
+      }
+    });
+  });
+
+  // Sort upcoming events first (chronological from today), then past events (most recent past first)
+  matched.sort((a, b) => {
+    const isAUpcoming = a.date >= todayStr;
+    const isBUpcoming = b.date >= todayStr;
+    if (isAUpcoming && !isBUpcoming) return -1;
+    if (!isAUpcoming && isBUpcoming) return 1;
+    if (isAUpcoming && isBUpcoming) return a.date.localeCompare(b.date);
+    return b.date.localeCompare(a.date);
+  });
+
+  return matched;
+}
+
+function searchEntities(query) {
+  if (!query || !AppState.data) return { teachers: [], classes: [], subjects: [], events: [] };
+  const q = query.trim().toLowerCase();
+  if (!q) return { teachers: [], classes: [], subjects: [], events: [] };
 
   // 1. Teachers Match
   const matchedTeachers = AppState.data.teachers.filter(t => {
@@ -629,11 +754,15 @@ function searchEntities(query) {
     });
   }
 
+  // 5. Academic Calendar Events Match
+  const matchedEvents = searchCalendarEvents(q);
+
   return {
     teachers: matchedTeachers,
     classes: matchedClasses,
     subjects: matchedSubjects,
-    students: matchedStudents
+    students: matchedStudents,
+    events: matchedEvents
   };
 }
 
@@ -657,7 +786,7 @@ function handleSearchInput(e) {
   }
 
   const results = searchEntities(query);
-  const totalCount = results.teachers.length + results.classes.length + results.subjects.length + (results.students ? results.students.length : 0);
+  const totalCount = results.teachers.length + results.classes.length + results.subjects.length + (results.students ? results.students.length : 0) + (results.events ? results.events.length : 0);
 
   if (totalCount === 0) {
     if (dropdown) {
@@ -673,6 +802,38 @@ function handleSearchInput(e) {
   }
 
   let html = '';
+
+  const renderEventSection = () => {
+    if (!results.events || results.events.length === 0) return '';
+    let sec = `<div class="search-category-title">📅 학사일정 행사 (${results.events.length})</div>`;
+    sec += results.events.slice(0, 6).map(evt => {
+      const dDayBadge = evt.dDay ? `<span class="chip-badge" style="font-size:0.7rem; font-weight:700; color:var(--primary); background:rgba(79, 70, 229, 0.08); border-color:rgba(79, 70, 229, 0.25);">${escapeHtml(evt.dDay)}</span>` : '';
+      return `
+        <div class="search-item" onclick="onSelectSearchCalendarEvent('${evt.date}', '${escapeHtml(evt.title).replace(/'/g, "\\'")}')">
+          <div class="search-item-header">
+            <div class="search-item-info">
+              <span class="search-item-title">${escapeHtml(evt.title)}</span>
+              ${evt.categoryBadge ? `<span class="${evt.categoryBadge.className}" style="font-size: 0.7rem; padding: 0.08rem 0.38rem; border-radius: 4px; font-weight: 700;">${escapeHtml(evt.categoryBadge.text)}</span>` : ''}
+              ${evt.deptBadges && evt.deptBadges.length > 0 ? evt.deptBadges.map(b => `<span class="calendar-dept-badge ${b.className}" style="font-size: 0.68rem;">${escapeHtml(b.name)}</span>`).join('') : ''}
+              ${dDayBadge}
+              <span class="chip-badge" style="font-size: 0.72rem; font-weight: 600; background: var(--bg-hover); color: var(--text-secondary);">
+                📅 ${evt.year}.${evt.month}.${evt.day}. (${evt.dayOfWeek}) · ${evt.semester} ${evt.week ? evt.week + '주차' : ''}
+              </span>
+            </div>
+            <span class="search-item-action">주별 캘린더 이동 ➔</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+    if (results.events.length > 6) {
+      sec += `
+        <div style="padding: 0.35rem 0.85rem; font-size: 0.74rem; color: var(--text-muted); text-align: right; background: var(--bg-hover); border-radius: 0 0 var(--radius-md) var(--radius-md);">
+          외 ${results.events.length - 6}건 더 있음 (더 구체적인 행사명이나 날짜로 검색하세요)
+        </div>
+      `;
+    }
+    return sec;
+  };
 
   const renderStudentSection = () => {
     if (!results.students || results.students.length === 0) return '';
@@ -783,13 +944,21 @@ function handleSearchInput(e) {
     return sec;
   };
 
-  if (AppState.currentTab === 'student') {
+  if (AppState.currentTab === 'calendar') {
+    html += renderEventSection();
+    html += renderTeacherSection();
+    html += renderClassSection();
+    html += renderStudentSection();
+    html += renderSubjectSection();
+  } else if (AppState.currentTab === 'student') {
     html += renderStudentSection();
     html += renderTeacherSection();
+    html += renderEventSection();
     html += renderClassSection();
     html += renderSubjectSection();
   } else {
     html += renderTeacherSection();
+    html += renderEventSection();
     html += renderClassSection();
     html += renderStudentSection();
     html += renderSubjectSection();
@@ -834,6 +1003,74 @@ function onSelectSearchClass(className) {
   showToast(`🏫 ${className}반 시간표로 이동했습니다.`);
 }
 
+function findFridayDateForDay(dateStr) {
+  const cal = getAcademicCalendar();
+  if (!cal) return dateStr;
+  const weeks = getAllCalendarWeeks(cal);
+  if (!weeks || weeks.length === 0) return dateStr;
+
+  const exact = weeks.find(w => w.date === dateStr);
+  if (exact) return exact.date;
+
+  const targetTime = new Date(dateStr + 'T00:00:00').getTime();
+  for (const w of weeks) {
+    const fri = new Date(w.date + 'T00:00:00');
+    const mon = new Date(fri);
+    mon.setDate(fri.getDate() - 4);
+    if (targetTime >= mon.getTime() && targetTime <= fri.getTime()) {
+      return w.date;
+    }
+  }
+
+  // Fallback: calculate Friday date directly
+  const d = new Date(dateStr + 'T00:00:00');
+  const dow = d.getDay();
+  let diff = 5 - dow;
+  if (dow === 6) diff = -1;
+  else if (dow === 0) diff = -2;
+  d.setDate(d.getDate() + diff);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const calculated = `${y}-${m}-${day}`;
+
+  const match = weeks.find(w => w.date === calculated);
+  if (match) return match.date;
+
+  return weeks[0].date;
+}
+
+function onSelectSearchCalendarEvent(dateStr, eventText) {
+  closeSearchDropdown();
+  AppState.searchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('globalSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  const friDate = findFridayDateForDay(dateStr);
+  AppState.calendarWeekDate = friDate;
+  AppState.calendarViewMode = 'week';
+
+  switchTab('calendar');
+
+  const parts = dateStr.split('-');
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+  showToast(`📅 ${m}월 ${d}일 '${eventText || '학사일정'}' 주별 캘린더로 이동했습니다.`);
+
+  setTimeout(() => {
+    const col = document.querySelector(`.week-day-col[data-date="${dateStr}"]`);
+    if (col) {
+      col.classList.add('search-highlight-pulse');
+      col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      setTimeout(() => {
+        col.classList.remove('search-highlight-pulse');
+      }, 2800);
+    }
+  }, 150);
+}
+
 function closeSearchDropdown() {
   const dropdown = document.getElementById('globalSearchDropdown');
   if (dropdown) {
@@ -868,6 +1105,16 @@ function executeGlobalSearch(query) {
   if (!q) return;
 
   const results = searchEntities(q);
+
+  // Calendar tab priority: if user is on calendar tab and query matches academic event
+  if (AppState.currentTab === 'calendar' && results.events && results.events.length > 0) {
+    if (results.events.length === 1) {
+      onSelectSearchCalendarEvent(results.events[0].date, results.events[0].title);
+      return;
+    }
+    showToast(`📅 '${q}' 관련 행사 ${results.events.length}건이 검색되었습니다. 목록에서 원하는 날짜를 선택하세요.`);
+    return;
+  }
 
   const exactStudent = (results.students && results.students.length > 0) ? results.students.find(s => s.name === q) : null;
   const exactTeacher = (results.teachers && results.teachers.length > 0) ? results.teachers.find(t => t.name === q) : null;
@@ -985,6 +1232,16 @@ function executeGlobalSearch(query) {
       closeSearchDropdown();
       return;
     }
+  }
+
+  // Academic Event match fallback (if query matches calendar events)
+  if (results.events && results.events.length > 0) {
+    if (results.events.length === 1) {
+      onSelectSearchCalendarEvent(results.events[0].date, results.events[0].title);
+      return;
+    }
+    showToast(`📅 '${q}' 관련 행사 ${results.events.length}건이 검색되었습니다. 목록에서 원하는 날짜를 선택하세요.`);
+    return;
   }
 
   showToast(`'${q}'에 대한 검색 결과를 찾을 수 없습니다.`);
