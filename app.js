@@ -5936,7 +5936,7 @@ function formatEventLineWithDeptBadges(line) {
   }
 
   // 6. Auto-tag '진학' for 수능접수, 수시접수, 지함관, 학부모 상담주간, 진학설명회
-  const isAdmissions = /(?:지함관|수시\s*접수|수시.*원서\s*접수|대입\s*수시.*접수|수능\s*접수|수능.*원서\s*접수|수능원서\s*접수|수능원서\s*작성|학부모\s*상담\s*주간|진학\s*설명회)/.test(text);
+  const isAdmissions = /(?:지함관|수시\s*접수|수시.*원서\s*접수|대입\s*수시.*접수|수능\s*접수|수능.*원서\s*접수|수능원서\s*접수|학부모\s*상담\s*주간|진학\s*설명회)/.test(text);
   if (isAdmissions && !badges.some(b => b.name === '진학' || b.name === '진학지도부')) {
     badges.push(getDepartmentStyleInfo('진학'));
   }
@@ -5944,6 +5944,11 @@ function formatEventLineWithDeptBadges(line) {
   // 7. Auto-tag '인문' for 방과후, 동아리활동 related events if not already tagged
   if (/(?:방과\s*후|동아리\s*활동)/.test(text) && !badges.some(b => b.name === '인문' || b.name === '인문사회' || b.name === '인문사회부')) {
     badges.push(getDepartmentStyleInfo('인문'));
+  }
+
+  // 8. Auto-tag '3학년' for 수능원서 작성 related events if not already tagged
+  if (/수능원서\s*작성/.test(text) && !badges.some(b => b.name === '3학년' || b.name === '3학년부')) {
+    badges.push(getDepartmentStyleInfo('3학년'));
   }
 
   text = text.trim();
