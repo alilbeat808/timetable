@@ -6701,12 +6701,10 @@ function renderCalendarView(container) {
         <!-- Left Side: Title & Sync Time (Top) + View Mode Switcher (Bottom) -->
         <div class="calendar-title-and-modes">
           <div class="calendar-title-group">
-            <span style="font-size: 1.6rem; flex-shrink: 0;">📅</span>
-            <div>
-              <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
-              <p class="calendar-sync-time-sub">
-                <span class="sync-dot">●</span> 동기화 시간: <span class="sync-time-val">${AppState.lastCalendarSyncTime ? formatTime(AppState.lastCalendarSyncTime) : '연결됨 (실시간)'}</span>
-              </p>
+            <span style="font-size: 1.5rem; flex-shrink: 0;">📅</span>
+            <h2>2026학년도 학사일정</h2>
+            <div class="calendar-sync-time-sub">
+              <span class="sync-dot">●</span> 동기화 시간: <span class="sync-time-val">${AppState.lastCalendarSyncTime ? formatTime(AppState.lastCalendarSyncTime) : '연결됨 (실시간)'}</span>
             </div>
           </div>
 
@@ -6813,23 +6811,27 @@ function renderCalendarYearView(cal) {
   let html = `
     <div style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
       <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
-        🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월, 월~금 일과 기준)
+        🗓️ 2026학년도 연간 학사일정 전체 보기
       </h3>
       <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.82rem; flex-wrap: wrap;">
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#dc2626; border-radius:2px;"></span> 공휴일</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#7c3aed; border-radius:2px;"></span> 1·2회고사</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span> 모의고사 / 수능</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#f59e0b; border-radius:2px;"></span> 방학·개학·졸업식</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6ee7b7; border:1px solid #10b981; border-radius:2px;"></span> 오늘</span>
-        <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" style="margin-left: 0.35rem;" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
-          🔄 지금 즉시 동기화
-        </button>
-        <a class="btn btn-secondary btn-sm week-nav-action-btn" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
-          🔗 시트 원본 열기
-        </a>
-        <button class="btn btn-secondary btn-sm week-nav-action-btn" onclick="window.print()" title="학사일정 인쇄">
-          🖨️ 인쇄
-        </button>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
+            🔄 지금 즉시 동기화
+          </button>
+          <a class="btn btn-secondary btn-sm week-nav-action-btn" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+            🔗 시트 원본 열기
+          </a>
+          <button class="btn btn-secondary btn-sm week-nav-action-btn" onclick="window.print()" title="학사일정 인쇄">
+            🖨️ 인쇄
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.85rem; margin-left: 0.25rem; flex-wrap: wrap;">
+          <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#dc2626; border-radius:2px;"></span> 공휴일</span>
+          <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#7c3aed; border-radius:2px;"></span> 1·2회고사</span>
+          <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span> 모의고사 / 수능</span>
+          <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#f59e0b; border-radius:2px;"></span> 방학·개학·졸업식</span>
+          <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6ee7b7; border:1px solid #10b981; border-radius:2px;"></span> 오늘</span>
+        </div>
       </div>
     </div>
 
