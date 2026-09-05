@@ -4260,6 +4260,14 @@ body {
   margin-bottom: 0.35rem;
 }
 
+.day-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+}
+
 .day-number {
   font-size: 0.88rem;
   font-weight: 700;
@@ -4405,6 +4413,19 @@ body {
   border-color: rgba(96, 165, 250, 0.35);
   color: #93c5fd;
   box-shadow: none;
+}
+
+/* Month View Meeting Badge (월별 캘린더 일자 옆 회의 뱃지) */
+.month-meeting-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  padding: 0.05rem 0.32rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  vertical-align: middle;
 }
 
 .week-day-body {
