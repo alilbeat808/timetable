@@ -7270,8 +7270,8 @@ function renderCalendarWeekView(cal) {
         return `
           <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
             <div class="week-day-header">
-              <div style="display: flex; align-items: ${allHeaderBadges.length > 1 ? 'flex-start' : 'center'}; gap: 0.35rem; min-width: 0; flex: 1;">
-                <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0; ${allHeaderBadges.length > 1 ? 'margin-top: 0.1rem;' : ''}">
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0;">
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
                   <span style="font-size:0.78rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
                 </div>
@@ -8092,7 +8092,7 @@ function exportCurrentTimetableToCsv(entityName) {
 const KMA_SERVICE_KEY = 'oHMyoRaJRwSlkrbmMHISJTQYZ7nifgvtEvYAO%2BH5d3GPR9rqItfIhqDDz0kbulVeezxAhscExc%2Fcxof0Eos84A%3D%3D';
 const KMA_NX = 98; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 X
 const KMA_NY = 75; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 Y
-const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v3';
+const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v4';
 const KMA_CACHE_TTL_MS = 60 * 60 * 1000; // 1시간 캐시
 
 /**
@@ -8330,6 +8330,47 @@ function parseKmaWeatherItems(items) {
       tooltip = `💨 부산진구 전포동 강풍 주의 예보\n• 최대 풍속: ${maxWindSpeed}m/s\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
     }
 
+    let rainTimeRange = '';
+    if (hasRain && typeof timeRangeText !== 'undefined') {
+      rainTimeRange = timeRangeText;
+    }
+
+    let snowTimeRange = '';
+    if (hasSnow) {
+      const ranges = [];
+      let startH = snowHours[0].hour;
+      let prevH = startH;
+      for (let i = 1; i < snowHours.length; i++) {
+        const curH = snowHours[i].hour;
+        if (curH === prevH + 1) prevH = curH;
+        else {
+          ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+          startH = curH;
+          prevH = curH;
+        }
+      }
+      ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+      snowTimeRange = ranges.join(', ');
+    }
+
+    let lightningTimeRange = '';
+    if (hasLightning) {
+      const ranges = [];
+      let startH = lightningHours[0].hour;
+      let prevH = startH;
+      for (let i = 1; i < lightningHours.length; i++) {
+        const curH = lightningHours[i].hour;
+        if (curH === prevH + 1) prevH = curH;
+        else {
+          ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+          startH = curH;
+          prevH = curH;
+        }
+      }
+      ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+      lightningTimeRange = ranges.join(', ');
+    }
+
     const dayWeather = {
       date: dateFormatted,
       ymd,
@@ -8338,9 +8379,12 @@ function parseKmaWeatherItems(items) {
       hasSnow,
       hasLightning,
       hasWind,
+      rainTimeRange,
       rainSummary,
       rainPcpSummary,
+      snowTimeRange,
       snowSummary,
+      lightningTimeRange,
       maxPop,
       maxWindSpeed,
       minTmp: minT,
@@ -8426,15 +8470,37 @@ function getWeatherBadgeForDate(dateStr, isWeekly = false) {
   const escapedTooltip = escapeHtml(w.tooltip || '');
 
   if (isWeekly) {
-    // Weekly calendar header tag (우측 끝 정렬)
+    // Weekly calendar header tag: 폰트 축소 및 2행 구조 (우측 끝 정렬)
+    // 1행 : 날씨 종류:예상시간
+    // 2행 : 예상 양 예상 퍼센테이지
     if (w.hasRain) {
-      return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">🌧️ 비: ${escapeHtml(w.rainSummary)} (${w.maxPop}%)</span>`;
+      const timeStr = w.rainTimeRange || (w.rainSummary ? w.rainSummary.split(' ')[0] : '');
+      const pcpStr = w.rainPcpSummary || '비';
+      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
+      return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">
+        <span class="week-weather-line1">🌧️ 비: ${escapeHtml(timeStr)}</span>
+        <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
+      </span>`;
     } else if (w.hasSnow) {
-      return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">❄️ 눈: ${escapeHtml(w.snowSummary)}</span>`;
+      const timeStr = w.snowTimeRange || (w.snowSummary ? w.snowSummary.split(' ')[0] : '');
+      const pcpStr = w.snowPcpSummary || '눈';
+      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
+      return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">
+        <span class="week-weather-line1">❄️ 눈: ${escapeHtml(timeStr)}</span>
+        <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
+      </span>`;
     } else if (w.hasLightning) {
-      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">⚡ 번개/낙뢰 주의</span>`;
+      const timeStr = w.lightningTimeRange || '주의';
+      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
+      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+        <span class="week-weather-line1">⚡ 번개: ${escapeHtml(timeStr)}</span>
+        <span class="week-weather-line2">낙뢰 주의 ${popStr}</span>
+      </span>`;
     } else if (w.hasWind) {
-      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">💨 강풍 (${w.maxWindSpeed}m/s)</span>`;
+      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+        <span class="week-weather-line1">💨 강풍: 주의</span>
+        <span class="week-weather-line2">최대 ${w.maxWindSpeed}m/s</span>
+      </span>`;
     }
   } else {
     // Monthly calendar day cell badge (우측 끝 정렬)

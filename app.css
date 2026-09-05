@@ -4784,8 +4784,9 @@ body {
   background: var(--bg-hover);
   border-bottom: 1px solid var(--border-color);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 0.35rem;
 }
 
 .week-day-title {
@@ -4810,6 +4811,9 @@ body {
   letter-spacing: -0.02em;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   vertical-align: middle;
+  max-width: 105px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .monday-meeting-badge {
@@ -4848,6 +4852,9 @@ body {
   letter-spacing: -0.02em;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   vertical-align: middle;
+  max-width: 105px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .school-ceremony-badge {
@@ -5353,17 +5360,35 @@ body {
 
 .week-weather-tag {
   display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.72rem;
-  font-weight: 800;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 0.62rem;
   border-radius: var(--radius-sm);
-  padding: 0.1rem 0.45rem;
+  padding: 0.12rem 0.35rem;
   line-height: 1.25;
   white-space: nowrap;
   flex-shrink: 0;
   cursor: default;
   transition: all var(--transition-fast);
+}
+
+.week-weather-line1 {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.week-weather-line2 {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  opacity: 0.92;
 }
 
 .week-weather-tag.rain-alert {
