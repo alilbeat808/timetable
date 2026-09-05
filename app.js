@@ -300,7 +300,7 @@ const AppState = {
   calendarViewMode: 'week', // 'year' | 'month' | 'week'
   calendarYear: 2026,
   calendarMonth: 9, // 1~12
-  calendarWeekDate: '2026-09-04',
+  calendarWeekDate: null, // Initialized via getDefaultCalendarWeekDate()
   selectedFridayWeekDate: '2026-09-04',
   calendarSelectedDayDetail: null,
   lastCalendarSyncTime: null,
@@ -6799,6 +6799,9 @@ function renderCalendarView(container) {
 
   container.innerHTML = html;
   loadTodayMealInfo();
+  if (typeof fetchJeonpoWeather === 'function') {
+    fetchJeonpoWeather();
+  }
 }
 
 // 1. Year View (연간 캘린더)
@@ -7098,7 +7101,6 @@ function renderCalendarMonthView(cal) {
           <div class="day-header-num">
             <div class="day-header-left">
               <span class="day-number" ${isHoliday ? 'style="color:#ef4444; flex-shrink:0;' : 'style="flex-shrink:0;'} ${allHeaderBadges.length > 1 ? 'margin-top:0.05rem;' : ''}">${dayNum}</span>
-              ${getWeatherBadgeForDate(dateStr, false)}
               ${allHeaderBadges.length > 0 ? `
                 <div class="month-meeting-badges-col">
                   ${allHeaderBadges.map(b => `
@@ -7109,7 +7111,10 @@ function renderCalendarMonthView(cal) {
                 </div>
               ` : ''}
             </div>
-            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:#059669; flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
+            <div class="day-header-right">
+              ${getWeatherBadgeForDate(dateStr, false)}
+              ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:#059669; flex-shrink:0;">오늘</span>' : ''}
+            </div>
           </div>
 
           <div class="day-events-list">
@@ -7178,10 +7183,11 @@ function getAllCalendarWeeks(cal) {
 function renderCalendarWeekView(cal) {
   cal = cal || getAcademicCalendar();
   const weekList = getAllCalendarWeeks(cal);
-  const selectedDate = AppState.calendarWeekDate || '2026-09-04';
+  const defWeekDate = getDefaultCalendarWeekDate();
+  const selectedDate = AppState.calendarWeekDate || defWeekDate;
   let selectedFri = weekList.find(f => f.date === selectedDate);
   if (!selectedFri) {
-    selectedFri = weekList.find(f => f.date === '2026-09-04') || weekList[0];
+    selectedFri = weekList.find(f => f.date === defWeekDate) || weekList.find(f => f.date === '2026-09-04') || weekList[0];
   }
 
   const friDate = new Date(selectedFri.date);
@@ -7220,7 +7226,7 @@ function renderCalendarWeekView(cal) {
           `).join('')}
         </select>
         <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarWeek(1)" title="다음 주차">다음 주 ▶</button>
-        <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarWeek('2026-09-04')" title="현재 주차(9월 4일 주)로 이동">
+        <button type="button" class="btn btn-sm ${selectedFri.date === defWeekDate ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarWeek(getDefaultCalendarWeekDate())" title="현재 주차로 이동">
           이번 주로 이동
         </button>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
@@ -7268,7 +7274,6 @@ function renderCalendarWeekView(cal) {
                 <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0; ${allHeaderBadges.length > 1 ? 'margin-top: 0.1rem;' : ''}">
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
                   <span style="font-size:0.78rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
-                  ${getWeatherBadgeForDate(wd.date, true)}
                 </div>
                 ${allHeaderBadges.length > 0 ? `
                   <div class="week-meeting-badges-col">
@@ -7280,7 +7285,10 @@ function renderCalendarWeekView(cal) {
                   </div>
                 ` : ''}
               </div>
-              ${isToday ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.68rem; padding: 0.1rem 0.35rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
+              <div class="week-header-right">
+                ${getWeatherBadgeForDate(wd.date, true)}
+                ${isToday ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.68rem; padding: 0.1rem 0.35rem; flex-shrink:0;">오늘</span>' : ''}
+              </div>
             </div>
 
             <div class="week-day-body">
@@ -8084,8 +8092,30 @@ function exportCurrentTimetableToCsv(entityName) {
 const KMA_SERVICE_KEY = 'oHMyoRaJRwSlkrbmMHISJTQYZ7nifgvtEvYAO%2BH5d3GPR9rqItfIhqDDz0kbulVeezxAhscExc%2Fcxof0Eos84A%3D%3D';
 const KMA_NX = 98; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 X
 const KMA_NY = 75; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 Y
-const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v2';
+const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v3';
 const KMA_CACHE_TTL_MS = 60 * 60 * 1000; // 1시간 캐시
+
+/**
+ * Calculates current active Friday date for weekly calendar.
+ * On Friday 19:00+ and weekends (Saturday/Sunday), points to the upcoming week's Friday.
+ */
+function getDefaultCalendarWeekDate(now = new Date()) {
+  const dow = now.getDay(); // 0:일, 6:토
+  const d = new Date(now);
+  if (dow === 6) {
+    d.setDate(d.getDate() + 6); // Next Friday
+  } else if (dow === 0) {
+    d.setDate(d.getDate() + 5); // Next Friday
+  } else if (dow === 5 && now.getHours() >= 19) {
+    d.setDate(d.getDate() + 7); // Next Friday
+  } else {
+    d.setDate(d.getDate() + (5 - dow)); // This Friday
+  }
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
 /**
  * Calculates latest available base_date and base_time for KMA VilageFcst
@@ -8130,7 +8160,8 @@ function getKmaBaseDateTime(now = new Date()) {
 }
 
 /**
- * Parses KMA forecast item list and computes daily summaries, focusing on rain analysis
+ * Parses KMA forecast item list and computes daily summaries.
+ * Filters for special adverse weather (Rain, Snow, Lightning, Gale/Typhoon).
  */
 function parseKmaWeatherItems(items) {
   if (!Array.isArray(items) || items.length === 0) return {};
@@ -8153,7 +8184,11 @@ function parseKmaWeatherItems(items) {
     let minTmp = Infinity;
     let maxTmp = -Infinity;
     let maxPop = 0;
+    let maxWindSpeed = 0;
+
     const rainHours = [];
+    const snowHours = [];
+    const lightningHours = [];
     const hourlyList = [];
 
     // Dominant daytime sky (12:00 ~ 15:00 if available, else first time)
@@ -8168,6 +8203,8 @@ function parseKmaWeatherItems(items) {
       const pty = entry.PTY || '0';
       const sky = entry.SKY || '1';
       const pcp = entry.PCP || '강수없음';
+      const lgt = entry.LGT !== undefined ? parseFloat(entry.LGT) : 0;
+      const wsd = entry.WSD !== undefined ? parseFloat(entry.WSD) : 0;
 
       if (tmp !== null && !isNaN(tmp)) {
         if (tmp < minTmp) minTmp = tmp;
@@ -8177,8 +8214,8 @@ function parseKmaWeatherItems(items) {
       if (entry.TMX !== undefined) maxTmp = parseFloat(entry.TMX);
 
       if (pop > maxPop) maxPop = pop;
+      if (wsd > maxWindSpeed) maxWindSpeed = wsd;
 
-      // Prefer 12:00 ~ 15:00 for general daytime icon
       if (hourNum >= 12 && hourNum <= 15) {
         daytimeSky = sky;
         daytimePty = pty;
@@ -8186,39 +8223,34 @@ function parseKmaWeatherItems(items) {
         daytimeSky = sky;
       }
 
-      // Check rain conditions
-      const isRain = (pty === '1' || pty === '2' || pty === '4') ||
-                     (pcp && pcp !== '강수없음' && pcp !== '0' && pcp !== '0.0' && pcp !== '0mm');
-
-      if (isRain) {
-        rainHours.push({
-          hour: hourNum,
-          timeStr: `${hourNum}시`,
-          pty,
-          pcp,
-          pop,
-          tmp
-        });
+      // Check Snow
+      if (pty === '3' || pty === '2') {
+        snowHours.push({ hour: hourNum, pty, pcp, pop, tmp });
+      }
+      // Check Rain (including shower 4)
+      else if (pty === '1' || pty === '4' || (pcp && pcp !== '강수없음' && pcp !== '0' && pcp !== '0.0' && pcp !== '0mm')) {
+        rainHours.push({ hour: hourNum, pty, pcp, pop, tmp });
       }
 
-      hourlyList.push({
-        time: t,
-        hour: hourNum,
-        tmp,
-        pop,
-        sky,
-        pty,
-        pcp
-      });
+      // Check Lightning
+      if (lgt >= 1) {
+        lightningHours.push({ hour: hourNum, lgt });
+      }
+
+      hourlyList.push({ time: t, hour: hourNum, tmp, pop, sky, pty, pcp, lgt, wsd });
     }
 
-    // Format rain time ranges & precipitation amounts
+    const hasSnow = snowHours.length > 0;
     const hasRain = rainHours.length > 0;
+    const hasLightning = lightningHours.length > 0;
+    const hasWind = maxWindSpeed >= 14; // 기상청 강풍 기준 (14m/s 이상)
+    const isSpecial = hasRain || hasSnow || hasLightning || hasWind;
+
+    // Format rain time ranges & precipitation amounts
     let rainSummary = '';
     let rainPcpSummary = '';
 
     if (hasRain) {
-      // Group contiguous hours
       const ranges = [];
       let startH = rainHours[0].hour;
       let prevH = startH;
@@ -8234,10 +8266,8 @@ function parseKmaWeatherItems(items) {
         }
       }
       ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
-
       const timeRangeText = ranges.join(', ');
 
-      // Summarize precipitation amounts
       const pcpSet = new Set(rainHours.map(r => r.pcp).filter(p => p && p !== '강수없음' && p !== '0'));
       let pcpText = '';
       if (pcpSet.size === 1) {
@@ -8251,20 +8281,13 @@ function parseKmaWeatherItems(items) {
             hasUnder1 = true;
           } else {
             const m = parseFloat(p);
-            if (!isNaN(m)) {
-              sum += m;
-            } else {
-              purelyNumeric = false;
-            }
+            if (!isNaN(m)) sum += m;
+            else purelyNumeric = false;
           }
         }
-        if (purelyNumeric && sum > 0) {
-          pcpText = `총 ${sum.toFixed(1)}mm`;
-        } else if (hasUnder1 && sum === 0) {
-          pcpText = '1mm 미만';
-        } else {
-          pcpText = Array.from(pcpSet).slice(0, 2).join('/');
-        }
+        if (purelyNumeric && sum > 0) pcpText = `총 ${sum.toFixed(1)}mm`;
+        else if (hasUnder1 && sum === 0) pcpText = '1mm 미만';
+        else pcpText = Array.from(pcpSet).slice(0, 2).join('/');
       } else {
         pcpText = '비';
       }
@@ -8273,46 +8296,55 @@ function parseKmaWeatherItems(items) {
       rainPcpSummary = pcpText;
     }
 
-    // Weather icon selection
-    let skyIcon = '☀️';
-    let skyText = '맑음';
-
-    if (hasRain) {
-      skyIcon = '🌧️';
-      skyText = '비';
-    } else if (daytimePty === '3') {
-      skyIcon = '❄️';
-      skyText = '눈';
-    } else if (daytimeSky === '4') {
-      skyIcon = '☁️';
-      skyText = '흐림';
-    } else if (daytimeSky === '3') {
-      skyIcon = '⛅';
-      skyText = '구름많음';
-    } else {
-      skyIcon = '☀️';
-      skyText = '맑음';
+    // Format snow time ranges
+    let snowSummary = '';
+    if (hasSnow) {
+      const ranges = [];
+      let startH = snowHours[0].hour;
+      let prevH = startH;
+      for (let i = 1; i < snowHours.length; i++) {
+        const curH = snowHours[i].hour;
+        if (curH === prevH + 1) prevH = curH;
+        else {
+          ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+          startH = curH;
+          prevH = curH;
+        }
+      }
+      ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
+      snowSummary = `${ranges.join(', ')} 눈`;
     }
 
+    // Tooltips
     const minT = minTmp !== Infinity ? Math.round(minTmp) : null;
     const maxT = maxTmp !== -Infinity ? Math.round(maxTmp) : null;
 
-    let tooltip = `📍 부산진구 전포동 (부산동고)\n날씨: ${skyText} ${skyIcon}\n기온: ${minT !== null ? minT + '℃' : ''}${maxT !== null ? ' ~ ' + maxT + '℃' : ''}\n강수확률: 최대 ${maxPop}%`;
+    let tooltip = '';
     if (hasRain) {
       tooltip = `🌧️ 부산진구 전포동 비 예보\n• 비 올 시간: ${rainSummary}\n• 예상 강수량: ${rainPcpSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasSnow) {
+      tooltip = `❄️ 부산진구 전포동 눈 예보\n• 눈 올 시간: ${snowSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasLightning) {
+      tooltip = `⚡ 부산진구 전포동 낙뢰/번개 주의 예보\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasWind) {
+      tooltip = `💨 부산진구 전포동 강풍 주의 예보\n• 최대 풍속: ${maxWindSpeed}m/s\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
     }
 
     const dayWeather = {
       date: dateFormatted,
       ymd,
-      skyIcon,
-      skyText,
-      minTmp: minT,
-      maxTmp: maxT,
+      isSpecial,
       hasRain,
+      hasSnow,
+      hasLightning,
+      hasWind,
       rainSummary,
       rainPcpSummary,
+      snowSummary,
       maxPop,
+      maxWindSpeed,
+      minTmp: minT,
+      maxTmp: maxT,
       tooltip,
       hourlyList
     };
@@ -8329,7 +8361,6 @@ function parseKmaWeatherItems(items) {
  */
 async function fetchJeonpoWeather(force = false) {
   try {
-    // 1. Check local cache
     if (!force) {
       try {
         const cachedRaw = localStorage.getItem(KMA_CACHE_KEY);
@@ -8347,7 +8378,6 @@ async function fetchJeonpoWeather(force = false) {
       } catch (e) {}
     }
 
-    // 2. Fetch from KMA Open API
     const dt = getKmaBaseDateTime();
     const url = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${dt.baseDate}&base_time=${dt.baseTime}&nx=${KMA_NX}&ny=${KMA_NY}`;
 
@@ -8371,7 +8401,6 @@ async function fetchJeonpoWeather(force = false) {
         }));
       } catch (e) {}
 
-      // If currently on calendar tab, refresh view to show new weather
       if (AppState.currentTab === 'calendar') {
         renderApp();
       }
@@ -8385,30 +8414,39 @@ async function fetchJeonpoWeather(force = false) {
 }
 
 /**
- * Returns weather HTML badge for Monthly or Weekly calendar
+ * Returns special weather HTML badge for Monthly or Weekly calendar.
+ * ONLY displays when special adverse weather is forecast (Rain, Snow, Lightning, Gale).
+ * Fair/clear weather (맑음, 구름많음, 흐림) returns empty string as requested.
  */
 function getWeatherBadgeForDate(dateStr, isWeekly = false) {
   if (!AppState.weatherDataByDate || !dateStr) return '';
   const w = AppState.weatherDataByDate[dateStr];
-  if (!w) return '';
+  if (!w || !w.isSpecial) return ''; // 맑음/구름/흐림 등 일반 날씨는 숨김!
 
   const escapedTooltip = escapeHtml(w.tooltip || '');
 
   if (isWeekly) {
-    // Weekly calendar header tag (N요일 (M/D) 우측)
+    // Weekly calendar header tag (우측 끝 정렬)
     if (w.hasRain) {
       return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">🌧️ 비: ${escapeHtml(w.rainSummary)} (${w.maxPop}%)</span>`;
-    } else {
-      const tempRange = (w.maxTmp !== null && w.minTmp !== null) ? ` ${w.maxTmp}°/${w.minTmp}°` : (w.maxTmp !== null ? ` ${w.maxTmp}°` : '');
-      return `<span class="week-weather-tag" title="${escapedTooltip}">${w.skyIcon}${tempRange}</span>`;
+    } else if (w.hasSnow) {
+      return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">❄️ 눈: ${escapeHtml(w.snowSummary)}</span>`;
+    } else if (w.hasLightning) {
+      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">⚡ 번개/낙뢰 주의</span>`;
+    } else if (w.hasWind) {
+      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">💨 강풍 (${w.maxWindSpeed}m/s)</span>`;
     }
   } else {
-    // Monthly calendar day cell badge (일자 옆)
+    // Monthly calendar day cell badge (우측 끝 정렬)
     if (w.hasRain) {
       return `<span class="weather-day-badge rain-alert" title="${escapedTooltip}">🌧️ ${escapeHtml(w.rainSummary)}</span>`;
-    } else {
-      const maxT = w.maxTmp !== null ? ` ${w.maxTmp}°` : '';
-      return `<span class="weather-day-badge" title="${escapedTooltip}">${w.skyIcon}${maxT}</span>`;
+    } else if (w.hasSnow) {
+      return `<span class="weather-day-badge snow-alert" title="${escapedTooltip}">❄️ ${escapeHtml(w.snowSummary)}</span>`;
+    } else if (w.hasLightning) {
+      return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">⚡ 번개</span>`;
+    } else if (w.hasWind) {
+      return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">💨 강풍</span>`;
     }
   }
+  return '';
 }
