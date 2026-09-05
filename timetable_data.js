@@ -108389,7 +108389,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 6,
         "dayOfWeek": "금",
         "week": 1,
-        "event": "국가수준성취도 평가(2학년, 2,3,4교시)\n1,2,3학년 학생도박예방교육(5교시,구암관)\n생명존중교육1,2,3학년(6교시, 구암관),<생활>\n인사위원회 13시 10분 1층 회의실\n방과후 소위원회 7교시",
+        "event": "국가수준성취도 평가(2학년, 2,3,4교시)\n1,2,3학년 학생도박예방교육(5교시,구암관)\n생명존중교육1,2,3학년(6교시, 구암관),<생활>\n인사위원회 13시 10분 1층 회의실\n방과후 소위원회 7교시<인문사회>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108497,7 +108497,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 19,
         "dayOfWeek": "목",
         "week": 3,
-        "event": "학부모 간담회(1,2,3)\n방과후수업 온라인신청",
+        "event": "학부모 간담회(1,2,3)\n방과후수업 온라인신청<인문사회>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108545,7 +108545,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 25,
         "dayOfWeek": "수",
         "week": 4,
-        "event": "방과후수업 시작\n학부모 상담주간\n학업성적관리위원회회의 08:00, 회의실(평가)\n학업중단예방위원회 4교시 회의실<생활>",
+        "event": "방과후수업 시작<인문사회>\n학부모 상담주간\n학업성적관리위원회회의 08:00, 회의실(평가)\n학업중단예방위원회 4교시 회의실<생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109157,7 +109157,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 4,
         "dayOfWeek": "목",
         "week": 14,
-        "event": "학평(1,2), 모평(3)\n학교홍보회의(3교시, 1층 회의실)<교감>\n방과후 회의 (5교시, 1층 회의실)<인문>",
+        "event": "학평(1,2), 모평(3)\n학교홍보회의(3교시, 1층 회의실)<교감>\n방과후 회의 (5교시, 1층 회의실)<인문사회>",
         "isHoliday": false,
         "isExam": true,
         "examTitle": "학력평가"
@@ -109217,7 +109217,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 11,
         "dayOfWeek": "목",
         "week": 15,
-        "event": "심리검사해설 2차(1) (1교시)<진로>\n방과후회의소위원회 (5교시)<인문>\n학부모대의원회<교무>",
+        "event": "심리검사해설 2차(1) (1교시)<진로>\n방과후회의소위원회 (5교시)<인문사회>\n학부모대의원회<교무>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109673,7 +109673,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 4,
         "dayOfWeek": "화",
         "week": 8,
-        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류<운동부>\n방과후학교 마지막 수업일",
+        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류<운동부>\n방과후학교 마지막 수업일<인문사회>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109865,7 +109865,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 26,
         "dayOfWeek": "수",
         "week": 2,
-        "event": "방과후 수업 온라인 신청\n대명여고 배드민턴부 본교 체육관 훈련(4명)<운동부>",
+        "event": "방과후 수업 온라인 신청<인문사회>\n대명여고 배드민턴부 본교 체육관 훈련(4명)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109901,7 +109901,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 31,
         "dayOfWeek": "월",
         "week": 3,
-        "event": "교과협의회\n방과후 수업 시작\n진로 페스티벌 2차 1학년 (7:30~8:10) <진로>",
+        "event": "교과협의회\n방과후 수업 시작<인문사회>\n진로 페스티벌 2차 1학년 (7:30~8:10) <진로>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""

@@ -5838,6 +5838,8 @@ const ACADEMIC_KNOWN_DEPTS = {
   '교장': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
   '교감': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
   '인문': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
+  '인문사회': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
+  '인문사회부': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
   '영어': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
   '운동부': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' }
 };
@@ -5854,7 +5856,12 @@ const ACADEMIC_DYNAMIC_PALETTES = [
 ];
 
 function getDepartmentStyleInfo(deptName) {
-  const clean = deptName.replace(/[<>()]/g, '').trim();
+  let clean = deptName.replace(/[<>()]/g, '').trim();
+  if (clean === '인문' || clean === '인문사회부') clean = '인문사회';
+  if (clean === '진학부') clean = '진학';
+  if (clean === '교무부') clean = '교무';
+  if (clean === '생안' || clean === '생안부') clean = '생활';
+  if (clean === '학점') clean = '학점제';
   if (ACADEMIC_KNOWN_DEPTS[clean]) return { ...ACADEMIC_KNOWN_DEPTS[clean], name: clean };
   let hash = 0;
   for (let i = 0; i < clean.length; i++) hash = (hash * 31 + clean.charCodeAt(i)) & 0xffffffff;
@@ -5874,7 +5881,7 @@ function formatEventLineWithDeptBadges(line) {
   });
 
   // Match parenthesized known department keywords (평가, 학점제, 3학년, 행정실, etc.)
-  text = text.replace(/\s*\(\s*(평가|학점제|학점|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부)\s*\)/g, (m, g1) => {
+  text = text.replace(/\s*\(\s*(평가|학점제|학점|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부|인문사회|인문사회부|인문)\s*\)/g, (m, g1) => {
     badges.push(getDepartmentStyleInfo(g1));
     return '';
   });
@@ -5900,6 +5907,11 @@ function formatEventLineWithDeptBadges(line) {
   const isAdmissions = /(?:지함관|수시\s*접수|수시.*원서\s*접수|대입\s*수시.*접수|수능\s*접수|수능.*원서\s*접수|수능원서\s*접수|수능원서\s*작성)/.test(text);
   if (isAdmissions && !badges.some(b => b.name === '진학' || b.name === '진학부')) {
     badges.push(getDepartmentStyleInfo('진학'));
+  }
+
+  // Auto-tag '인문사회' for 방과후-related events if not already tagged
+  if (/방과\s*후/.test(text) && !badges.some(b => b.name === '인문사회' || b.name === '인문')) {
+    badges.push(getDepartmentStyleInfo('인문사회'));
   }
 
   text = text.trim();
