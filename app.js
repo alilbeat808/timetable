@@ -6591,6 +6591,64 @@ function renderCalendarYearView(cal) {
   return html;
 }
 
+// 교원 회의(정례/임시 교무회의, 전문적 학습 공동체, 교과협의회, 다모임 등) 뱃지 추출 공통 함수
+function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
+  if (!rawEventText || isHoliday || isExam) {
+    return {
+      meetingBadges: [],
+      remainingLines: rawEventText ? rawEventText.split('\n').map(l => l.trim()).filter(Boolean) : []
+    };
+  }
+
+  const rawLines = rawEventText.split('\n').map(l => l.trim()).filter(Boolean);
+  const meetingBadges = [];
+  const remainingLines = [];
+
+  const meetingRegex = /^(?:임시\s*)?(?:교무회의|교과\s*협의회|전문적\s*학습\s*공동체|다모임)/;
+
+  for (let line of rawLines) {
+    // 1. 단독 또는 쉼표 구분 회의 항목 처리 (예: "전문적 학습 공동체, 임시 교무회의", "교무회의", "임시 교무회의(08시)-교생 소개")
+    if (meetingRegex.test(line)) {
+      if (line.includes(',')) {
+        const parts = line.split(',').map(p => p.trim()).filter(Boolean);
+        for (const p of parts) {
+          if (meetingRegex.test(p)) {
+            if (!meetingBadges.includes(p)) meetingBadges.push(p);
+          } else {
+            remainingLines.push(p);
+          }
+        }
+      } else {
+        if (!meetingBadges.includes(line)) meetingBadges.push(line);
+      }
+      continue;
+    }
+
+    // 2. 행사 텍스트 내 포함된 임시 교무회의 / 교무회의 추출 (예: "배드민턴 전국체전 출정 인사(임시 교무회의)<운동부>")
+    if (/(?:임시\s*교무회의)/.test(line)) {
+      if (!meetingBadges.includes('임시 교무회의')) meetingBadges.push('임시 교무회의');
+      line = line.replace(/\s*[\(\[]?임시\s*교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
+      if (line) {
+        remainingLines.push(line);
+      }
+      continue;
+    }
+
+    if (/(?:교무회의)/.test(line)) {
+      if (!meetingBadges.includes('교무회의')) meetingBadges.push('교무회의');
+      line = line.replace(/\s*[\(\[]?교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
+      if (line) {
+        remainingLines.push(line);
+      }
+      continue;
+    }
+
+    remainingLines.push(line);
+  }
+
+  return { meetingBadges, remainingLines };
+}
+
 // 2. Month View (월별 캘린더 - 토·일 제외 월~금 5열 학사일정)
 function renderCalendarMonthView(cal) {
   cal = cal || getAcademicCalendar();
@@ -6672,23 +6730,8 @@ function renderCalendarMonthView(cal) {
       const isHoliday = (dayEvent && dayEvent.isHoliday);
       const isExam = (dayEvent && dayEvent.isExam);
 
-      // Extract teacher meeting if applicable (교무회의, 전문적 학습 공동체, 교과협의회, 다모임 등)
-      let meetingEvtLine = null;
-      if (dayEvent && dayEvent.event && !isHoliday && !isExam) {
-        const rawLines = dayEvent.event.split('\n').map(l => l.trim()).filter(Boolean);
-        for (const line of rawLines) {
-          if (/^(임시\s*)?(교무회의|교과\s*협의회|전문적\s*학습\s*공동체|다모임)/.test(line)) {
-            meetingEvtLine = line;
-            break;
-          }
-        }
-      }
-
-      // Event lines excluding meetingEvtLine
-      let monthEventLines = dayEvent && dayEvent.event ? dayEvent.event.split('\n').map(l => l.trim()).filter(Boolean) : [];
-      if (meetingEvtLine) {
-        monthEventLines = monthEventLines.filter(l => l !== meetingEvtLine);
-      }
+      // Extract teacher meeting if applicable (교무회의, 임시 교무회의, 전문적 학습 공동체, 교과협의회, 다모임 등)
+      const { meetingBadges, remainingLines: monthEventLines } = extractTeacherMeetingBadges(dayEvent ? dayEvent.event : '', isHoliday, isExam);
 
       const friChangche = isFri ? cal.fridaySchedule.find(f => f.date === dateStr) : null;
       const tooltipTitle = escapeHtml(dayEvent && dayEvent.event ? `${m}월 ${dayNum}일: ${dayEvent.event.replace(/\n/g, ' ')}` : `${m}월 ${dayNum}일`);
@@ -6698,11 +6741,11 @@ function renderCalendarMonthView(cal) {
           <div class="day-header-num">
             <div class="day-header-left">
               <span class="day-number" ${isHoliday ? 'style="color:#ef4444; flex-shrink:0;"' : 'style="flex-shrink:0;"'}>${dayNum}</span>
-              ${meetingEvtLine ? `
-                <span class="monday-meeting-badge month-meeting-badge" title="${escapeHtml(meetingEvtLine)}">
-                  ${escapeHtml(meetingEvtLine)}
+              ${meetingBadges.map(b => `
+                <span class="monday-meeting-badge month-meeting-badge" title="${escapeHtml(b)}">
+                  ${escapeHtml(b)}
                 </span>
-              ` : ''}
+              `).join('')}
             </div>
             ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:var(--primary); flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
           </div>
@@ -6840,24 +6883,8 @@ function renderCalendarWeekView(cal) {
         const isMon = (wd.dayOfWeek === '월');
         const isTue = (wd.dayOfWeek === '화');
 
-        // Extract teacher meeting (월요일 정례회의 또는 월요일 휴일 시 대체 회의 등)
-        // (교무회의, 임시 교무회의, 교과협의회, 전문적 학습 공동체, 다모임 등)
-        let meetingEvtLine = null;
-        if (dayEvt && dayEvt.event && !isHoliday && !isExam) {
-          const rawLines = dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean);
-          for (const line of rawLines) {
-            if (/^(임시\s*)?(교무회의|교과\s*협의회|전문적\s*학습\s*공동체|다모임)/.test(line)) {
-              meetingEvtLine = line;
-              break;
-            }
-          }
-        }
-
-        // Daily event lines (excluding meetingEvtLine from the bottom box)
-        let eventLines = dayEvt && dayEvt.event ? dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean) : [];
-        if (meetingEvtLine) {
-          eventLines = eventLines.filter(l => l !== meetingEvtLine);
-        }
+        // Extract teacher meeting (월요일 정례회의 또는 대체 회의 등)
+        const { meetingBadges, remainingLines: eventLines } = extractTeacherMeetingBadges(dayEvt ? dayEvt.event : '', isHoliday, isExam);
 
         return `
           <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
@@ -6867,11 +6894,11 @@ function renderCalendarWeekView(cal) {
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
                   <span style="font-size:0.8rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
                 </div>
-                ${meetingEvtLine ? `
+                ${meetingBadges.map(b => `
                   <span class="monday-meeting-badge" title="${isMon ? '매주 월요일 1교시 교원 정례 회의' : '교원 회의 (휴일 대체/임시)'}">
-                    ${escapeHtml(meetingEvtLine)}
+                    ${escapeHtml(b)}
                   </span>
-                ` : ''}
+                `).join('')}
               </div>
               ${isToday ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.7rem; flex-shrink:0;">오늘</span>' : ''}
             </div>
@@ -7050,21 +7077,8 @@ function openCalendarDayDetailModal(dateStr) {
   const isTue = (dateObj.getDay() === 2);
 
   // Extract teacher meeting if applicable (월요일 정례회의 또는 대체 회의 등)
-  let meetingEvtLine = null;
-  if (dayEvt && dayEvt.event && !dayEvt.isHoliday && !dayEvt.isExam) {
-    const rawLines = dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean);
-    for (const line of rawLines) {
-      if (/^(임시\s*)?(교무회의|교과\s*협의회|전문적\s*학습\s*공동체|다모임)/.test(line)) {
-        meetingEvtLine = line;
-        break;
-      }
-    }
-  }
-
-  let modalEventLines = dayEvt && dayEvt.event ? dayEvt.event.split('\n').map(l => l.trim()).filter(Boolean) : [];
-  if (meetingEvtLine) {
-    modalEventLines = modalEventLines.filter(l => l !== meetingEvtLine);
-  }
+  // Extract teacher meeting if applicable (월요일 정례회의 또는 대체 회의 등)
+  const { meetingBadges, remainingLines: modalEventLines } = extractTeacherMeetingBadges(dayEvt ? dayEvt.event : '', dayEvt ? dayEvt.isHoliday : false, dayEvt ? dayEvt.isExam : false);
 
   let modalElem = document.getElementById('calendarDayDetailModal');
   if (!modalElem) {
@@ -7082,11 +7096,11 @@ function openCalendarDayDetailModal(dateStr) {
             <div>
               <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <span>${y}년 ${m}월 ${d}일 (${dowName}요일)</span>
-                ${meetingEvtLine ? `
+                ${meetingBadges.map(b => `
                   <span class="monday-meeting-badge" title="${isMon ? '매주 월요일 1교시 교원 정례 회의' : '교원 회의 (휴일 대체/임시)'}">
-                    ${escapeHtml(meetingEvtLine)}
+                    ${escapeHtml(b)}
                   </span>
-                ` : ''}
+                `).join('')}
               </h3>
               <span style="font-size: 0.8rem; color: var(--text-muted);">2026학년도 공식 학사일정 상세</span>
             </div>
@@ -7101,17 +7115,17 @@ function openCalendarDayDetailModal(dateStr) {
             </div>
           ` : ''}
 
-          ${meetingEvtLine ? `
-            <div style="display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.7rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+          ${meetingBadges.map(b => `
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.7rem 1rem; border-radius: var(--radius-md); margin-bottom: 0.75rem;">
               <div style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 1.2rem;">🏢</span>
                 <div>
                   <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb;">${isMon ? '매주 월요일 1교시 교원 정례 회의' : '교원 회의 (휴일 대체/임시)'}</div>
-                  <div style="font-size: 0.98rem; font-weight: 700; color: #1e40af;">${escapeHtml(meetingEvtLine)}</div>
+                  <div style="font-size: 0.98rem; font-weight: 700; color: #1e40af;">${escapeHtml(b)}</div>
                 </div>
               </div>
             </div>
-          ` : ''}
+          `).join('')}
 
           <div style="margin-bottom: 1.25rem;">
             <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem;">주요 학사 행사:</div>
