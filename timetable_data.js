@@ -111060,7 +111060,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "진",
         "동"
-      ]
+      ],
+      "semesterWeek": 1,
+      "monthWeek": 1
     },
     {
       "date": "2026-03-13",
@@ -111083,7 +111085,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 2,
+      "monthWeek": 2
     },
     {
       "date": "2026-03-20",
@@ -111106,7 +111110,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 3,
+      "monthWeek": 3
     },
     {
       "date": "2026-03-27",
@@ -111129,14 +111135,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 4,
+      "monthWeek": 4
     },
     {
       "date": "2026-04-03",
       "year": 2026,
       "month": 4,
       "day": 3,
-      "week": 5,
+      "week": 1,
       "event": "2,3학년 담임  바이브온 연수(7교시, 진학부)\n3학년 생기부 사진촬영 오전(교사 사진도 가능)\n동아리활동\n시험범위입력마감(평가)",
       "grade1": [
         "동",
@@ -111152,14 +111160,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 5,
+      "monthWeek": 1
     },
     {
       "date": "2026-04-10",
       "year": 2026,
       "month": 4,
       "day": 10,
-      "week": 6,
+      "week": 2,
       "event": "마음챙김의 날<생활>\n국외 현장체험학습(2)\n진로요구분석조사 및 안내 1학년(5~7교시)<진로>\n진로비전플러스 3학년 (6, 7교시)<진로>",
       "grade1": [
         "진",
@@ -111175,14 +111185,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 6,
+      "monthWeek": 2
     },
     {
       "date": "2026-04-17",
       "year": 2026,
       "month": 4,
       "day": 17,
-      "week": 7,
+      "week": 3,
       "event": "개교기념식\n약물오남용예방교육 1, 2, 3학년(5교시, 구암관)<생활>, 결핵검사 홀수년 교직원, 2~3학년(6, 7교시, 운동장)<생활>\n1학년 정서행동검사(6,7교시)<생활>\n성적관리위원회 14시<평가>\n기출문제공개(~24)(평가)",
       "grade1": [
         "여유",
@@ -111198,14 +111210,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "봉",
         "봉",
         "봉"
-      ]
+      ],
+      "semesterWeek": 7,
+      "monthWeek": 3
     },
     {
       "date": "2026-04-24",
       "year": 2026,
       "month": 4,
       "day": 24,
-      "week": 8,
+      "week": 4,
       "event": "고사이동연습(5교시) (평가)\n학교폭력 예방교육 전학년(6, 7교시, 교실)<생활>\n학교장과 운동부 학부모 간담회 17시<생활> 4월위기관리위원회 5교시<생활>",
       "grade1": [
         "여유",
@@ -111221,14 +111235,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 8,
+      "monthWeek": 4
     },
     {
       "date": "2026-05-08",
       "year": 2026,
       "month": 5,
       "day": 8,
-      "week": 10,
+      "week": 2,
       "event": "문화체험(1,2)\n3학년 졸업앨범 사진촬영(신라대)",
       "grade1": [
         "진",
@@ -111244,14 +111260,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 10,
+      "monthWeek": 2
     },
     {
       "date": "2026-05-15",
       "year": 2026,
       "month": 5,
       "day": 15,
-      "week": 11,
+      "week": 3,
       "event": "스승의 날\n체육 한마당",
       "grade1": [
         "여유",
@@ -111267,14 +111285,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 11,
+      "monthWeek": 3
     },
     {
       "date": "2026-05-22",
       "year": 2026,
       "month": 5,
       "day": 22,
-      "week": 12,
+      "week": 4,
       "event": "동아리활동\n부산과학전람회 발표대회 참가(6팀 15명)<과중>\n 5월위기관리위원회 1교시<생활>",
       "grade1": [
         "동",
@@ -111290,14 +111310,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 12,
+      "monthWeek": 4
     },
     {
       "date": "2026-05-29",
       "year": 2026,
       "month": 5,
       "day": 29,
-      "week": 13,
+      "week": 5,
       "event": "미니진로박람회 1차 1, 2학년(5~7교시)<진로>\n교사대상 생명존중교육5,6,7교시(도서관)<생활>\n중앙대 고교방문 설명회 동맥꿈터<3학년>(6교시)(1,2,3)",
       "grade1": [
         "진",
@@ -111313,14 +111335,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "자",
         "자"
-      ]
+      ],
+      "semesterWeek": 13,
+      "monthWeek": 5
     },
     {
       "date": "2026-06-05",
       "year": 2026,
       "month": 6,
       "day": 5,
-      "week": 14,
+      "week": 1,
       "event": "동아리활동\n중대재해처벌법 연수 14:50 동맥꿈터(관리자, 교무, 보건, 행정실, 영양사)",
       "grade1": [
         "동",
@@ -111336,14 +111360,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "자",
         "자"
-      ]
+      ],
+      "semesterWeek": 14,
+      "monthWeek": 1
     },
     {
       "date": "2026-06-12",
       "year": 2026,
       "month": 6,
       "day": 12,
-      "week": 15,
+      "week": 2,
       "event": "교직원 심폐소생술 교육(5,6,7교시, 구암관) <생활>",
       "grade1": [
         "여유",
@@ -111359,14 +111385,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "자",
         "자"
-      ]
+      ],
+      "semesterWeek": 15,
+      "monthWeek": 2
     },
     {
       "date": "2026-06-19",
       "year": 2026,
       "month": 6,
       "day": 19,
-      "week": 16,
+      "week": 3,
       "event": "고사이동연습(5,6교시)(평가)\n 6월위기관리위원회13:00<생활>\n부산대학교 고교방문 입시설명회(3)(7교시, 도서관)\n수행평가최종마감(평가)",
       "grade1": [
         "여유",
@@ -111382,14 +111410,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "자"
-      ]
+      ],
+      "semesterWeek": 16,
+      "monthWeek": 3
     },
     {
       "date": "2026-06-26",
       "year": 2026,
       "month": 6,
       "day": 26,
-      "week": 17,
+      "week": 4,
       "event": "2회고사",
       "grade1": [
         "여유",
@@ -111405,14 +111435,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "자"
-      ]
+      ],
+      "semesterWeek": 17,
+      "monthWeek": 4
     },
     {
       "date": "2026-07-03",
       "year": 2026,
       "month": 7,
       "day": 3,
-      "week": 18,
+      "week": 1,
       "event": "대학생 멘토링 특강 1, 2학년(5~7교시)<진로>\n전포1동재개발 교육환경 관련회의 14:00<교무>\n교육과정위원회 15:30<학점>",
       "grade1": [
         "진",
@@ -111428,14 +111460,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "여유",
         "자"
-      ]
+      ],
+      "semesterWeek": 18,
+      "monthWeek": 1
     },
     {
       "date": "2026-07-10",
       "year": 2026,
       "month": 7,
       "day": 10,
-      "week": 19,
+      "week": 2,
       "event": "마음챙김의 날<생활>\n3학년 수능원서용 증명사진 촬영(1~4교시)\n동아리 사진 촬영(점심~7교시)\n동아리활동\n'한림원 석학과의 만남' 강연14시-16시<과중>",
       "grade1": [
         "동",
@@ -111451,14 +111485,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "자",
         "자"
-      ]
+      ],
+      "semesterWeek": 19,
+      "monthWeek": 2
     },
     {
       "date": "2026-08-21",
       "year": 2026,
       "month": 8,
       "day": 21,
-      "week": 1,
+      "week": 3,
       "event": "성희롱, 성폭력 예방교육 1, 2, 3학년\n( 5, 6교시, 구암관)<생활>\n학교폭력예방교육1,2,3학년\n(7교시, 교실)<생활>\nBeAT활용찾아가는연수(심화)(13:30~15:30)(평가)\n경성대학교 입시설명회(3학년)(7교시)",
       "grade1": [
         "여유",
@@ -111474,14 +111510,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 1,
+      "monthWeek": 3
     },
     {
       "date": "2026-08-28",
       "year": 2026,
       "month": 8,
       "day": 28,
-      "week": 2,
+      "week": 4,
       "event": "진로 페스티벌 1차 1학년 (5~7교시)<진로>\n8월 위기관리위원회(13:00~)\n2학기교수학습및평가계획제출마감(평가)\n동서대학교 입시설명회(3학년)(6교시)\n진주 경상국립대학교 입시설명회(3학년)(7교시)",
       "grade1": [
         "진",
@@ -111497,14 +111535,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 2,
+      "monthWeek": 4
     },
     {
       "date": "2026-09-04",
       "year": 2026,
       "month": 9,
       "day": 4,
-      "week": 3,
+      "week": 1,
       "event": "동아리활동\n동의대학교 입시설명회(3학년)(5교시)",
       "grade1": [
         "동",
@@ -111520,14 +111560,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 3,
+      "monthWeek": 1
     },
     {
       "date": "2026-09-11",
       "year": 2026,
       "month": 9,
       "day": 11,
-      "week": 4,
+      "week": 2,
       "event": "양성평등교육 1, 2, 3학년(5교시, 교실)<생활>\n생명존중교육 1,2,3(6교시 교실)<생활>",
       "grade1": [
         "여유",
@@ -111543,14 +111585,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 4,
+      "monthWeek": 2
     },
     {
       "date": "2026-09-18",
       "year": 2026,
       "month": 9,
       "day": 18,
-      "week": 5,
+      "week": 3,
       "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
       "grade1": [
         "진",
@@ -111566,14 +111610,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 5,
+      "monthWeek": 3
     },
     {
       "date": "2026-10-02",
       "year": 2026,
       "month": 10,
       "day": 2,
-      "week": 7,
+      "week": 1,
       "event": "동아리활동\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
       "grade1": [
         "동",
@@ -111589,14 +111635,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 7,
+      "monthWeek": 1
     },
     {
       "date": "2026-10-23",
       "year": 2026,
       "month": 10,
       "day": 23,
-      "week": 10,
+      "week": 4,
       "event": "진로 페스티벌 5차 1학년 (5~7교시)<진로>",
       "grade1": [
         "진",
@@ -111612,14 +111660,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 10,
+      "monthWeek": 4
     },
     {
       "date": "2026-10-30",
       "year": 2026,
       "month": 10,
       "day": 30,
-      "week": 11,
+      "week": 5,
       "event": "오픈랩(과중)\n동아리활동",
       "grade1": [
         "동",
@@ -111635,14 +111685,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 11,
+      "monthWeek": 5
     },
     {
       "date": "2026-11-06",
       "year": 2026,
       "month": 11,
       "day": 6,
-      "week": 12,
+      "week": 1,
       "event": "교직원 성희롱, 성폭력, 성매매 예방교육(5교시, 도서관)<생활>\n1,2학년 교내백일장(5,6,7교시, 각교실)",
       "grade1": [
         "여유",
@@ -111658,14 +111710,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 12,
+      "monthWeek": 1
     },
     {
       "date": "2026-11-13",
       "year": 2026,
       "month": 11,
       "day": 13,
-      "week": 13,
+      "week": 2,
       "event": "진로 페스티벌 1학년 (5~7교시)",
       "grade1": [
         "진",
@@ -111681,14 +111735,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 13,
+      "monthWeek": 2
     },
     {
       "date": "2026-11-20",
       "year": 2026,
       "month": 11,
       "day": 20,
-      "week": 14,
+      "week": 3,
       "event": "동아리활동",
       "grade1": [
         "동",
@@ -111704,14 +111760,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 14,
+      "monthWeek": 3
     },
     {
       "date": "2026-11-27",
       "year": 2026,
       "month": 11,
       "day": 27,
-      "week": 15,
+      "week": 4,
       "event": "시험범위취합마감(평가)",
       "grade1": [
         "여유",
@@ -111727,14 +111785,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "진",
         "동"
-      ]
+      ],
+      "semesterWeek": 15,
+      "monthWeek": 4
     },
     {
       "date": "2026-12-04",
       "year": 2026,
       "month": 12,
       "day": 4,
-      "week": 16,
+      "week": 1,
       "event": "고사이동연습(5,6교시)(평가)",
       "grade1": [
         "여유",
@@ -111750,14 +111810,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "여유",
         "여유"
-      ]
+      ],
+      "semesterWeek": 16,
+      "monthWeek": 1
     },
     {
       "date": "2026-12-11",
       "year": 2026,
       "month": 12,
       "day": 11,
-      "week": 17,
+      "week": 2,
       "event": "2회고사",
       "grade1": [
         "여유",
@@ -111773,14 +111835,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "여유",
         "진",
         "동"
-      ]
+      ],
+      "semesterWeek": 17,
+      "monthWeek": 2
     },
     {
       "date": "2026-12-18",
       "year": 2026,
       "month": 12,
       "day": 18,
-      "week": 18,
+      "week": 3,
       "event": "진로 포트폴리오 점검 1,2,3학년 (5~7교시)<진로>",
       "grade1": [
         "진",
@@ -111796,14 +111860,16 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "진",
         "진",
         "진"
-      ]
+      ],
+      "semesterWeek": 18,
+      "monthWeek": 3
     },
     {
       "date": "2026-12-25",
       "year": 2026,
       "month": 12,
       "day": 25,
-      "week": 19,
+      "week": 4,
       "event": "성탄절",
       "grade1": [
         "동",
@@ -111819,7 +111885,9 @@ window.SCHOOL_TIMETABLE_DATA.academicCalendar = {
         "동",
         "동",
         "동"
-      ]
+      ],
+      "semesterWeek": 19,
+      "monthWeek": 4
     }
   ]
 };

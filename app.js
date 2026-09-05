@@ -6210,7 +6210,7 @@ function renderFridayChangcheSelectorBar() {
         <select class="filter-select changche-week-select" onchange="onSelectFridayWeek(this.value)">
           ${cal.fridaySchedule.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금)${f.date === '2026-09-04' ? ' ★현재' : ''}
+              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)${f.date === '2026-09-04' ? ' ★현재' : ''}
             </option>
           `).join('')}
         </select>
@@ -6221,6 +6221,14 @@ function renderFridayChangcheSelectorBar() {
       </div>
     </div>
   `;
+}
+
+function getFridayWeekNumber(f) {
+  if (!f) return 1;
+  if (typeof f.week === 'number' && f.week >= 1 && f.week <= 5) return f.week;
+  if (f.monthWeek) return f.monthWeek;
+  const day = f.day || (new Date(f.date).getDate());
+  return Math.ceil(day / 7);
 }
 
 function onSelectFridayWeek(dateStr) {
@@ -6650,7 +6658,7 @@ function renderCalendarWeekView(cal) {
         <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${f.week ? `${f.week}주차 ` : ''}(${f.date} 금) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
+              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
             </option>
           `).join('')}
         </select>
@@ -6661,7 +6669,7 @@ function renderCalendarWeekView(cal) {
       </div>
 
       <div class="changche-summary-pill">
-        🎯 ${selectedFri.month}월 ${selectedFri.week ? `${selectedFri.week}주차 ` : ''}금요일 창체: 
+        🎯 ${selectedFri.month}월 ${getFridayWeekNumber(selectedFri)}주차 금요일 창체: 
         1학년 [${selectedFri.grade1.join('/')}] · 2학년 [${selectedFri.grade2.join('/')}] · 3학년 [${selectedFri.grade3.join('/')}]
       </div>
     </div>
