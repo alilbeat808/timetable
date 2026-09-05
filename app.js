@@ -6403,6 +6403,117 @@ function getDepartmentStyleInfo(deptName) {
   };
 }
 
+
+// ==========================================================================
+// 행사 내용 내 학년, 교시, 시간, 날짜(기간), 장소 메타데이터 인라인 시각화 함수
+// ==========================================================================
+function highlightEventMeta(text) {
+  if (!text || typeof text !== 'string') return text;
+  let s = text;
+
+  // 1. 기간/날짜: (~9/11), (9/16-9/22), (~16일), (~28)
+  s = s.replace(/(\([~]?[0-9]{1,2}\/[0-9]{1,2}(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2})?\)|\(~[0-9]{1,2}(?:일)?\))/g, m => {
+    return `<span class="event-meta-tag event-meta-date">${m}</span>`;
+  });
+
+  // 2. 학년: 1, 2, 3학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년, 전학년
+  s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1학년|2학년|3학년|전학년)/g, m => {
+    return `<span class="event-meta-tag event-meta-grade">${m}</span>`;
+  });
+
+  // 3. 교시: 1교시, 5, 6교시, 5,6,7교시, 5~7교시
+  s = s.replace(/([0-9]+(?:\s*[,~]\s*[0-9]+)*교시)/g, m => {
+    return `<span class="event-meta-tag event-meta-time">${m}</span>`;
+  });
+
+  // 4. 시간 (HH:MM): 13:30~15:30, 13:00~, 7:30~8:10, 08:00
+  s = s.replace(/\b([0-9]{1,2}:[0-9]{2}(?:\s*[-~]\s*[0-9]{1,2}:[0-9]{2})?~?)/g, m => {
+    return `<span class="event-meta-tag event-meta-time">${m}</span>`;
+  });
+
+  // 5. 시간 (N시 M분): 10시 20분~, 14시 30분, 16시
+  s = s.replace(/(?<![0-9가-힣class="])([0-9]{1,2}시(?:\s*[0-9]{1,2}분)?(?:\s*[-~]\s*[0-9]{1,2}시(?:\s*[0-9]{1,2}분)?)?~?)(?!\s*간)/g, m => {
+    return `<span class="event-meta-tag event-meta-time">${m}</span>`;
+  });
+
+  // 6. 장소: 각 교실, 구암관, 도서관, 1층 회의실 등
+  const placeRegex = /(?:각\s*교실|구암관|도서관|1층\s*회의실|3층\s*사회과실|회의실|운동장|물리실|음악실|동맥꿈터|체육관|홈베이스|교장실|방송실|사회과실|교실)/g;
+  s = s.replace(placeRegex, (m, offset, fullStr) => {
+    const before = fullStr.slice(0, offset);
+    const lastOpen = before.lastIndexOf('<');
+    const lastClose = before.lastIndexOf('>');
+    if (lastOpen > lastClose) return m;
+    return `<span class="event-meta-tag event-meta-place">${m}</span>`;
+  });
+
+  return s;
+}
+
+// 행사 시간/교시 분 단위 환산 함수 (빠른 시간순 정렬용)
+function extractEventTimeMinute(line) {
+  if (!line || typeof line !== 'string') return 2000;
+
+  // 전일 시험/평가인 경우 최우선 (-100)
+  if (/^(?:1회고사|2회고사|대학수학능력시험|수능시험|학평|모평|학력평가|모의평가)/.test(line)) {
+    return -100;
+  }
+
+  let minMinute = 2000;
+
+  // 1. 시간 패턴 (예: 13:30, 08:00, 7:30, 14:00~ 등)
+  const hhmmMatch = line.match(/\b([0-9]{1,2}):([0-9]{2})/);
+  if (hhmmMatch) {
+    const hh = parseInt(hhmmMatch[1], 10);
+    const mm = parseInt(hhmmMatch[2], 10);
+    const m = hh * 60 + mm;
+    if (m < minMinute) minMinute = m;
+  }
+
+  // 2. 한글 시/분 패턴 (예: 10시 20분, 14시 30분, 16시, 8시 등)
+  const koreanTimeMatch = line.match(/([0-9]{1,2})시(?:\s*([0-9]{1,2})분)?/);
+  if (koreanTimeMatch) {
+    let hh = parseInt(koreanTimeMatch[1], 10);
+    if (hh <= 6) hh += 12; // 1시~6시는 오후로 간주
+    const mm = koreanTimeMatch[2] ? parseInt(koreanTimeMatch[2], 10) : 0;
+    const m = hh * 60 + mm;
+    if (m < minMinute) minMinute = m;
+  }
+
+  // 3. 교시 패턴 (예: 1교시, 5~7교시, 5,6교시 등)
+  const periodMatch = line.match(/([0-9]+)(?:\s*[,~]\s*[0-9]+)*교시/);
+  if (periodMatch) {
+    const p = parseInt(periodMatch[1], 10);
+    const periodMap = {
+      1: 540,
+      2: 600,
+      3: 660,
+      4: 720,
+      5: 810,
+      6: 870,
+      7: 930,
+      8: 990
+    };
+    const m = periodMap[p] || (540 + (p - 1) * 60);
+    if (m < minMinute) minMinute = m;
+  }
+
+  return minMinute;
+}
+
+// 빠른 시간이나 교시가 위에 오도록 정렬하는 함수
+function sortEventLinesByTime(lines) {
+  if (!Array.isArray(lines) || lines.length <= 1) return lines;
+
+  return lines.map((line, idx) => ({
+    line,
+    idx,
+    timeMin: extractEventTimeMinute(line)
+  })).sort((a, b) => {
+    if (a.timeMin !== b.timeMin) return a.timeMin - b.timeMin;
+    return a.idx - b.idx; // Stable sort
+  }).map(item => item.line);
+}
+
 function formatEventLineWithDeptBadges(line) {
   let text = cleanCalendarEventText(line);
   const badges = [];
@@ -6451,23 +6562,37 @@ function formatEventLineWithDeptBadges(line) {
     badges.push(getDepartmentStyleInfo('진학'));
   }
 
-  // 7. Auto-tag '인문' for 방과후, 동아리활동 related events if not already tagged
-  if (/(?:방과\s*후|동아리\s*활동)/.test(text) && !badges.some(b => b.name === '인문' || b.name === '인문사회' || b.name === '인문사회부')) {
+  // 7. Auto-tag '인문' for 방과후, 동아리활동, 백일장
+  if (/(?:방과\s*후|동아리\s*활동|백일장)/.test(text) && !badges.some(b => b.name === '인문' || b.name === '인문사회' || b.name === '인문사회부')) {
     badges.push(getDepartmentStyleInfo('인문'));
   }
 
-  // 8. Auto-tag '3학년' for 수능원서 작성 related events if not already tagged
+  // 8. Auto-tag '3학년' for 수능원서 작성
   if (/수능원서\s*작성/.test(text) && !badges.some(b => b.name === '3학년' || b.name === '3학년부')) {
     badges.push(getDepartmentStyleInfo('3학년'));
   }
 
+  // 9. Auto-tag grade badges for 문화체험, 체험활동, 현장체험 based on mentioned grades
+  if (/(?:문화체험|체험활동|현장체험|전공체험|메이커\s*체험|체험)/.test(text)) {
+    if (/(?:1학년|1,\s*2학년|1,\s*2,\s*3학년|\b1반|\(1\))/.test(text) && !badges.some(b => b.name === '1학년')) {
+      badges.push(getDepartmentStyleInfo('1학년'));
+    }
+    if (/(?:2학년|1,\s*2학년|2,\s*3학년|1,\s*2,\s*3학년|\(2\))/.test(text) && !badges.some(b => b.name === '2학년')) {
+      badges.push(getDepartmentStyleInfo('2학년'));
+    }
+    if (/(?:3학년|2,\s*3학년|1,\s*2,\s*3학년|\(3\))/.test(text) && !badges.some(b => b.name === '3학년')) {
+      badges.push(getDepartmentStyleInfo('3학년'));
+    }
+  }
+
   text = text.trim();
   const escapedText = escapeHtml(text);
+  const highlightedText = highlightEventMeta(escapedText);
   const badgeHtml = badges.map(b => 
     `<span class="calendar-dept-badge ${escapeHtml(b.className)}" data-dept="${escapeHtml(b.name)}">${escapeHtml(b.name)}</span>`
   ).join('');
 
-  return escapedText + badgeHtml;
+  return highlightedText + badgeHtml;
 }
 
 function parseGoogleSheetCalendarCSV(csvText) {
@@ -7154,39 +7279,36 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
       meetingBadges: [],
       ceremonyBadges: [],
       allHeaderBadges: [],
-      remainingLines: rawEventText ? rawEventText.split('\n').map(l => l.trim()).filter(Boolean) : []
+      remainingLines: rawEventText ? sortEventLinesByTime(rawEventText.split('\n').map(l => l.trim()).filter(Boolean)) : []
     };
   }
 
   const rawLines = rawEventText.split('\n').map(l => l.trim()).filter(Boolean);
   const meetingBadges = [];
   const ceremonyBadges = [];
-  const allHeaderBadges = [];
   const remainingLines = [];
 
-  const meetingRegex = /^(?:임시\s*)?(?:교무회의|교과\s*협의회|전문적\s*학습\s*공동체|다모임)/;
-  const ceremonyRegex = /(?:방학식|개학식|졸업식)/;
+  const ceremonyRegex = /^(?:[\(\[]\s*)?(?:방학식|개학식|졸업식|종업식|시업식|입학식|개교기념식)/;
+  const regularMeetingPrefixRegex = /^(?:전문적\s*학습\s*공동체|교과\s*협의회|다모임|교무회의|임시\s*교무회의)/;
 
   for (let line of rawLines) {
-    // 1. 주요 학사 의식 행사 추출 (방학식, 개학식, 졸업식 등)
+    // 1. 주요 학사 의식 행사 추출 (개학식, 방학식, 졸업식 등)
     if (ceremonyRegex.test(line)) {
       const cleanCeremony = line.replace(/^[\s\(\[]+/, '').replace(/[\s\)\]]+$/, '').trim();
       if (!ceremonyBadges.includes(cleanCeremony)) {
         ceremonyBadges.push(cleanCeremony);
-        allHeaderBadges.push({ type: 'ceremony', text: cleanCeremony });
       }
       continue;
     }
 
-    // 2. 단독 또는 쉼표 구분 회의 항목 처리 (예: "전문적 학습 공동체, 임시 교무회의", "교무회의", "임시 교무회의(08시)-교생 소개")
-    if (meetingRegex.test(line)) {
+    // 2. 단독 또는 쉼표 구분 정규 회의 항목 처리 (예: "전문적 학습 공동체", "교무회의", "다모임", "교과협의회")
+    if (regularMeetingPrefixRegex.test(line)) {
       if (line.includes(',')) {
         const parts = line.split(',').map(p => p.trim()).filter(Boolean);
         for (const p of parts) {
-          if (meetingRegex.test(p)) {
+          if (regularMeetingPrefixRegex.test(p)) {
             if (!meetingBadges.includes(p)) {
               meetingBadges.push(p);
-              allHeaderBadges.push({ type: 'meeting', text: p });
             }
           } else {
             remainingLines.push(p);
@@ -7195,19 +7317,20 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
       } else {
         if (!meetingBadges.includes(line)) {
           meetingBadges.push(line);
-          allHeaderBadges.push({ type: 'meeting', text: line });
         }
       }
       continue;
     }
 
-    // 3. 행사 텍스트 내 포함된 임시 교무회의 / 교무회의 추출 (예: "배드민턴 전국체전 출정 인사(임시 교무회의)<운동부>")
+    // 3. 행사 텍스트 내 포함된 임시 교무회의 / 교무회의
+    // 해당 일에 이미 정규 회의(전문적 학습 공동체 등)가 있는 경우 부수 회의는 본문 텍스트에 유지하여 핵심 회의가 가려지지 않도록 보호
     if (/(?:임시\s*교무회의)/.test(line)) {
-      if (!meetingBadges.includes('임시 교무회의')) {
-        meetingBadges.push('임시 교무회의');
-        allHeaderBadges.push({ type: 'meeting', text: '임시 교무회의' });
+      if (meetingBadges.length === 0) {
+        if (!meetingBadges.includes('임시 교무회의')) {
+          meetingBadges.push('임시 교무회의');
+        }
+        line = line.replace(/\s*[\(\[]?임시\s*교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
       }
-      line = line.replace(/\s*[\(\[]?임시\s*교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
       if (line) {
         remainingLines.push(line);
       }
@@ -7215,11 +7338,12 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
     }
 
     if (/(?:교무회의)/.test(line)) {
-      if (!meetingBadges.includes('교무회의')) {
-        meetingBadges.push('교무회의');
-        allHeaderBadges.push({ type: 'meeting', text: '교무회의' });
+      if (meetingBadges.length === 0) {
+        if (!meetingBadges.includes('교무회의')) {
+          meetingBadges.push('교무회의');
+        }
+        line = line.replace(/\s*[\(\[]?교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
       }
-      line = line.replace(/\s*[\(\[]?교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
       if (line) {
         remainingLines.push(line);
       }
@@ -7229,7 +7353,15 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
     remainingLines.push(line);
   }
 
-  return { meetingBadges, ceremonyBadges, allHeaderBadges, remainingLines };
+  // [중요 규칙] ~식이랑 회의가 겹칠 땐 ~식을 위에/앞에 표기! (2/1 개학식 우선 표기)
+  const allHeaderBadges = [];
+  ceremonyBadges.forEach(c => allHeaderBadges.push({ type: 'ceremony', text: c }));
+  meetingBadges.forEach(m => allHeaderBadges.push({ type: 'meeting', text: m }));
+
+  // [중요 규칙] 빠른 시간이나 교시가 위에 오도록 정렬!
+  const sortedRemainingLines = sortEventLinesByTime(remainingLines);
+
+  return { meetingBadges, ceremonyBadges, allHeaderBadges, remainingLines: sortedRemainingLines };
 }
 
 // 2. Month View (월별 캘린더 - 토·일 제외 월~금 5열 학사일정)

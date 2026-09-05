@@ -4962,6 +4962,70 @@ body {
   color: #fef08a !important;
 }
 
+
+/* Calendar Event Inline Meta Tags (학년, 교시/시간, 날짜/기간, 장소 시각적 구별 스타일) */
+.event-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 0.05rem 0.28rem;
+  font-weight: 700;
+  font-size: 0.71rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin: 0 0.12rem;
+  letter-spacing: -0.01em;
+}
+
+/* 1. 교시 & 시간 (동일한 슬레이트 블루 톤) */
+.event-meta-time {
+  background: rgba(37, 99, 235, 0.09);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+}
+[data-theme="dark"] .event-meta-time {
+  background: rgba(37, 99, 235, 0.22);
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+/* 2. 특정 학년 (바이올렛/퍼플 톤) */
+.event-meta-grade {
+  background: rgba(124, 58, 237, 0.09);
+  color: #6d28d9;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+}
+[data-theme="dark"] .event-meta-grade {
+  background: rgba(124, 58, 237, 0.22);
+  color: #d8b4fe;
+  border-color: rgba(167, 139, 250, 0.4);
+}
+
+/* 3. 날짜 및 기간 (에메랄드/틸 톤) */
+.event-meta-date {
+  background: rgba(13, 148, 136, 0.09);
+  color: #0f766e;
+  border: 1px solid rgba(20, 184, 166, 0.28);
+}
+[data-theme="dark"] .event-meta-date {
+  background: rgba(13, 148, 136, 0.22);
+  color: #5eead4;
+  border-color: rgba(45, 212, 191, 0.4);
+}
+
+/* 4. 장소 (로즈/코랄 톤) */
+.event-meta-place {
+  background: rgba(225, 29, 72, 0.08);
+  color: #be123c;
+  border: 1px solid rgba(244, 63, 94, 0.28);
+}
+[data-theme="dark"] .event-meta-place {
+  background: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+  border-color: rgba(251, 113, 133, 0.4);
+}
+
 /* Week & Month View Meeting Badges Column (주별 및 월별 다중 회의 세로 열 정렬) */
 .week-meeting-badges-col {
   display: flex;
@@ -4969,6 +5033,7 @@ body {
   gap: 0.2rem;
   min-width: 0;
   flex: 1;
+  flex-wrap: wrap;
 }
 
 .month-meeting-badges-col {
