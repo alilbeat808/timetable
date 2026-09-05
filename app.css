@@ -2438,6 +2438,7 @@ body {
   .calendar-dday-strip,
   .calendar-dday-2x2,
   .calendar-meal-widget,
+  .calendar-meal-expanded-widget,
   #calendarMealDetailModal,
   button {
     display: none !important;
@@ -3951,13 +3952,19 @@ body {
 
 .calendar-header-toolbar {
   display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.calendar-toolbar-top-row {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 0.65rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .calendar-title-group {
@@ -3971,28 +3978,38 @@ body {
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
+  line-height: 1.25;
 }
 
-.calendar-actions {
+.calendar-sync-time-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0.2rem 0 0 0;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
-/* 2x2 D-Day Widget (Placed Beside Sync Status Badge) */
+.calendar-sync-time-sub .sync-dot {
+  color: #10b981;
+  font-size: 0.65rem;
+}
+
+.calendar-sync-time-sub .sync-time-val {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* 2x2 D-Day Widget (Top Row Right, strictly left-aligned) */
 .calendar-dday-2x2 {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 2px 6px;
+  padding: 3px 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   user-select: none;
-  height: 34px;
-  justify-content: center;
 }
 
 [data-theme="dark"] .calendar-dday-2x2 {
@@ -4000,24 +4017,26 @@ body {
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-.dday-2x2-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.dday-2x2-grid {
+  display: grid;
+  grid-template-columns: 102px 102px;
+  gap: 3px 12px;
 }
 
 .dday-2x2-item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 3px;
+  justify-content: flex-start;
+  gap: 6px;
   background: none;
   border: none;
-  padding: 0 2px;
+  padding: 1px 2px;
   border-radius: 3px;
   cursor: pointer;
   font-family: inherit;
-  line-height: 1.15;
+  line-height: 1.2;
   transition: all 0.15s ease;
+  text-align: left;
 }
 
 .dday-2x2-item:hover {
@@ -4028,21 +4047,22 @@ body {
 .dday-2x2-name {
   color: var(--text-secondary);
   font-weight: 700;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   letter-spacing: -0.2px;
-  white-space: nowrap;
+  width: 46px;
+  text-align: left;
+  flex-shrink: 0;
 }
 
 .dday-2x2-badge {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  padding: 0.5px 4px;
+  padding: 1px 5px;
   border-radius: 3px;
   color: #ffffff;
-  min-width: 34px;
+  min-width: 40px;
   text-align: center;
   display: inline-block;
-  white-space: nowrap;
 }
 
 .dday-2x2-badge.exam {
@@ -4057,97 +4077,120 @@ body {
   background: #10b981;
 }
 
-/* NEIS School Meal Menu Widget (Right of Print Button) */
-.calendar-meal-widget {
+/* Bottom Row: Action Buttons (Left) & Expanded Meal Display (Right of Print) */
+.calendar-toolbar-bottom-row {
   display: flex;
   align-items: center;
-  gap: 4px;
-  height: 34px;
-  user-select: none;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.meal-box {
+.calendar-action-buttons-group {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2px 7px;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* Expanded Meal Menu Widget (Right of Print Button, Full Dishes Display) */
+.calendar-meal-expanded-widget {
+  display: flex;
+  align-items: stretch;
+  gap: 0.55rem;
+  flex: 1;
+  min-width: 300px;
+  justify-content: flex-end;
+}
+
+.meal-card-compact {
+  flex: 1;
+  min-width: 140px;
+  max-width: 420px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
   cursor: pointer;
-  height: 34px;
-  min-width: 95px;
-  max-width: 140px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.15s ease;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.meal-box:hover {
+.meal-card-compact:hover {
   border-color: var(--primary);
   background: var(--bg-hover);
   transform: translateY(-0.5px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-.meal-box.lunch:hover {
+.meal-card-compact.lunch:hover {
   border-color: #ea580c;
 }
 
-.meal-box.dinner:hover {
+.meal-card-compact.dinner:hover {
   border-color: #4f46e5;
 }
 
-[data-theme="dark"] .meal-box {
+[data-theme="dark"] .meal-card-compact {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-.meal-box-header {
+.meal-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
+  gap: 0.35rem;
 }
 
-.meal-box-tag {
-  font-size: 0.65rem;
+.meal-card-badge {
+  font-size: 0.68rem;
   font-weight: 800;
   border-radius: 3px;
   white-space: nowrap;
 }
 
-.meal-box-tag.lunch {
+.meal-card-badge.lunch {
   color: #ea580c;
 }
 
-.meal-box-tag.dinner {
+.meal-card-badge.dinner {
   color: #6366f1;
 }
 
-[data-theme="dark"] .meal-box-tag.lunch {
+[data-theme="dark"] .meal-card-badge.lunch {
   color: #fb923c;
 }
 
-[data-theme="dark"] .meal-box-tag.dinner {
+[data-theme="dark"] .meal-card-badge.dinner {
   color: #a5b4fc;
 }
 
-.meal-box-cal {
-  font-size: 0.62rem;
+.meal-card-cal {
+  font-size: 0.65rem;
+  font-weight: 700;
   color: var(--text-muted);
-  font-weight: 600;
   white-space: nowrap;
 }
 
-.meal-box-menu {
-  font-size: 0.68rem;
+.meal-card-dishes {
+  font-size: 0.72rem;
   color: var(--text-secondary);
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 125px;
+  line-height: 1.35;
+  font-weight: 500;
+  word-break: keep-all;
+}
+
+@media (max-width: 900px) {
+  .calendar-meal-expanded-widget {
+    min-width: 100%;
+    justify-content: stretch;
+  }
 }
 
 /* Meal Detail Modal Styles */
@@ -4472,25 +4515,6 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Real-time Google Sheet Sync Status */
-.sync-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.65rem;
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-[data-theme="dark"] .sync-status-badge {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border-color: rgba(16, 185, 129, 0.4);
-}
 
 /* Month View (월별 캘린더) */
 .month-calendar-table {

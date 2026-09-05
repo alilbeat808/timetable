@@ -6688,89 +6688,89 @@ function renderCalendarView(container) {
     <!-- Top Calendar Card -->
     <div class="calendar-view-card">
       <div class="calendar-header-toolbar">
-        <div class="calendar-title-group">
-          <span style="font-size: 1.6rem;">📅</span>
-          <div>
-            <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
-            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem;">
-              공휴일/고사 및 금요 창체 연동 · 구글 시트 실시간 자동 연동
-              ${AppState.lastCalendarSyncTime ? ` · <span style="color:var(--primary); font-weight:600;">동기화: ${formatTime(AppState.lastCalendarSyncTime)}</span>` : ''}
-            </p>
-          </div>
-        </div>
-
-        <div class="calendar-actions">
-          <!-- Mode Switcher -->
-          <div class="view-mode-switcher">
-            <button class="view-mode-btn ${AppState.calendarViewMode === 'year' ? 'active' : ''}" onclick="setCalendarViewMode('year')">
-              🗓️ 연간 캘린더
-            </button>
-            <button class="view-mode-btn ${AppState.calendarViewMode === 'month' ? 'active' : ''}" onclick="setCalendarViewMode('month')">
-              📆 월별 캘린더
-            </button>
-            <button class="view-mode-btn ${AppState.calendarViewMode === 'week' ? 'active' : ''}" onclick="setCalendarViewMode('week')">
-              📋 주별 캘린더
-            </button>
+        <!-- Top Row: Title + Sync Time (Left) & 2x2 D-Day Widget (Right / Strictly Left-Aligned) -->
+        <div class="calendar-toolbar-top-row">
+          <div class="calendar-title-group">
+            <span style="font-size: 1.6rem; flex-shrink: 0;">📅</span>
+            <div>
+              <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
+              <p class="calendar-sync-time-sub">
+                <span class="sync-dot">●</span> 동기화 시간: <span class="sync-time-val">${AppState.lastCalendarSyncTime ? formatTime(AppState.lastCalendarSyncTime) : '연결됨 (실시간)'}</span>
+              </p>
+            </div>
           </div>
 
-          <div class="sync-status-badge" title="구글 시트의 변경 내용이 자동으로 실시간 감지되어 반영됩니다">
-            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-            실시간 자동 연동
-            <span style="font-size: 0.72rem; opacity: 0.85;">(${AppState.lastCalendarSyncTime ? '최근 ' + String(AppState.lastCalendarSyncTime.getHours()).padStart(2, '0') + ':' + String(AppState.lastCalendarSyncTime.getMinutes()).padStart(2, '0') : '연결됨'})</span>
-          </div>
-
-          <!-- 2x2 D-Day Widget (Right Beside Sync Status Time) -->
+          <!-- 2x2 D-Day Widget (Right side of Top Row, strictly left-aligned inside) -->
           <div class="calendar-dday-2x2" title="주요 학사일정 D-Day (클릭 시 해당 주차 캘린더로 이동)">
-            <div class="dday-2x2-row">
-              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사 (10.13 화 ~ 10.19 월) · 클릭 시 이동">
+            <div class="dday-2x2-grid">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월)">
                 <span class="dday-2x2-name">1회고사</span>
                 <span class="dday-2x2-badge exam">${d1}</span>
               </button>
-              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사 (12.07 월 ~ 12.11 금) · 클릭 시 이동">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금)">
                 <span class="dday-2x2-name">2회고사</span>
                 <span class="dday-2x2-badge exam">${d2}</span>
               </button>
-            </div>
-            <div class="dday-2x2-row">
-              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험 (11.19 목) · 클릭 시 이동">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험: 2026. 11. 19.(목)">
                 <span class="dday-2x2-name">수능</span>
                 <span class="dday-2x2-badge suneung">${dSuneung}</span>
               </button>
-              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식 (12.30 수) · 클릭 시 이동">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식: 2026. 12. 30.(수)">
                 <span class="dday-2x2-name">방학식</span>
                 <span class="dday-2x2-badge vac">${dVac}</span>
               </button>
             </div>
           </div>
+        </div>
 
-          <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 즉시 다시 가져옵니다">
-            🔄 지금 즉시 새로고침
-          </button>
-          <a class="btn btn-secondary" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
-            🔗 시트 원본 열기
-          </a>
-          <button class="btn btn-secondary" onclick="window.print()" title="학사일정 인쇄">
-            🖨️ 인쇄
-          </button>
+        <!-- Bottom Row: Pulled Action Buttons (Left) & Wide Meal Display (Right of Print) -->
+        <div class="calendar-toolbar-bottom-row">
+          <div class="calendar-action-buttons-group">
+            <!-- Mode Switcher -->
+            <div class="view-mode-switcher">
+              <button class="view-mode-btn ${AppState.calendarViewMode === 'year' ? 'active' : ''}" onclick="setCalendarViewMode('year')">
+                🗓️ 연간 캘린더
+              </button>
+              <button class="view-mode-btn ${AppState.calendarViewMode === 'month' ? 'active' : ''}" onclick="setCalendarViewMode('month')">
+                📆 월별 캘린더
+              </button>
+              <button class="view-mode-btn ${AppState.calendarViewMode === 'week' ? 'active' : ''}" onclick="setCalendarViewMode('week')">
+                📋 주별 캘린더
+              </button>
+            </div>
 
-          <!-- NEIS School Meal Menu Widget (Right of Print Button, Split Lunch/Dinner) -->
+            <!-- 지금 즉시 동기화 (주별 캘린더 옆으로 당김) -->
+            <button class="btn btn-primary btn-sm" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
+              🔄 지금 즉시 동기화
+            </button>
+            <!-- 시트 원본 열기 -->
+            <a class="btn btn-secondary btn-sm" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+              🔗 시트 원본 열기
+            </a>
+            <!-- 인쇄 -->
+            <button class="btn btn-secondary btn-sm" onclick="window.print()" title="학사일정 인쇄">
+              🖨️ 인쇄
+            </button>
+          </div>
+
+          <!-- NEIS School Meal Menu Widget (인쇄 버튼 우측 남는 넓은 칸에 전체 메뉴 표시) -->
           ${(() => {
             const sm = getCachedTodayMealSummary();
             return `
-              <div class="calendar-meal-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 메뉴 및 상세 확인)">
-                <div class="meal-box lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
-                  <div class="meal-box-header">
-                    <span class="meal-box-tag lunch">🍱 점심</span>
-                    <span class="meal-box-cal" id="mealLunchCal">${sm.lunchCal}</span>
+              <div class="calendar-meal-expanded-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 식단 상세 모달)">
+                <div class="meal-card-compact lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
+                  <div class="meal-card-head">
+                    <span class="meal-card-badge lunch">🍱 점심</span>
+                    <span class="meal-card-cal" id="mealLunchCal">${sm.lunchCal}</span>
                   </div>
-                  <div class="meal-box-menu" id="mealLunchMenu">${sm.lunchText}</div>
+                  <div class="meal-card-dishes" id="mealLunchMenu">${escapeHtml(sm.lunchText)}</div>
                 </div>
-                <div class="meal-box dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
-                  <div class="meal-box-header">
-                    <span class="meal-box-tag dinner">🌙 저녁</span>
-                    <span class="meal-box-cal" id="mealDinnerCal">${sm.dinnerCal}</span>
+                <div class="meal-card-compact dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
+                  <div class="meal-card-head">
+                    <span class="meal-card-badge dinner">🌙 저녁</span>
+                    <span class="meal-card-cal" id="mealDinnerCal">${sm.dinnerCal}</span>
                   </div>
-                  <div class="meal-box-menu" id="mealDinnerMenu">${sm.dinnerText}</div>
+                  <div class="meal-card-dishes" id="mealDinnerMenu">${escapeHtml(sm.dinnerText)}</div>
                 </div>
               </div>
             `;
@@ -7646,20 +7646,21 @@ function getCachedTodayMealSummary() {
   const cached = AppState.mealCache && AppState.mealCache[target.ymd];
   if (cached) {
     const lunchText = cached.lunch && cached.lunch.dishes.length > 0
-      ? cached.lunch.dishes.map(x => x.name).slice(0, 2).join(', ')
+      ? cached.lunch.dishes.map(x => x.name).join(', ')
       : (target.isWeekend ? '주말 급식 없음' : '급식 없음');
-    const lunchCal = cached.lunch && cached.lunch.cal ? cached.lunch.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+    const lunchCal = cached.lunch && cached.lunch.cal ? cached.lunch.cal.replace(/\s*Kcal/i, '') + ' kcal' : '';
     const dinnerText = cached.dinner && cached.dinner.dishes.length > 0
-      ? cached.dinner.dishes.map(x => x.name).slice(0, 2).join(', ')
+      ? cached.dinner.dishes.map(x => x.name).join(', ')
       : (target.isWeekend ? '주말 급식 없음' : '급식 없음');
-    const dinnerCal = cached.dinner && cached.dinner.cal ? cached.dinner.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
-    return { lunchText, lunchCal, dinnerText, dinnerCal };
+    const dinnerCal = cached.dinner && cached.dinner.cal ? cached.dinner.cal.replace(/\s*Kcal/i, '') + ' kcal' : '';
+    return { lunchText, lunchCal, dinnerText, dinnerCal, target };
   }
   return {
     lunchText: '식단 불러오는 중...',
     lunchCal: '',
     dinnerText: '식단 불러오는 중...',
-    dinnerCal: ''
+    dinnerCal: '',
+    target
   };
 }
 
@@ -7747,24 +7748,24 @@ async function loadTodayMealInfo(force = false) {
 
   if (!lunchMenuEl || !dinnerMenuEl) return;
 
-  // Update lunch
+  // Update lunch (전체 메뉴 안 잘리고 다 표시)
   if (mealData.lunch && mealData.lunch.dishes.length > 0) {
-    const preview = mealData.lunch.dishes.map(x => x.name).slice(0, 2).join(', ');
-    lunchMenuEl.textContent = preview;
-    lunchMenuEl.title = `점심: ${mealData.lunch.dishes.map(x => x.name).join(', ')} (${mealData.lunch.cal || ''})`;
-    if (lunchCalEl) lunchCalEl.textContent = mealData.lunch.cal ? mealData.lunch.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+    const fullDishes = mealData.lunch.dishes.map(x => x.name).join(', ');
+    lunchMenuEl.textContent = fullDishes;
+    lunchMenuEl.title = `점심: ${fullDishes} (${mealData.lunch.cal || ''})`;
+    if (lunchCalEl) lunchCalEl.textContent = mealData.lunch.cal ? mealData.lunch.cal.replace(/\s*Kcal/i, '') + ' kcal' : '';
   } else {
     lunchMenuEl.textContent = target.isWeekend ? '주말 급식 없음' : '급식 없음';
     lunchMenuEl.title = target.isWeekend ? '주말에는 급식이 운영되지 않습니다.' : '오늘 점심 급식 일정이 없습니다.';
     if (lunchCalEl) lunchCalEl.textContent = '';
   }
 
-  // Update dinner
+  // Update dinner (전체 메뉴 안 잘리고 다 표시)
   if (mealData.dinner && mealData.dinner.dishes.length > 0) {
-    const preview = mealData.dinner.dishes.map(x => x.name).slice(0, 2).join(', ');
-    dinnerMenuEl.textContent = preview;
-    dinnerMenuEl.title = `저녁: ${mealData.dinner.dishes.map(x => x.name).join(', ')} (${mealData.dinner.cal || ''})`;
-    if (dinnerCalEl) dinnerCalEl.textContent = mealData.dinner.cal ? mealData.dinner.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+    const fullDishes = mealData.dinner.dishes.map(x => x.name).join(', ');
+    dinnerMenuEl.textContent = fullDishes;
+    dinnerMenuEl.title = `저녁: ${fullDishes} (${mealData.dinner.cal || ''})`;
+    if (dinnerCalEl) dinnerCalEl.textContent = mealData.dinner.cal ? mealData.dinner.cal.replace(/\s*Kcal/i, '') + ' kcal' : '';
   } else {
     dinnerMenuEl.textContent = target.isWeekend ? '주말 급식 없음' : '급식 없음';
     dinnerMenuEl.title = target.isWeekend ? '주말에는 급식이 운영되지 않습니다.' : '오늘 저녁 급식 일정이 없습니다.';
