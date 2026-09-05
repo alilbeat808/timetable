@@ -1480,21 +1480,21 @@ function renderTeacherView(container) {
       const planNames = Object.values(OFFICIAL_ADMIN_DEPTS).map(m => m[1]);
       filteredTeachers = filteredTeachers.filter(t => planNames.includes(t.name));
     }
-
-    const baseTeachersForChosung = filteredTeachers;
-    var availableTeacherChosungs = new Set(baseTeachersForChosung.map(t => getChosung(t.name)));
-    if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
-      if (!availableTeacherChosungs.has(AppState.teacherChosungFilter)) {
-        AppState.teacherChosungFilter = 'all';
-      }
-    }
-
-    if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
-      filteredTeachers = filteredTeachers.filter(t => getChosung(t.name) === AppState.teacherChosungFilter);
-    }
   } else {
     // Both are 'none' initially: names are hidden to improve readability!
     filteredTeachers = [];
+  }
+
+  const baseTeachersForChosung = (isTypeSelected && filteredTeachers.length > 0) ? filteredTeachers : allTeachers;
+  const availableTeacherChosungs = new Set(baseTeachersForChosung.map(t => getChosung(t.name)));
+  if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
+    if (!availableTeacherChosungs.has(AppState.teacherChosungFilter)) {
+      AppState.teacherChosungFilter = 'all';
+    }
+  }
+
+  if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
+    filteredTeachers = filteredTeachers.filter(t => getChosung(t.name) === AppState.teacherChosungFilter);
   }
 
   // Universal Teacher Sorting (가나다순 / 부서별 부장-기획-가나다순)
