@@ -108654,7 +108654,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 7,
         "dayOfWeek": "화",
         "week": 6,
-        "event": "국외 현장체험학습 2\n(1학년 영어듣기)",
+        "event": "국외 현장체험학습 2\n1학년 영어듣기",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108666,7 +108666,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 8,
         "dayOfWeek": "수",
         "week": 6,
-        "event": "국외 현장체험학습 2\n(2학년 영어듣기)",
+        "event": "국외 현장체험학습 2\n2학년 영어듣기",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108678,7 +108678,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 9,
         "dayOfWeek": "목",
         "week": 6,
-        "event": "국외 현장체험학습 2\n(3학년 영어듣기)\n정서행동특성검사(1학년2반)\n청소년 미디어 이용습관 진단조사 1 <정보>",
+        "event": "국외 현장체험학습 2\n3학년 영어듣기\n정서행동특성검사(1학년2반)\n청소년 미디어 이용습관 진단조사 1 <정보>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109974,7 +109974,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 8,
         "dayOfWeek": "화",
         "week": 4,
-        "event": "(1학년 영어듣기)",
+        "event": "1학년 영어듣기",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109986,7 +109986,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 9,
         "dayOfWeek": "수",
         "week": 4,
-        "event": "(2학년 영어듣기)",
+        "event": "2학년 영어듣기",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109998,7 +109998,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 10,
         "dayOfWeek": "목",
         "week": 4,
-        "event": "(3학년 영어듣기)",
+        "event": "3학년 영어듣기",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
