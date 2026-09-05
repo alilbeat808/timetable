@@ -108413,7 +108413,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 10,
         "dayOfWeek": "화",
         "week": 2,
-        "event": "마음챙김의 날<생활>\n진로 심리 검사 1학년 (3,4교시)<진로>\n 2학년 학생,학부모 진학설명회(19:00 구암관)",
+        "event": "마음챙김의 날<생활>\n진로 심리 검사 1학년 (3,4교시)<진로>\n 2학년 학생,학부모 진학설명회(19:00 구암관)<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108425,7 +108425,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 11,
         "dayOfWeek": "수",
         "week": 2,
-        "event": "진로 심리 검사 1학년 (4교시)<진로>\n3학년 학생,학부모 진학설명회(19:00 구암관)",
+        "event": "진로 심리 검사 1학년 (4교시)<진로>\n3학년 학생,학부모 진학설명회(19:00 구암관)<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108533,7 +108533,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 24,
         "dayOfWeek": "화",
         "week": 4,
-        "event": "학평(1,2,3)\n친목회 회식\n학부모 상담주간",
+        "event": "학평(1,2,3)\n친목회 회식\n학부모 상담주간<진학>",
         "isHoliday": false,
         "isExam": true,
         "examTitle": "학력평가"
@@ -108545,7 +108545,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 25,
         "dayOfWeek": "수",
         "week": 4,
-        "event": "방과후수업 시작<인문사회>\n학부모 상담주간\n학업성적관리위원회회의 08:00, 회의실(평가)\n학업중단예방위원회 4교시 회의실<생활>",
+        "event": "방과후수업 시작<인문사회>\n학부모 상담주간<진학>\n학업성적관리위원회회의 08:00, 회의실(평가)\n학업중단예방위원회 4교시 회의실<생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108557,7 +108557,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 26,
         "dayOfWeek": "목",
         "week": 4,
-        "event": "학부모 상담주간",
+        "event": "학부모 상담주간<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108569,7 +108569,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 27,
         "dayOfWeek": "금",
         "week": 4,
-        "event": "총학생회 간부수련회\n1,2학년 장애인식개선교육(5,6교시, 각교실)\n1,2학년 자원봉사소양교육(7교시, 각교실)\n학부모 상담주간\n방송실 PC 교제에 따른 타종 오류 가능<방송부>\n학업성적관리위원회회의  08:00, 회의실(평가)\n학생맞춤통합지원 위원회 2교시 회의실 <생활>",
+        "event": "총학생회 간부수련회\n1,2학년 장애인식개선교육(5,6교시, 각교실)\n1,2학년 자원봉사소양교육(7교시, 각교실)\n학부모 상담주간<진학>\n방송실 PC 교제에 따른 타종 오류 가능<방송부>\n학업성적관리위원회회의  08:00, 회의실(평가)\n학생맞춤통합지원 위원회 2교시 회의실 <생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110045,7 +110045,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 16,
         "dayOfWeek": "수",
         "week": 5,
-        "event": "학부모 상담주간(9/16-9/22)\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
+        "event": "학부모 상담주간(9/16-9/22)<진학>\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110057,7 +110057,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 17,
         "dayOfWeek": "목",
         "week": 5,
-        "event": "1,2학년 진학설명회 예정\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
+        "event": "1,2학년 진학설명회 예정<진학>\n학부모 상담주간<진학>\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110069,7 +110069,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 18,
         "dayOfWeek": "금",
         "week": 5,
-        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
+        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간<진학>\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110081,7 +110081,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 21,
         "dayOfWeek": "월",
         "week": 6,
-        "event": "교무회의\n학부모 상담주간\n　딥페이크 성범죄예방교육(1교시)<생활>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
+        "event": "교무회의\n학부모 상담주간<진학>\n　딥페이크 성범죄예방교육(1교시)<생활>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110093,7 +110093,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 22,
         "dayOfWeek": "화",
         "week": 6,
-        "event": "학부모 상담주간\n전국체전 대비 배드민턴부 오후 운동<운동부>",
+        "event": "학부모 상담주간<진학>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
