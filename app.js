@@ -5587,6 +5587,16 @@ function updateLiveClock() {
     clock.textContent = formatTime(now);
   }
 
+  // 1-1. Auto-refresh meal menu if target meal date rolled over (e.g. crossing 19:00 or midnight)
+  if (AppState.lastMealTargetYmd && typeof getTodayMealTargetDate === 'function') {
+    const curTarget = getTodayMealTargetDate(now);
+    if (AppState.lastMealTargetYmd !== curTarget.ymd) {
+      if (typeof loadTodayMealInfo === 'function') {
+        loadTodayMealInfo();
+      }
+    }
+  }
+
   // 2. Real-time Live Tab Update
   if (AppState.currentTab === 'live' && AppState.data) {
     const todayIdx = now.getDay();
@@ -7628,17 +7638,43 @@ const NEIS_CONFIG = {
  * Calculates today's target date for meal service (auto-adjusts weekend to Friday/Monday)
  */
 function getTodayMealTargetDate(baseDate = new Date()) {
-  const dow = baseDate.getDay(); // 0=Sun, 6=Sat
-  let target = new Date(baseDate);
-  let isWeekend = false;
+  const dow = baseDate.getDay(); // 0: Sun, 1: Mon, 2: Tue, 3: Wed, 4: Thu, 5: Fri, 6: Sat
+  const hour = baseDate.getHours();
+  let daysToAdd = 0;
+  let isNextDay = false;
+  let isNextWeek = false;
 
-  if (dow === 6) { // Saturday -> check Friday
-    target.setDate(baseDate.getDate() - 1);
-    isWeekend = true;
-  } else if (dow === 0) { // Sunday -> check Friday
-    target.setDate(baseDate.getDate() - 2);
-    isWeekend = true;
+  if (dow === 5) {
+    // 금요일: 19시 이후에는 다음 월요일(+3일), 19시 이전에는 당일 금요일(+0일)
+    if (hour >= 19) {
+      daysToAdd = 3;
+      isNextWeek = true;
+      isNextDay = true;
+    } else {
+      daysToAdd = 0;
+    }
+  } else if (dow === 6) {
+    // 토요일: 주말 동안에는 다음 월요일(+2일)
+    daysToAdd = 2;
+    isNextWeek = true;
+    isNextDay = true;
+  } else if (dow === 0) {
+    // 일요일: 주말 동안에는 다음 월요일(+1일)
+    daysToAdd = 1;
+    isNextWeek = true;
+    isNextDay = true;
+  } else {
+    // 월요일 ~ 목요일: 19시 이후에는 다음날(+1일), 19시 이전에는 당일(+0일)
+    if (hour >= 19) {
+      daysToAdd = 1;
+      isNextDay = true;
+    } else {
+      daysToAdd = 0;
+    }
   }
+
+  const target = new Date(baseDate);
+  target.setDate(baseDate.getDate() + daysToAdd);
 
   const y = target.getFullYear();
   const m = String(target.getMonth() + 1).padStart(2, '0');
@@ -7650,10 +7686,14 @@ function getTodayMealTargetDate(baseDate = new Date()) {
   return {
     ymd: `${y}${m}${d}`,
     dateStr: `${y}-${m}-${d}`,
-    isWeekend,
+    isWeekend: false,
+    isNextDay,
+    isNextWeek,
+    daysToAdd,
     dow: target.getDay(),
     dowName,
-    dateLabel
+    dateLabel,
+    targetDate: target
   };
 }
 
@@ -7766,6 +7806,7 @@ async function loadTodayMealInfo(force = false) {
   const dinnerDateEl = document.getElementById('mealDinnerDate');
 
   const target = getTodayMealTargetDate();
+  AppState.lastMealTargetYmd = target.ymd;
   if (lunchDateEl) lunchDateEl.textContent = target.dateLabel;
   if (dinnerDateEl) dinnerDateEl.textContent = target.dateLabel;
 
@@ -7802,11 +7843,9 @@ async function loadTodayMealInfo(force = false) {
  * Open Meal Detail Modal with Date Navigation
  */
 async function openMealDetailModal(initialType = 'lunch', specificDateStr = null) {
-  let targetDate = specificDateStr ? new Date(specificDateStr + 'T00:00:00') : new Date();
-  if (!specificDateStr && (targetDate.getDay() === 0 || targetDate.getDay() === 6)) {
-    const diff = targetDate.getDay() === 6 ? -1 : -2;
-    targetDate.setDate(targetDate.getDate() + diff);
-  }
+  let targetDate = specificDateStr 
+    ? new Date(specificDateStr + 'T00:00:00') 
+    : (typeof getTodayMealTargetDate === 'function' ? getTodayMealTargetDate().targetDate : new Date());
 
   const y = targetDate.getFullYear();
   const m = targetDate.getMonth() + 1;
@@ -7960,7 +7999,7 @@ function closeMealDetailModal(e) {
 function stepMealDetailDate(step) {
   let cur = AppState.mealModalActiveDate ? new Date(AppState.mealModalActiveDate + 'T00:00:00') : new Date();
   if (step === 0) {
-    cur = new Date();
+    cur = typeof getTodayMealTargetDate === 'function' ? getTodayMealTargetDate().targetDate : new Date();
   } else {
     cur.setDate(cur.getDate() + step);
   }
