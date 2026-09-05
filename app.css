@@ -4471,41 +4471,52 @@ body {
 }
 
 .changche-grade-box {
-  padding: 0.42rem 0;
+  padding: 0.35rem 0;
   border-bottom: 1px dashed rgba(16, 185, 129, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 }
 
 .changche-grade-box:last-child {
   border-bottom: none;
-  padding-bottom: 0.1rem;
+  padding-bottom: 0.05rem;
 }
 
 .changche-grade-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .changche-grade-num {
-  font-size: 0.83rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
+.changche-activity-code {
+  font-size: 0.81rem;
+  font-weight: 700;
+  color: #047857;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+}
+
+[data-theme="dark"] .changche-activity-code {
+  color: #34d399;
+}
+
 .changche-teacher-tag {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #065f46;
   white-space: nowrap;
   word-break: keep-all;
   flex-shrink: 0;
-  padding: 0.12rem 0.45rem;
+  padding: 0.1rem 0.4rem;
   background: rgba(16, 185, 129, 0.14);
   border-radius: 4px;
   border: 1px solid rgba(16, 185, 129, 0.28);
