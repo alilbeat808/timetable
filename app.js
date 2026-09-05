@@ -6739,15 +6739,11 @@ function renderCalendarView(container) {
               </button>
             </div>
 
-            <!-- 지금 즉시 동기화 (주별 캘린더 옆으로 당김) -->
-            <button class="btn btn-primary btn-sm" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
-              🔄 지금 즉시 동기화
-            </button>
-            <!-- 시트 원본 열기 -->
+            <!-- 시트 원본 열기 (왼쪽으로 당김) -->
             <a class="btn btn-secondary btn-sm" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
               🔗 시트 원본 열기
             </a>
-            <!-- 인쇄 -->
+            <!-- 인쇄 (왼쪽으로 당김) -->
             <button class="btn btn-secondary btn-sm" onclick="window.print()" title="학사일정 인쇄">
               🖨️ 인쇄
             </button>
@@ -6830,6 +6826,9 @@ function renderCalendarYearView(cal) {
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span> 모의고사 / 수능</span>
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#f59e0b; border-radius:2px;"></span> 방학·개학·졸업식</span>
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6ee7b7; border:1px solid #10b981; border-radius:2px;"></span> 오늘</span>
+        <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" style="margin-left: 0.35rem;" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
+          🔄 지금 즉시 동기화
+        </button>
       </div>
     </div>
 
@@ -7026,6 +7025,9 @@ function renderCalendarMonthView(cal) {
         <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})">
           오늘 (${now.getMonth() + 1}월)로 이동
         </button>
+        <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
+          🔄 지금 즉시 동기화
+        </button>
       </div>
     </div>
 
@@ -7195,6 +7197,9 @@ function renderCalendarWeekView(cal) {
         <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarWeek(1)" title="다음 주차">다음 주 ▶</button>
         <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarWeek('2026-09-04')" title="현재 주차(9월 4일 주)로 이동">
           이번 주
+        </button>
+        <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
+          🔄 지금 즉시 동기화
         </button>
       </div>
 
