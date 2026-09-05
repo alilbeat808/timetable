@@ -7880,62 +7880,88 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
   const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   AppState.mealModalActiveDate = dateStr;
 
+  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dowName = dayNames[targetDate.getDay()];
+
   let modalElem = document.getElementById('calendarMealDetailModal');
+  const isAlreadyOpen = modalElem && modalElem.querySelector('.calendar-modal-backdrop');
+
   if (!modalElem) {
     modalElem = document.createElement('div');
     modalElem.id = 'calendarMealDetailModal';
     document.body.appendChild(modalElem);
   }
 
-  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
-  const dowName = dayNames[targetDate.getDay()];
+  if (isAlreadyOpen) {
+    // 이미 모달이 열려 있는 상태에서 날짜 이동 시: backdrop과 card를 다시 만들지 않고
+    // 날짜 텍스트와 본문 영역만 갱신하여 배경 깜빡임(애니메이션 재발동)을 완벽히 방지!
+    const curDateEl = modalElem.querySelector('.meal-modal-cur-date');
+    if (curDateEl) {
+      curDateEl.innerHTML = `📅 <strong>${y}년 ${m}월 ${d}일 (${dowName}요일)</strong>`;
+    }
+    const bodyEl = document.getElementById('mealModalBody');
+    if (bodyEl) {
+      bodyEl.innerHTML = `
+        <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted);">
+          ⏳ NEIS에서 ${m}월 ${d}일 급식 식단을 가져오는 중입니다...
+        </div>
+      `;
+    }
+  } else {
+    // 처음 모달을 열 때만 전체 모달 프레임(backdrop, card, header, date-bar, footer) 렌더링
+    modalElem.innerHTML = `
+      <div class="calendar-modal-backdrop" onclick="closeMealDetailModal(event)">
+        <div class="calendar-modal-card meal-modal-card" onclick="event.stopPropagation()">
+          <!-- Header -->
+          <div style="padding: 0.85rem 1.15rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface);">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 1.35rem;">🍱</span>
+              <div>
+                <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                  부산동고등학교 급식 식단
+                </h3>
+                <p style="font-size: 0.72rem; color: #10b981; font-weight: 700; margin: 0.1rem 0 0;">
+                  교육부 NEIS 개방포털 실시간 연동 (인증 완료)
+                </p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()" style="padding: 0.2rem 0.55rem; font-size: 0.8rem;">✕</button>
+          </div>
 
-  modalElem.innerHTML = `
-    <div class="calendar-modal-backdrop" onclick="closeMealDetailModal(event)">
-      <div class="calendar-modal-card meal-modal-card" onclick="event.stopPropagation()">
-        <!-- Header -->
-        <div style="padding: 0.85rem 1.15rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface);">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 1.35rem;">🍱</span>
-            <div>
-              <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
-                부산동고등학교 급식 식단
-              </h3>
-              <p style="font-size: 0.72rem; color: #10b981; font-weight: 700; margin: 0.1rem 0 0;">
-                교육부 NEIS 개방포털 실시간 연동 (인증 완료)
-              </p>
+          <!-- Date Navigation Bar -->
+          <div class="meal-modal-date-bar">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(-1)">◀ 이전 날</button>
+            <div class="meal-modal-cur-date">
+              📅 <strong>${y}년 ${m}월 ${d}일 (${dowName}요일)</strong>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(1)">다음 날 ▶</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="stepMealDetailDate(0)">오늘</button>
+          </div>
+
+          <!-- Meal Content Area -->
+          <div class="meal-modal-body" id="mealModalBody">
+            <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted);">
+              ⏳ NEIS에서 ${m}월 ${d}일 급식 식단을 가져오는 중입니다...
             </div>
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()" style="padding: 0.2rem 0.55rem; font-size: 0.8rem;">✕</button>
-        </div>
 
-        <!-- Date Navigation Bar -->
-        <div class="meal-modal-date-bar">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(-1)">◀ 이전 날</button>
-          <div class="meal-modal-cur-date">
-            📅 <strong>${y}년 ${m}월 ${d}일 (${dowName}요일)</strong>
+          <!-- Clean Footer (No Key Prompt) -->
+          <div class="meal-modal-footer" style="display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()">닫기</button>
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(1)">다음 날 ▶</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="stepMealDetailDate(0)">오늘</button>
-        </div>
-
-        <!-- Meal Content Area -->
-        <div class="meal-modal-body" id="mealModalBody">
-          <div style="text-align:center; padding: 2rem; color: var(--text-muted);">
-            ⏳ NEIS에서 ${m}월 ${d}일 급식 식단을 가져오는 중입니다...
-          </div>
-        </div>
-
-        <!-- Clean Footer (No Key Prompt) -->
-        <div class="meal-modal-footer" style="display: flex; justify-content: flex-end;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()">닫기</button>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 
   // Fetch and update body
   const mealData = await fetchNeisMeal(dateStr);
+
+  // 날짜 이동 중 빠른 연타 시 응답 경합(Race Condition) 방지
+  if (AppState.mealModalActiveDate !== dateStr) {
+    return;
+  }
+
   const bodyEl = document.getElementById('mealModalBody');
   if (!bodyEl) return;
 
