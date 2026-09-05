@@ -620,7 +620,7 @@ function searchCalendarEvents(query) {
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   cal.calendarDays.forEach(d => {
-    const rawEvent = d.event || '';
+    const rawEvent = cleanCalendarEventText(d.event || '');
     const isHoliday = d.isHoliday;
     const lines = rawEvent.split('\n').map(l => l.trim()).filter(Boolean);
 
@@ -6115,10 +6115,164 @@ function parseHmlClassTablesInBrowser(tables) {
    Academic Calendar & Friday Changche Dynamic System (학사일정 & 금요일 창체 시스템)
    ========================================================================== */
 
+
+// ==========================================================================
+// 학사일정 행사 텍스트 띄어쓰기 및 맞춤법, 학년 표기(1,2,3년 -> 1,2,3학년) 정제 함수
+// ==========================================================================
+function cleanCalendarEventText(text) {
+  if (!text || typeof text !== 'string') return text;
+
+  return text.split('\n').map(line => {
+    let s = line.trim();
+    if (!s) return '';
+
+    // 전각 공백 및 다중 공백 단일화
+    s = s.replace(/[\u3000\t]+/g, ' ').replace(/[ ]{2,}/g, ' ');
+
+    // 1. 학교 현장 공통 오타 교정
+    s = s.replace(/정검/g, '점검');
+    s = s.replace(/현혈/g, '헌혈');
+    s = s.replace(/마음챙김이 날/g, '마음챙김의 날');
+
+    // 2. 학년 표기 교정: 1년, 2년, 3년 -> 1학년, 2학년, 3학년
+    s = s.replace(/(\()?([123])년\s*([가-힣a-zA-Z])/g, '$1$2학년 $3');
+    s = s.replace(/1\s*,\s*2\s*,\s*3년\s*([가-힣a-zA-Z])/g, '1, 2, 3학년 $1');
+    s = s.replace(/1\s*,\s*2년\s*([가-힣a-zA-Z])/g, '1, 2학년 $1');
+    s = s.replace(/2\s*,\s*3년\s*([가-힣a-zA-Z])/g, '2, 3학년 $1');
+    s = s.replace(/1\s*,\s*2\s*,\s*3년(?=[\s,\)\]>]|$)/g, '1, 2, 3학년');
+    s = s.replace(/1\s*,\s*2년(?=[\s,\)\]>]|$)/g, '1, 2학년');
+    s = s.replace(/2\s*,\s*3년(?=[\s,\)\]>]|$)/g, '2, 3학년');
+    s = s.replace(/([123])년(?=[,\)\]>\s]|$)(?![차간도])/g, '$1학년');
+
+    s = s.replace(/문화체험\(1,2\)/g, '문화체험 (1, 2학년)');
+    s = s.replace(/메이커체험\(1,2\)/g, '메이커 체험 (1, 2학년)');
+
+    // 3. 콤마 뒤 공백 확보
+    s = s.replace(/,([^\s0-9\(\)])/g, ', $1');
+
+    // 4. 주요 학교 행사 키워드 띄어쓰기 교정 사전
+    const replacements = [
+      [/1회고사원안마감/g, '1회고사 원안 마감'],
+      [/시험범위공지/g, '시험범위 공지'],
+      [/시험범위입력마감/g, '시험범위 입력 마감'],
+      [/시험범위취합마감/g, '시험범위 취합 마감'],
+      [/원안마감/g, '원안 마감'],
+      [/원안봉인/g, '원안 봉인'],
+      [/원안인쇄/g, '원안 인쇄'],
+      [/원안작성연수/g, '원안 작성 연수'],
+      [/원안최종마감/g, '원안 최종 마감'],
+      [/추정분할공지/g, '추정 분할 공지'],
+      [/고사감독연수/g, '고사 감독 연수'],
+      [/고사이동연습/g, '고사 이동 연습'],
+      [/수행평가최종마감/g, '수행평가 최종 마감'],
+      [/기출문제공개/g, '기출문제 공개'],
+      [/2학기교수학습및평가계획제출마감/g, '2학기 교수학습 및 평가계획 제출 마감'],
+      [/학기말성적교과확인마감/g, '학기말 성적 교과 확인 마감'],
+      [/학기말성적\s*최종\s*확인마감/g, '학기말 성적 최종 확인 마감'],
+      [/학기말성적최종확인마감/g, '학기말 성적 최종 확인 마감'],
+      [/성적이의신청기간/g, '성적 이의신청 기간'],
+      [/성적최종확인/g, '성적 최종 확인'],
+      [/성적통지표출력공지/g, '성적 통지표 출력 공지'],
+      [/성적통지표출력안내/g, '성적 통지표 출력 안내'],
+      [/성적확인완료/g, '성적 확인 완료'],
+      [/맞춤형학업성취도자율평가/g, '맞춤형 학업성취도 자율평가'],
+      [/내부평가위원단구성/g, '내부 평가위원단 구성'],
+      [/평가계획작성/g, '평가계획 작성'],
+      [/([0-9]+)월위기관리위원회/g, '$1월 위기관리위원회'],
+      [/위기관리위원회\s*([0-9]+교시)/g, '위기관리위원회 $1'],
+      [/위기관리위원회([0-9]+:[0-9]+)/g, '위기관리위원회 $1'],
+      [/학업성적관리위원회의/g, '학업성적관리위원회 회의'],
+      [/학업성적관리위원회회의/g, '학업성적관리위원회 회의'],
+      [/학교홍보회의/g, '학교 홍보 회의'],
+      [/방과후회의소위원회/g, '방과후 회의 소위원회'],
+      [/학부모대의원회/g, '학부모 대의원회'],
+      [/임시교무회의/g, '임시 교무회의'],
+      [/교육환경\s*관련회의/g, '교육환경 관련 회의'],
+      [/자원봉사소양교육/g, '자원봉사 소양 교육'],
+      [/장애인식개선교육/g, '장애인식 개선 교육'],
+      [/학생도박예방교육/g, '학생 도박 예방 교육'],
+      [/학교폭력예방교육/g, '학교폭력 예방 교육'],
+      [/학교폭력\s*예방\s*교육(?=[0-9])/g, '학교폭력 예방 교육 '],
+      [/심폐소생술교육/g, '심폐소생술 교육'],
+      [/아동학대예방교육/g, '아동학대 예방 교육'],
+      [/양성평등교육/g, '양성평등 교육'],
+      [/재난안전교육/g, '재난안전 교육'],
+      [/화재안전교육/g, '화재안전 교육'],
+      [/생활안전교육/g, '생활안전 교육'],
+      [/교통안전교육/g, '교통안전 교육'],
+      [/약물오남용예방교육/g, '약물 오남용 예방 교육'],
+      [/성범죄예방교육/g, '성범죄 예방 교육'],
+      [/소양교육/g, '소양 교육'],
+      [/법정의무연수/g, '법정 의무 연수'],
+      [/전문적학습공동체/g, '전문적 학습 공동체'],
+      [/수업나눔/g, '수업 나눔'],
+      [/생명존중교육주간/g, '생명존중교육 주간'],
+      [/행복한등굣길행사/g, '행복한 등굣길 행사'],
+      [/흡연예방캠페인/g, '흡연 예방 캠페인'],
+      [/미디어이용습관/g, '미디어 이용습관'],
+      [/BeAT활용찾아가는연수/g, 'BeAT 활용 찾아가는 연수'],
+      [/고시외과목수강/g, '고시 외 과목 수강'],
+      [/교과목선택\s*캠프/g, '교과목 선택 캠프'],
+      [/사전검사/g, '사전 검사'],
+      [/본선진출팀/g, '본선 진출팀'],
+      [/생기부\s*기재\s*최종\s*완료/g, '생기부 기재 최종 완료'],
+      [/생기부\s*작성\s*집중\s*기간/g, '생기부 작성 집중 기간'],
+      [/학부모대상공개수업/g, '학부모 대상 공개수업'],
+      [/진로버스킹\s*준비/g, '진로버스킹 준비'],
+      [/진로비전플러스\s*준비/g, '진로비전플러스 준비'],
+      [/진로페스티벌\s*준비/g, '진로 페스티벌 준비'],
+      [/진로페스티벌/g, '진로 페스티벌'],
+      [/진로요구분석조사/g, '진로 요구분석 조사'],
+      [/교육과정설명회/g, '교육과정 설명회'],
+      [/입시설명회/g, '입시 설명회'],
+      [/진학설명회/g, '진학 설명회'],
+      [/대입수시전형/g, '대입 수시전형'],
+      [/추석연휴/g, '추석 연휴'],
+      [/급식공개의 날/g, '급식 공개의 날'],
+      [/심리검사해설/g, '심리검사 해설'],
+      [/방역실시/g, '방역 실시'],
+      [/메이커체험/g, '메이커 체험'],
+      [/졸업생진로특강/g, '졸업생 진로 특강'],
+      [/최소성취수준보장지도관련/g, '최소성취수준 보장지도 관련'],
+      [/학급담임임장/g, '학급담임 임장'],
+      [/교과담임임장/g, '교과담임 임장'],
+      [/각교실/g, '각 교실'],
+      [/각\s*교실/g, '각 교실']
+    ];
+
+    for (const [pattern, repl] of replacements) {
+      s = s.replace(pattern, repl);
+    }
+
+    s = s.replace(/<\s*([가-힣]+)\s*>/g, '<$1>');
+    s = s.replace(/([^\s<])<([가-힣]+)>/g, '$1 <$2>');
+    s = s.replace(/([가-힣0-9])\(([0-9]+교시)/g, '$1 ($2');
+    s = s.replace(/\(\s+([0-9]+)/g, '($1');
+
+    return s.trim();
+  }).join('\n');
+}
+
+function ensureCalendarCleaned(cal) {
+  if (!cal || cal._cleaned) return cal;
+  if (Array.isArray(cal.calendarDays)) {
+    cal.calendarDays.forEach(d => {
+      if (d.event) d.event = cleanCalendarEventText(d.event);
+    });
+  }
+  if (Array.isArray(cal.fridaySchedule)) {
+    cal.fridaySchedule.forEach(f => {
+      if (f.event) f.event = cleanCalendarEventText(f.event);
+    });
+  }
+  cal._cleaned = true;
+  return cal;
+}
+
 function getAcademicCalendar() {
-  if (AppState.academicCalendar) return AppState.academicCalendar;
+  if (AppState.academicCalendar) return ensureCalendarCleaned(AppState.academicCalendar);
   if (window.SCHOOL_TIMETABLE_DATA && window.SCHOOL_TIMETABLE_DATA.academicCalendar) {
-    AppState.academicCalendar = window.SCHOOL_TIMETABLE_DATA.academicCalendar;
+    AppState.academicCalendar = ensureCalendarCleaned(window.SCHOOL_TIMETABLE_DATA.academicCalendar);
     return AppState.academicCalendar;
   }
   return null;
@@ -6250,7 +6404,7 @@ function getDepartmentStyleInfo(deptName) {
 }
 
 function formatEventLineWithDeptBadges(line) {
-  let text = line;
+  let text = cleanCalendarEventText(line);
   const badges = [];
 
   // 1. Match angle brackets <부서>
@@ -6358,7 +6512,7 @@ function parseGoogleSheetCalendarCSV(csvText) {
       const dayStr = r[wd.dayIdx]?.trim();
       if (dayStr && /^\d+$/.test(dayStr)) {
         const dayNum = parseInt(dayStr);
-        const eventRaw = r[wd.eventIdx]?.trim() || '';
+        const eventRaw = cleanCalendarEventText(r[wd.eventIdx]?.trim() || '');
 
         let actualMonth = currentMonth;
         let actualYear = (actualMonth >= 3) ? 2026 : 2027;
@@ -6440,7 +6594,7 @@ function parseGoogleSheetCalendarCSV(csvText) {
         actualYear = 2027;
       }
       const dateStr = `${actualYear}-${String(actualMonth).padStart(2, '0')}-${String(friDay).padStart(2, '0')}`;
-      const friEvent = r[36]?.trim() || '';
+      const friEvent = cleanCalendarEventText(r[36]?.trim() || '');
 
       if (c1.some(x => x && x !== '5' && x !== '1학년')) {
         fridaySchedule.push({
@@ -6992,6 +7146,9 @@ function renderCalendarYearView(cal) {
 
 // 교원 회의(정례/임시 교무회의, 전문적 학습 공동체, 교과협의회, 다모임 등) 및 주요 학사 의식(방학식, 개학식, 졸업식 등) 뱃지 추출 공통 함수
 function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
+  if (rawEventText && typeof rawEventText === 'string') {
+    rawEventText = cleanCalendarEventText(rawEventText);
+  }
   if (!rawEventText || isHoliday || isExam) {
     return {
       meetingBadges: [],
