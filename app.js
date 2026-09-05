@@ -6527,7 +6527,7 @@ function renderCalendarYearView(cal) {
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#dc2626; border-radius:2px;"></span> 공휴일</span>
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#7c3aed; border-radius:2px;"></span> 1·2회고사</span>
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span> 모의고사 / 수능</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#ea580c; border-radius:2px;"></span> 오늘</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6ee7b7; border:1px solid #10b981; border-radius:2px;"></span> 오늘</span>
       </div>
     </div>
 
@@ -6552,7 +6552,7 @@ function renderCalendarYearView(cal) {
           <div class="mini-month-card ${isCurMonth ? 'is-current-month' : ''}" onclick="selectCalendarMonth(${item.y}, ${item.m})">
             <div class="mini-month-header">
               <span>${item.y}년 ${item.label}</span>
-              ${isCurMonth ? '<span class="chip-badge" style="background:#ea580c; color:#fff; font-size:0.68rem;">이번 달</span>' : ''}
+              ${isCurMonth ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.68rem;">이번 달</span>' : ''}
             </div>
 
             <div class="mini-month-grid">
@@ -6750,7 +6750,7 @@ function renderCalendarMonthView(cal) {
                 </div>
               ` : ''}
             </div>
-            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:#ea580c; flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
+            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:#059669; flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
           </div>
 
           <div class="day-events-list">
@@ -6909,7 +6909,7 @@ function renderCalendarWeekView(cal) {
                   </div>
                 ` : ''}
               </div>
-              ${isToday ? '<span class="chip-badge" style="background:#ea580c; color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
+              ${isToday ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
             </div>
 
             <div class="week-day-body">

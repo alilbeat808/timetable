@@ -4132,16 +4132,18 @@ body {
 }
 
 .mini-day-cell.is-today {
-  background: #ea580c !important;
-  color: #ffffff !important;
+  background: #a7f3d0 !important;
+  color: #064e3b !important;
   font-weight: 800;
-  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.4);
+  border: 1.5px solid #10b981 !important;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.35);
 }
 
 [data-theme="dark"] .mini-day-cell.is-today {
-  background: #f97316 !important;
-  color: #ffffff !important;
-  box-shadow: 0 1px 4px rgba(249, 115, 22, 0.5);
+  background: rgba(16, 185, 129, 0.35) !important;
+  color: #6ee7b7 !important;
+  border: 1.5px solid #34d399 !important;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.4);
 }
 
 .mini-day-cell.other-month {
@@ -4263,8 +4265,8 @@ body {
 }
 
 .month-day-cell.is-today {
-  background: rgba(234, 88, 12, 0.05);
-  border: 2px solid #ea580c;
+  background: rgba(16, 185, 129, 0.06);
+  border: 2px solid #10b981;
 }
 
 .month-day-cell.is-holiday {
@@ -4294,7 +4296,7 @@ body {
 }
 
 .month-day-cell.is-today .day-number {
-  background: #ea580c;
+  background: #10b981;
   color: #ffffff;
   width: 22px;
   height: 22px;
@@ -4403,8 +4405,8 @@ body {
 }
 
 .week-day-col.is-today {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
 }
 
 .week-day-header {
