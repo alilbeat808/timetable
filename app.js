@@ -6774,8 +6774,7 @@ function renderCalendarWeekView(cal) {
                 </div>
                 ${mondayMeeting ? `
                   <span class="monday-meeting-badge" title="매주 월요일 1교시 교원 정례 회의">
-                    <span class="monday-meeting-period">1교시</span>
-                    <span class="monday-meeting-name">${escapeHtml(mondayMeeting)}</span>
+                    ${escapeHtml(mondayMeeting)}
                   </span>
                 ` : ''}
               </div>
@@ -6989,8 +6988,7 @@ function openCalendarDayDetailModal(dateStr) {
                 <span>${y}년 ${m}월 ${d}일 (${dowName}요일)</span>
                 ${mondayMeeting ? `
                   <span class="monday-meeting-badge" title="매주 월요일 1교시 교원 정례 회의">
-                    <span class="monday-meeting-period">1교시</span>
-                    <span class="monday-meeting-name">${escapeHtml(mondayMeeting)}</span>
+                    ${escapeHtml(mondayMeeting)}
                   </span>
                 ` : ''}
               </h3>
@@ -7008,7 +7006,7 @@ function openCalendarDayDetailModal(dateStr) {
           ` : ''}
 
           ${mondayMeeting ? `
-            <div style="display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.7rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
               <div style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-size: 1.2rem;">🏢</span>
                 <div>
@@ -7016,7 +7014,6 @@ function openCalendarDayDetailModal(dateStr) {
                   <div style="font-size: 0.98rem; font-weight: 700; color: #1e40af;">${escapeHtml(mondayMeeting)}</div>
                 </div>
               </div>
-              <span class="chip-badge" style="background: #2563eb; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.55rem;">1교시</span>
             </div>
           ` : ''}
 
