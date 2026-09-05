@@ -1481,6 +1481,14 @@ function renderTeacherView(container) {
       filteredTeachers = filteredTeachers.filter(t => planNames.includes(t.name));
     }
 
+    const baseTeachersForChosung = filteredTeachers;
+    var availableTeacherChosungs = new Set(baseTeachersForChosung.map(t => getChosung(t.name)));
+    if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
+      if (!availableTeacherChosungs.has(AppState.teacherChosungFilter)) {
+        AppState.teacherChosungFilter = 'all';
+      }
+    }
+
     if (AppState.teacherChosungFilter && AppState.teacherChosungFilter !== 'all' && AppState.teacherChosungFilter !== 'none') {
       filteredTeachers = filteredTeachers.filter(t => getChosung(t.name) === AppState.teacherChosungFilter);
     }
@@ -1608,9 +1616,9 @@ function renderTeacherView(container) {
             `).join('')}
           </div>
 
-          <!-- Chosung Filter Bar -->
+          <!-- Chosung Filter Bar (해당 초성의 교사가 없는 경우 숨김) -->
           <div class="chosung-filter-bar">
-            ${CHOSUNG_LIST.map(ch => `
+            ${CHOSUNG_LIST.filter(ch => ch === 'all' || availableTeacherChosungs.has(ch)).map(ch => `
               <button class="chosung-btn ${AppState.teacherChosungFilter === ch ? 'active' : ''}" onclick="setTeacherChosung('${ch}')">
                 ${ch === 'all' ? '전체' : ch}
               </button>
@@ -3263,6 +3271,37 @@ function renderStudentView(container) {
 
   const filtered = getFilteredStudentsList();
 
+  // 초성 필터 적용 전 현재 학년/학반/검색어 기준 대상 학생 목록
+  let baseStudentsForChosung = allStudents;
+  if (AppState.studentSelectedGrade !== 'all') {
+    const g = parseInt(AppState.studentSelectedGrade, 10);
+    baseStudentsForChosung = baseStudentsForChosung.filter(s => s.grade === g);
+  }
+  if (AppState.studentSelectedClass !== 'all') {
+    const c = parseInt(AppState.studentSelectedClass, 10);
+    baseStudentsForChosung = baseStudentsForChosung.filter(s => s.classNum === c);
+  }
+  if (AppState.studentSearchQuery) {
+    const sq = AppState.studentSearchQuery.trim().toLowerCase();
+    baseStudentsForChosung = baseStudentsForChosung.filter(s => {
+      const chosung = getChosung(s.name);
+      const fullChosung = getFullChosung(s.name);
+      return s.name.toLowerCase().includes(sq) ||
+             chosung.includes(sq) ||
+             fullChosung.includes(sq) ||
+             s.className.toLowerCase().includes(sq) ||
+             `${s.grade}-${s.classNum}`.includes(sq) ||
+             `${s.classNum}반`.includes(sq) ||
+             `${s.studentNum}번`.includes(sq);
+    });
+  }
+  const availableStudentChosungs = new Set(baseStudentsForChosung.map(s => getChosung(s.name)));
+  if (AppState.studentChosung && AppState.studentChosung !== 'all' && AppState.studentChosung !== 'none') {
+    if (!availableStudentChosungs.has(AppState.studentChosung)) {
+      AppState.studentChosung = 'all';
+    }
+  }
+
   // Name duplicate counts map
   const nameToCount = {};
   allStudents.forEach(s => { nameToCount[s.name] = (nameToCount[s.name] || 0) + 1; });
@@ -3453,9 +3492,9 @@ function renderStudentView(container) {
           </div>
         </div>
 
-        <!-- Chosung Fast Filter Buttons -->
+        <!-- Chosung Fast Filter Buttons (해당 초성의 학생이 없는 경우 숨김) -->
         <div class="chosung-filter" style="margin-top: 0.5rem;">
-          ${CHOSUNG_LIST.map(ch => `
+          ${CHOSUNG_LIST.filter(ch => ch === 'all' || availableStudentChosungs.has(ch)).map(ch => `
             <button type="button" class="chosung-btn ${AppState.studentChosung === ch ? 'active' : ''}" onclick="setStudentChosung('${ch}')">
               ${ch === 'all' ? '전체' : ch}
             </button>
@@ -6510,7 +6549,29 @@ function highlightEventMeta(text) {
   });
 
   // 2. 학년: 1, 2, 3학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년, 전학년
+  // 교사별 시간표 업무부서(1학년부, 2학년부, 3학년부)의 고유 스타일을 가져와서 적용 (아이콘 제외)
   s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1학년|2학년|3학년|전학년)/g, m => {
+    if (m === '1학년') {
+      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span>`;
+    }
+    if (m === '2학년') {
+      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
+    }
+    if (m === '3학년') {
+      return `<span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+    }
+    if (m.includes('1') && m.includes('2') && m.includes('3')) {
+      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+    }
+    if (m.includes('1') && m.includes('2')) {
+      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
+    }
+    if (m.includes('2') && m.includes('3')) {
+      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+    }
+    if (m === '전학년') {
+      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+    }
     return `<span class="event-meta-tag event-meta-grade">${m}</span>`;
   });
 
@@ -6682,9 +6743,18 @@ function formatEventLineWithDeptBadges(line) {
   }
 
   text = text.trim();
+
+  // 본문 텍스트 내에 이미 특정 학년이 명시되어 스타일 태그로 표기된 경우, 후미 부서 뱃지 중복 부착 방지
+  const finalBadges = badges.filter(b => {
+    if (b.name === '1학년' && /1학년/.test(text)) return false;
+    if (b.name === '2학년' && /2학년/.test(text)) return false;
+    if (b.name === '3학년' && /3학년/.test(text)) return false;
+    return true;
+  });
+
   const escapedText = escapeHtml(text);
   const highlightedText = highlightEventMeta(escapedText);
-  const badgeHtml = badges.map(b => 
+  const badgeHtml = finalBadges.map(b => 
     `<span class="calendar-dept-badge ${escapeHtml(b.className)}" data-dept="${escapeHtml(b.name)}">${escapeHtml(b.name)}</span>`
   ).join('');
 

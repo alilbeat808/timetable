@@ -4991,6 +4991,49 @@ body {
 }
 
 /* 2. 특정 학년 (바이올렛/퍼플 톤) */
+
+.event-meta-grade-1, .badge-admin-1학년 {
+  background: #f8fafc !important;
+  color: #3f6212 !important;
+  border: 1px solid #d9f99d !important;
+  border-left: 3.5px solid #65a30d !important;
+}
+
+.event-meta-grade-2, .badge-admin-2학년 {
+  background: #f8fafc !important;
+  color: #9d174d !important;
+  border: 1px solid #fbcfe8 !important;
+  border-left: 3.5px solid #db2777 !important;
+}
+
+.event-meta-grade-3, .badge-admin-3학년 {
+  background: #f8fafc !important;
+  color: #854d0e !important;
+  border: 1px solid #fef08a !important;
+  border-left: 3.5px solid #ca8a04 !important;
+}
+
+[data-theme="dark"] .event-meta-grade-1, [data-theme="dark"] .badge-admin-1학년 {
+  background: #0f172a !important;
+  color: #bef264 !important;
+  border: 1px solid rgba(132, 204, 22, 0.4) !important;
+  border-left: 3.5px solid #84cc16 !important;
+}
+
+[data-theme="dark"] .event-meta-grade-2, [data-theme="dark"] .badge-admin-2학년 {
+  background: #0f172a !important;
+  color: #f472b6 !important;
+  border: 1px solid rgba(236, 72, 153, 0.4) !important;
+  border-left: 3.5px solid #ec4899 !important;
+}
+
+[data-theme="dark"] .event-meta-grade-3, [data-theme="dark"] .badge-admin-3학년 {
+  background: #0f172a !important;
+  color: #fde047 !important;
+  border: 1px solid rgba(234, 179, 8, 0.4) !important;
+  border-left: 3.5px solid #eab308 !important;
+}
+
 .event-meta-grade {
   background: rgba(124, 58, 237, 0.09);
   color: #6d28d9;
