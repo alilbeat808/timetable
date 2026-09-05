@@ -108629,7 +108629,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 3,
         "dayOfWeek": "금",
         "week": 5,
-        "event": "2,3학년 담임  바이브온 연수(7교시, 진학부)\n3학년 생기부 사진촬영 오전(교사 사진도 가능)\n동아리활동\n시험범위입력마감(평가)",
+        "event": "2,3학년 담임  바이브온 연수(7교시, 진학부)\n3학년 생기부 사진촬영 오전(교사 사진도 가능)\n동아리활동<인문사회>\n시험범위입력마감(평가)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109049,7 +109049,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 22,
         "dayOfWeek": "금",
         "week": 12,
-        "event": "동아리활동\n부산과학전람회 발표대회 참가(6팀 15명)<과중>\n 5월위기관리위원회 1교시<생활>",
+        "event": "동아리활동<인문사회>\n부산과학전람회 발표대회 참가(6팀 15명)<과중>\n 5월위기관리위원회 1교시<생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109169,7 +109169,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 5,
         "dayOfWeek": "금",
         "week": 14,
-        "event": "동아리활동\n중대재해처벌법 연수 14:50 동맥꿈터(관리자, 교무, 보건, 행정실, 영양사)",
+        "event": "동아리활동<인문사회>\n중대재해처벌법 연수 14:50 동맥꿈터(관리자, 교무, 보건, 행정실, 영양사)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109469,7 +109469,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 10,
         "dayOfWeek": "금",
         "week": 19,
-        "event": "마음챙김의 날<생활>\n3학년 수능원서용 증명사진 촬영(1~4교시)\n동아리 사진 촬영(점심~7교시)\n동아리활동\n'한림원 석학과의 만남' 강연14시-16시<과중>",
+        "event": "마음챙김의 날<생활>\n3학년 수능원서용 증명사진 촬영(1~4교시)\n동아리 사진 촬영(점심~7교시)\n동아리활동<인문사회>\n'한림원 석학과의 만남' 강연14시-16시<과중>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109517,7 +109517,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 16,
         "dayOfWeek": "목",
         "week": 20,
-        "event": "(자율교육과정)\n교과목선택  캠프 (1학년) (1~4교시)\n\"헌혈의 날\" 장소: 홈베이스, 동맥꿈터(2곳)\n 7월위기관리위원회 3교시<생활>해당교사\n동아리활동(5,6,7교시)\n학기말성적최종확인마감(평가)\n고신대학교 입시설명회(3학년)(6~7교시)",
+        "event": "(자율교육과정)\n교과목선택  캠프 (1학년) (1~4교시)\n\"헌혈의 날\" 장소: 홈베이스, 동맥꿈터(2곳)\n 7월위기관리위원회 3교시<생활>해당교사\n동아리활동(5,6,7교시)<인문사회>\n학기말성적최종확인마감(평가)\n고신대학교 입시설명회(3학년)(6~7교시)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109949,7 +109949,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 4,
         "dayOfWeek": "금",
         "week": 3,
-        "event": "동아리활동\n동의대학교 입시설명회(3학년)(5교시)",
+        "event": "동아리활동<인문사회>\n동의대학교 입시설명회(3학년)(5교시)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110141,7 +110141,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 28,
         "dayOfWeek": "월",
         "week": 7,
-        "event": "배드민턴 전국체전 출정 인사(임시 교무회의)<운동부>\n전문적 학습 공동체\n원안마감\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
+        "event": "배드민턴 전국체전 출정 인사(임시 교무회의)<운동부>\n전문적 학습 공동체\n원안마감(평가)\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110189,7 +110189,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 2,
         "dayOfWeek": "금",
         "week": 7,
-        "event": "동아리활동\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
+        "event": "동아리활동<인문사회>\n원안최종마감(16:00)(평가)\n고사이동연습(5,6교시)(평가)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110261,7 +110261,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 12,
         "dayOfWeek": "월",
         "week": 9,
-        "event": "교무회의\n고사감독연수(1교시)\n생명존중교육주간(~16일)<생활>",
+        "event": "교무회의\n고사감독연수(1교시)(평가)\n생명존중교육주간(~16일)<생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110333,7 +110333,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 20,
         "dayOfWeek": "화",
         "week": 10,
-        "event": "학평(1,2,3)\n성적이의신청기간(~26일)",
+        "event": "학평(1,2,3)\n성적이의신청기간(~26일)(평가)",
         "isHoliday": false,
         "isExam": true,
         "examTitle": "학력평가"
@@ -110429,7 +110429,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 30,
         "dayOfWeek": "금",
         "week": 11,
-        "event": "오픈랩(과중)\n동아리활동",
+        "event": "오픈랩(과중)\n동아리활동<인문사회>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110609,7 +110609,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 20,
         "dayOfWeek": "금",
         "week": 14,
-        "event": "동아리활동",
+        "event": "동아리활동<인문사회>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110801,7 +110801,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 14,
         "dayOfWeek": "월",
         "week": 18,
-        "event": "교무회의\n성적이의신청기간(~18일)\n학교운영위원회<행정실>",
+        "event": "교무회의\n성적이의신청기간(~18일)(평가)\n학교운영위원회<행정실>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""

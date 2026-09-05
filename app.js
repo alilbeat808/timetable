@@ -5891,8 +5891,8 @@ function formatEventLineWithDeptBadges(line) {
     badges.push(getDepartmentStyleInfo('운동부'));
   }
 
-  // Auto-tag '평가' for 수업나눔, 원안 작성 연수, 시험범위 공지, 학부모대상 공개수업
-  const isEvaluation = /수업\s*나눔|원안\s*작성\s*연수|시험범위\s*공지|학부모\s*대상\s*공개\s*수업/.test(text);
+  // Auto-tag '평가' for 원안, 고사감독, 성적이의, 수업나눔, 시험범위 공지, 학부모대상 공개수업
+  const isEvaluation = /원안|고사\s*감독|성적\s*이의|수업\s*나눔|시험범위\s*공지|학부모\s*대상\s*공개\s*수업/.test(text);
   if (isEvaluation && !badges.some(b => b.name === '평가')) {
     badges.push(getDepartmentStyleInfo('평가'));
   }
@@ -5909,8 +5909,8 @@ function formatEventLineWithDeptBadges(line) {
     badges.push(getDepartmentStyleInfo('진학'));
   }
 
-  // Auto-tag '인문사회' for 방과후-related events if not already tagged
-  if (/방과\s*후/.test(text) && !badges.some(b => b.name === '인문사회' || b.name === '인문')) {
+  // Auto-tag '인문사회' for 방과후, 동아리활동 related events if not already tagged
+  if (/(?:방과\s*후|동아리\s*활동)/.test(text) && !badges.some(b => b.name === '인문사회' || b.name === '인문')) {
     badges.push(getDepartmentStyleInfo('인문사회'));
   }
 
