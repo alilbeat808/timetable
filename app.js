@@ -5829,7 +5829,9 @@ const ACADEMIC_KNOWN_DEPTS = {
   '도서관': { bg: '#fef9c3', text: '#854d0e', border: '#fde047' },
   '방송부': { bg: '#fae8ff', text: '#a21caf', border: '#f0abfc' },
   '1학년부': { bg: '#dbeafe', text: '#1d4ed8', border: '#93c5fd' },
+  '1학년': { bg: '#dbeafe', text: '#1d4ed8', border: '#93c5fd' },
   '2학년부': { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
+  '2학년': { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
   '3학년부': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
   '3학년': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
   '교장': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
@@ -5870,8 +5872,8 @@ function formatEventLineWithDeptBadges(line) {
     return '';
   });
 
-  // Match parenthesized known department keywords (평가, 행정실, etc.)
-  text = text.replace(/\((평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|연구|정보|도서관|방송부|운동부)\)/g, (m, g1) => {
+  // Match parenthesized known department keywords (평가, 3학년, 행정실, etc.)
+  text = text.replace(/\s*\(\s*(평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부)\s*\)/g, (m, g1) => {
     badges.push(getDepartmentStyleInfo(g1));
     return '';
   });
