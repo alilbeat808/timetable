@@ -5272,3 +5272,102 @@ body {
   line-height: 1 !important;
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   KMA Jeonpo-dong Weather Badges (기상청 부산진구 전포동 날씨 & 강수 예보)
+   ========================================================================== */
+.weather-day-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.3rem;
+  margin-left: 0.15rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: default;
+  transition: all var(--transition-fast);
+}
+
+.weather-day-badge:hover {
+  background: var(--bg-surface);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.weather-day-badge.rain-alert {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.08);
+}
+
+.weather-day-badge.rain-alert:hover {
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .weather-day-badge.rain-alert {
+  background: rgba(30, 58, 138, 0.35);
+  color: #bfdbfe;
+  border-color: rgba(147, 197, 253, 0.4);
+}
+
+[data-theme="dark"] .weather-day-badge.rain-alert:hover {
+  background: rgba(30, 58, 138, 0.55);
+}
+
+.week-weather-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.35rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: default;
+  transition: all var(--transition-fast);
+}
+
+.week-weather-tag:hover {
+  background: var(--bg-surface);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.week-weather-tag.rain-alert {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #60a5fa;
+  font-weight: 800;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+}
+
+.week-weather-tag.rain-alert:hover {
+  background: #dbeafe;
+  border-color: #2563eb;
+}
+
+[data-theme="dark"] .week-weather-tag.rain-alert {
+  background: rgba(30, 58, 138, 0.4);
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme="dark"] .week-weather-tag.rain-alert:hover {
+  background: rgba(30, 58, 138, 0.6);
+}
