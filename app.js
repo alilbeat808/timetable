@@ -6567,16 +6567,16 @@ function highlightEventMeta(text) {
   });
 
   // 2. 학년: 1, 2, 3학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년, 전학년
-  // 단일 학년은 1·2·3학년부 고유 스타일 적용, 복수 학년은 별도 고유 로열 바이올렛 테마(.event-meta-grade-multi) 단일 뱃지 적용
+  // 교시 뱃지처럼 담백하고 깔끔한 라운드 알약형 (학년별 고유 색상 구별)
   s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, m => {
     if (m === '1학년') {
-      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-1">1학년</span>`;
     }
     if (m === '2학년') {
-      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-2">2학년</span>`;
     }
     if (m === '3학년') {
-      return `<span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-3">3학년</span>`;
     }
     const cleanGrade = m.replace(/\s+/g, '');
     return `<span class="event-meta-tag event-meta-grade-multi">${cleanGrade}</span>`;
@@ -6805,13 +6805,13 @@ function formatEventLineWithDeptBadges(line) {
 
   const gradeHtml = gradeMatches.map(g => {
     if (g === '1학년') {
-      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-1">1학년</span>`;
     }
     if (g === '2학년') {
-      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-2">2학년</span>`;
     }
     if (g === '3학년') {
-      return `<span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+      return `<span class="event-meta-tag event-meta-grade-3">3학년</span>`;
     }
     return `<span class="event-meta-tag event-meta-grade-multi">${escapeHtml(g)}</span>`;
   }).join(' ');
@@ -6851,11 +6851,11 @@ function formatEventLineWithDeptBadges(line) {
   });
 
   // 최종 표기 순서 결합:
-  // [주관 부서 뱃지] -> [교시/시간] -> 행사명 -> [대상 학년] -> [날짜(기간)] -> [장소]
+  // [주관 부서 뱃지] -> 행사명 -> [교시/시간] -> [대상 학년] -> [날짜(기간)] -> [장소]
   const pieces = [];
   if (deptBadgesHtml) pieces.push(deptBadgesHtml);
-  if (timeHtml) pieces.push(timeHtml);
   if (escapedTitle) pieces.push(escapedTitle);
+  if (timeHtml) pieces.push(timeHtml);
   if (gradeHtml) pieces.push(gradeHtml);
   if (dateHtml) pieces.push(dateHtml);
   if (placeHtml) pieces.push(placeHtml);
@@ -7857,7 +7857,7 @@ function renderCalendarWeekView(cal) {
         ${selectedFri.hasChangche ? `
           <span class="changche-tag-icon">🎯</span>
           <span class="changche-tag-label">금요 창체:</span>
-          <span class="changche-tag-val">1학년 [${selectedFri.grade1.map(toChangcheShortCode).join('/')}] · 2학년 [${selectedFri.grade2.map(toChangcheShortCode).join('/')}] · 3학년 [${selectedFri.grade3.map(toChangcheShortCode).join('/')}]</span>
+          <span class="changche-tag-val">1학년 [${selectedFri.grade1.map(toChangcheShortCode).join('/')}] · 2학년 [${selectedFri.grade2.map(toChangcheShortCode).join('/')}] · 3학년 [${selectedFri.grade3.map(toChangcheShortCode).join('/')}]<span class="changche-tag-role-hint">(진로: 담임, 여유: 부담임)</span></span>
         ` : `
           <span class="changche-tag-icon">🎯</span>
           <span class="changche-tag-label">금요 창체:</span>
@@ -7931,43 +7931,6 @@ function renderCalendarWeekView(cal) {
                   `}
                 </div>
               `}
-
-              <!-- Friday Changche Highlight -->
-              ${isFri && !isHoliday && selectedFri && selectedFri.hasChangche ? `
-                <div class="friday-changche-highlight-card">
-                  <div style="font-weight:800; font-size:0.8rem; color:#065f46; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.3rem;">
-                    <span>🎯</span>
-                    <span>5~7교시 창체 운영</span>
-                  </div>
-                  <div class="changche-grade-box">
-                    <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
-                        <span class="changche-grade-num">1학년:</span>
-                        <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade1)}</span>
-                      </div>
-                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade1)}</span>
-                    </div>
-                  </div>
-                  <div class="changche-grade-box">
-                    <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
-                        <span class="changche-grade-num">2학년:</span>
-                        <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade2)}</span>
-                      </div>
-                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade2)}</span>
-                    </div>
-                  </div>
-                  <div class="changche-grade-box">
-                    <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
-                        <span class="changche-grade-num">3학년:</span>
-                        <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade3)}</span>
-                      </div>
-                      <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade3)}</span>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
             </div>
           </div>
         `;
