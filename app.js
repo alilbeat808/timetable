@@ -6721,25 +6721,36 @@ function renderCalendarView(container) {
             🖨️ 인쇄
           </button>
           
-          <!-- Compact Vertical D-Day Widget (Next to Print Button) -->
-          <div class="calendar-dday-compact" title="주요 학사일정 D-Day">
-            <div class="dday-compact-item" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월)">
-              <span class="dday-compact-name">1회고사</span>
-              <span class="dday-compact-badge exam">${d1}</span>
-            </div>
-            <div class="dday-compact-item" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금)">
-              <span class="dday-compact-name">2회고사</span>
-              <span class="dday-compact-badge exam">${d2}</span>
-            </div>
-            <div class="dday-compact-item" title="2027 대학수학능력시험: 2026. 11. 19.(목) (예비소집 11. 18.)">
-              <span class="dday-compact-name">수능</span>
-              <span class="dday-compact-badge suneung">${dSuneung}</span>
-            </div>
-            <div class="dday-compact-item" title="2학기 겨울방학식: 2026. 12. 30.(수)">
-              <span class="dday-compact-name">방학식</span>
-              <span class="dday-compact-badge vac">${dVac}</span>
-            </div>
-          </div>
+        </div>
+      </div>
+
+      <!-- Elegant Horizontal D-Day Strip (Clickable Milestone Badges) -->
+      <div class="calendar-dday-strip" role="region" aria-label="주요 학사일정 D-Day">
+        <div class="dday-strip-label">
+          <span class="dday-strip-icon">⏳</span>
+          <span class="dday-strip-text">주요 D-Day</span>
+        </div>
+        <div class="dday-strip-chips">
+          <button type="button" class="dday-chip chip-exam" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월) · 클릭 시 해당 주별 캘린더로 이동">
+            <span class="dday-chip-name">1회고사</span>
+            <span class="dday-chip-val">${d1}</span>
+            <span class="dday-chip-date">10.13(화)</span>
+          </button>
+          <button type="button" class="dday-chip chip-exam" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금) · 클릭 시 해당 주별 캘린더로 이동">
+            <span class="dday-chip-name">2회고사</span>
+            <span class="dday-chip-val">${d2}</span>
+            <span class="dday-chip-date">12.07(월)</span>
+          </button>
+          <button type="button" class="dday-chip chip-suneung" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험: 2026. 11. 19.(목) (예비소집 11. 18.) · 클릭 시 해당 주별 캘린더로 이동">
+            <span class="dday-chip-name">수능</span>
+            <span class="dday-chip-val">${dSuneung}</span>
+            <span class="dday-chip-date">11.19(목)</span>
+          </button>
+          <button type="button" class="dday-chip chip-vac" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식: 2026. 12. 30.(수) · 클릭 시 해당 주별 캘린더로 이동">
+            <span class="dday-chip-name">겨울방학식</span>
+            <span class="dday-chip-val">${dVac}</span>
+            <span class="dday-chip-date">12.30(수)</span>
+          </button>
         </div>
       </div>
 
@@ -7022,10 +7033,11 @@ function renderCalendarMonthView(cal) {
       const { meetingBadges, ceremonyBadges, allHeaderBadges, remainingLines: monthEventLines } = extractTeacherMeetingBadges(dayEvent ? dayEvent.event : '', isHoliday, isExam);
 
       const friChangche = isFri ? cal.fridaySchedule.find(f => f.date === dateStr) : null;
-      const tooltipTitle = escapeHtml(dayEvent && dayEvent.event ? `${m}월 ${dayNum}일: ${dayEvent.event.replace(/\n/g, ' ')}` : `${m}월 ${dayNum}일`);
+      const eventSummary = dayEvent && dayEvent.event ? ` · ${dayEvent.event.replace(/\n/g, ' ')}` : '';
+      const tooltipTitle = escapeHtml(`${m}월 ${dayNum}일${eventSummary} (클릭 시 주별 캘린더로 이동)`);
 
       html += `
-        <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="openCalendarDayDetailModal('${dateStr}')" title="${tooltipTitle}">
+        <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="onSelectCalendarMonthDay('${dateStr}')" title="${tooltipTitle}">
           <div class="day-header-num">
             <div class="day-header-left">
               <span class="day-number" ${isHoliday ? 'style="color:#ef4444; flex-shrink:0;' : 'style="flex-shrink:0;'} ${allHeaderBadges.length > 1 ? 'margin-top:0.05rem;' : ''}">${dayNum}</span>
@@ -7363,6 +7375,41 @@ function stepCalendarWeek(step) {
   if (newIdx >= list.length) newIdx = list.length - 1;
   AppState.calendarWeekDate = list[newIdx].date;
   renderApp();
+}
+
+/**
+ * 월별 캘린더 날짜 클릭 또는 D-Day 칩 클릭 시 해당 주차의 주별 캘린더로 이동하고 해당 일자를 펄스 강조
+ */
+function onSelectCalendarMonthDay(dateStr) {
+  const friDate = findFridayDateForDay(dateStr);
+  AppState.currentTab = 'calendar';
+  AppState.calendarWeekDate = friDate;
+  AppState.calendarViewMode = 'week';
+
+  document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === 'calendar');
+  });
+  document.querySelectorAll('.mobile-nav-item').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === 'calendar');
+  });
+
+  renderApp();
+
+  const parts = dateStr.split('-');
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+  showToast(`📅 ${m}월 ${d}일 주별 캘린더로 이동했습니다.`);
+
+  setTimeout(() => {
+    const col = document.querySelector(`.week-day-col[data-date="${dateStr}"]`);
+    if (col) {
+      col.classList.add('search-highlight-pulse');
+      col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      setTimeout(() => {
+        col.classList.remove('search-highlight-pulse');
+      }, 2500);
+    }
+  }, 120);
 }
 
 function openCalendarDayDetailModal(dateStr) {
