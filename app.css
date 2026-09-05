@@ -4131,6 +4131,19 @@ body {
   background: rgba(2, 132, 199, 0.35);
 }
 
+.mini-day-cell.is-ceremony {
+  color: #b45309;
+  font-weight: 800;
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+[data-theme="dark"] .mini-day-cell.is-ceremony {
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
 .mini-day-cell.is-today {
   background: #a7f3d0 !important;
   color: #064e3b !important;
@@ -4460,6 +4473,69 @@ body {
   white-space: nowrap;
   flex-shrink: 1;
   vertical-align: middle;
+}
+
+/* School Ceremony Badge (방학식, 개학식, 졸업식 등 주요 의식 행사 뱃지) */
+.school-ceremony-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 4px;
+  padding: 0.1rem 0.42rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #b45309;
+  white-space: nowrap;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .school-ceremony-badge {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: #fde68a;
+  box-shadow: none;
+}
+
+/* Month View Ceremony Badge (월별 캘린더 일자 옆 의식 뱃지) */
+.month-ceremony-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  padding: 0.05rem 0.32rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  vertical-align: middle;
+}
+
+/* Day Detail Modal Ceremony Card */
+.modal-ceremony-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+}
+
+[data-theme="dark"] .modal-ceremony-card {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+[data-theme="dark"] .modal-ceremony-card .ceremony-title {
+  color: #fde68a !important;
+}
+
+[data-theme="dark"] .modal-ceremony-card .ceremony-name {
+  color: #fef08a !important;
 }
 
 /* Week & Month View Meeting Badges Column (주별 및 월별 다중 회의 세로 열 정렬) */
