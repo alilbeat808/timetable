@@ -4361,6 +4361,57 @@ body {
   color: var(--text-primary);
 }
 
+/* Monday 1st Period Meeting Badge (월요일 1교시 교무회의/교과협의회/전문적학습공동체 뱃지) */
+.monday-meeting-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  padding: 0.12rem 0.55rem 0.12rem 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  white-space: nowrap;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  vertical-align: middle;
+}
+
+.monday-meeting-period {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.08rem 0.35rem;
+  border-radius: 9999px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.monday-meeting-name {
+  font-weight: 700;
+  color: #1e40af;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="dark"] .monday-meeting-badge {
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #93c5fd;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .monday-meeting-period {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .monday-meeting-name {
+  color: #dbeafe;
+}
+
 .week-day-body {
   padding: 0.85rem;
   flex: 1;
