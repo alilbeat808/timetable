@@ -5648,3 +5648,63 @@ body {
 [data-theme="dark"] .month-weather-simple-icon:hover {
   background: rgba(255, 255, 255, 0.08);
 }
+
+/* ==========================================================================
+   Calendar Weather 2-Row High/Low Temperature Widget (최고 빨강 / 최저 파랑)
+   ========================================================================== */
+.calendar-weather-widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.calendar-weather-widget.weekly {
+  gap: 0.28rem;
+}
+
+.calendar-weather-widget.monthly {
+  gap: 0.2rem;
+}
+
+.weather-temp-col {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1.05;
+  cursor: default;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.weather-temp-max {
+  font-size: 0.56rem;
+  font-weight: 800;
+  color: #dc2626; /* 최고기온 빨간색 */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.weather-temp-min {
+  font-size: 0.56rem;
+  font-weight: 800;
+  color: #2563eb; /* 최저기온 파란색 */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.calendar-weather-widget.weekly .weather-temp-max,
+.calendar-weather-widget.weekly .weather-temp-min {
+  font-size: 0.58rem;
+}
+
+[data-theme="dark"] .weather-temp-max {
+  color: #f87171;
+}
+
+[data-theme="dark"] .weather-temp-min {
+  color: #60a5fa;
+}
+

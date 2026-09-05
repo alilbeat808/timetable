@@ -5718,6 +5718,11 @@ function updateLiveClock() {
     }
   }
 
+  // 1-2. Auto-refresh calendar weather when hour rolls over (e.g. rain hours passing)
+  if (AppState.currentTab === 'calendar' && now.getMinutes() === 0 && now.getSeconds() === 0) {
+    renderApp();
+  }
+
   // 2. Real-time Live Tab Update
   if (AppState.currentTab === 'live' && AppState.data) {
     const todayIdx = now.getDay();
@@ -9166,63 +9171,133 @@ async function fetchJeonpoWeather(force = false) {
  * Returns weather HTML for Monthly or Weekly calendar.
  * - 비 / 눈 등 특이날씨: 상세 정보 뱃지 표기 (주별: 2행 축소, 월별: 상세 뱃지)
  * - 나머지 맑음, 구름많음, 흐림 등 일반 날씨: 아이콘으로만 표기 (☀️, ⛅, ☁️)
+ * - 당일(오늘) 강수 시간 경과 실시간 감지: 비/눈 오는 시간대가 지나면 현재 하늘 상태의 아이콘(☀️, ⛅, ☁️)으로 자동 전환
+ * - 최고기온(빨강) 및 최저기온(파랑)을 아이콘 우측에 조그맣게 2행으로 항상 표기 (일반 날씨 및 눈/비 특이사항 날씨 모두 적용)
  */
 function getWeatherBadgeForDate(dateStr, isWeekly = false) {
   if (!AppState.weatherDataByDate || !dateStr) return '';
   const w = AppState.weatherDataByDate[dateStr];
   if (!w) return '';
 
-  const escapedTooltip = escapeHtml(w.tooltip || '');
+  const now = new Date();
+  const kst = typeof getKstDate === 'function' ? getKstDate(now) : now;
+  const todayYmd = `${kst.getFullYear()}-${String(kst.getMonth() + 1).padStart(2, '0')}-${String(kst.getDate()).padStart(2, '0')}`;
+  const isToday = (dateStr === todayYmd);
+  const curHour = kst.getHours();
 
-  // 1. 특이날씨 (비, 눈, 번개, 강풍) -> 상세 정보 표기
-  if (w.isSpecial) {
+  // 당일(오늘) 강수 시간 경과 여부 실시간 판정
+  let effectiveSpecial = w.isSpecial;
+  let effectiveHasRain = w.hasRain;
+  let effectiveHasSnow = w.hasSnow;
+  let effectiveHasLightning = w.hasLightning;
+  let effectiveHasWind = w.hasWind;
+  let effectiveIcon = w.icon || '☀️';
+  let effectiveTooltip = w.tooltip || '';
+  let rainPassed = false;
+  let snowPassed = false;
+
+  if (isToday && Array.isArray(w.hourlyList) && w.hourlyList.length > 0) {
+    const remainingHourly = w.hourlyList.filter(h => h.hour >= curHour);
+    const pastHourly = w.hourlyList.filter(h => h.hour < curHour);
+
+    const hasUpcomingRain = remainingHourly.some(h => h.pty === '1' || h.pty === '4' || (h.pcp && h.pcp !== '강수없음' && h.pcp !== '0' && h.pcp !== '0.0' && h.pcp !== '0mm'));
+    const hasUpcomingSnow = remainingHourly.some(h => h.pty === '2' || h.pty === '3');
+    const hasUpcomingLightning = remainingHourly.some(h => h.lgt >= 1);
+    const hasUpcomingWind = remainingHourly.some(h => h.wsd >= 14);
+
+    if (w.hasRain && !hasUpcomingRain) {
+      effectiveHasRain = false;
+      rainPassed = true;
+    }
+    if (w.hasSnow && !hasUpcomingSnow) {
+      effectiveHasSnow = false;
+      snowPassed = true;
+    }
+    if (w.hasLightning && !hasUpcomingLightning) effectiveHasLightning = false;
+    if (w.hasWind && !hasUpcomingWind) effectiveHasWind = false;
+
+    effectiveSpecial = effectiveHasRain || effectiveHasSnow || effectiveHasLightning || effectiveHasWind;
+
+    // 비/눈 시간이 종료된 경우 현재 시간대 하늘 상태 아이콘으로 실시간 전환
+    if (!effectiveSpecial) {
+      const curHourEntry = w.hourlyList.find(h => h.hour === curHour) || remainingHourly[0] || pastHourly[pastHourly.length - 1];
+      if (curHourEntry) {
+        const sky = curHourEntry.sky;
+        effectiveIcon = (sky === '4') ? '☁️' : (sky === '3' ? '⛅' : '☀️');
+        const skyName = (sky === '4') ? '흐림' : (sky === '3' ? '구름많음' : '맑음');
+        const passedNote = rainPassed ? ` (${w.rainTimeRange ? `${w.rainTimeRange} ` : ''}비 종료)` : (snowPassed ? ' (눈 종료)' : '');
+        effectiveTooltip = `${effectiveIcon} 부산진구 전포동 현재 날씨\n• 상태: ${skyName}${passedNote}\n• 최고기온: ${w.maxTmp !== null && w.maxTmp !== undefined ? w.maxTmp + '℃' : ''}, 최저기온: ${w.minTmp !== null && w.minTmp !== undefined ? w.minTmp + '℃' : ''}`;
+      }
+    }
+  }
+
+  const escapedTooltip = escapeHtml(effectiveTooltip);
+
+  // 1. 날씨 아이콘 또는 특이날씨 상세 뱃지 HTML
+  let iconHtml = '';
+  if (effectiveSpecial) {
     if (isWeekly) {
-      if (w.hasRain) {
+      if (effectiveHasRain) {
         const timeStr = w.rainTimeRange || (w.rainSummary ? w.rainSummary.split(' ')[0] : '비');
         const pcpStr = w.rainPcpSummary || (w.maxPop ? `강수 ${w.maxPop}%` : '비');
         const popStr = !pcpStr.includes('%') && w.maxPop ? `(${w.maxPop}%)` : '';
-        return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">
+        iconHtml = `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">
           <span class="week-weather-line1">🌧️ 비: ${escapeHtml(timeStr)}</span>
           <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
         </span>`;
-      } else if (w.hasSnow) {
+      } else if (effectiveHasSnow) {
         const timeStr = w.snowTimeRange || '눈';
         const pcpStr = w.snowPcpSummary || (w.maxPop ? `확률 ${w.maxPop}%` : '눈');
         const popStr = !pcpStr.includes('%') && w.maxPop ? `(${w.maxPop}%)` : '';
-        return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">
+        iconHtml = `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">
           <span class="week-weather-line1">❄️ 눈: ${escapeHtml(timeStr)}</span>
           <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
         </span>`;
-      } else if (w.hasLightning) {
+      } else if (effectiveHasLightning) {
         const timeStr = w.lightningTimeRange || '주의';
-        return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+        iconHtml = `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
           <span class="week-weather-line1">⚡ 번개: ${escapeHtml(timeStr)}</span>
           <span class="week-weather-line2">낙뢰 주의</span>
         </span>`;
-      } else if (w.hasWind) {
-        return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+      } else if (effectiveHasWind) {
+        iconHtml = `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
           <span class="week-weather-line1">💨 강풍: 주의</span>
           <span class="week-weather-line2">최대 ${w.maxWindSpeed}m/s</span>
         </span>`;
       }
     } else {
-      if (w.hasRain) {
-        return `<span class="weather-day-badge rain-alert" title="${escapedTooltip}">🌧️ ${escapeHtml(w.rainSummary || '비')}</span>`;
-      } else if (w.hasSnow) {
-        return `<span class="weather-day-badge snow-alert" title="${escapedTooltip}">❄️ ${escapeHtml(w.snowSummary || '눈')}</span>`;
-      } else if (w.hasLightning) {
-        return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">⚡ 번개</span>`;
-      } else if (w.hasWind) {
-        return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">💨 강풍</span>`;
+      if (effectiveHasRain) {
+        iconHtml = `<span class="weather-day-badge rain-alert" title="${escapedTooltip}">🌧️ ${escapeHtml(w.rainSummary || '비')}</span>`;
+      } else if (effectiveHasSnow) {
+        iconHtml = `<span class="weather-day-badge snow-alert" title="${escapedTooltip}">❄️ ${escapeHtml(w.snowSummary || '눈')}</span>`;
+      } else if (effectiveHasLightning) {
+        iconHtml = `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">⚡ 번개</span>`;
+      } else if (effectiveHasWind) {
+        iconHtml = `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">💨 강풍</span>`;
       }
+    }
+  } else {
+    // 일반 날씨 또는 강수가 종료된 날씨
+    if (isWeekly) {
+      iconHtml = `<span class="week-weather-simple-icon" title="${escapedTooltip}">${effectiveIcon}</span>`;
+    } else {
+      iconHtml = `<span class="month-weather-simple-icon" title="${escapedTooltip}">${effectiveIcon}</span>`;
     }
   }
 
-  // 2. 나머지 맑은 날씨나 그런건 아이콘으로만 표시
-  const icon = w.icon || '☀️';
-  if (isWeekly) {
-    return `<span class="week-weather-simple-icon" title="${escapedTooltip}">${icon}</span>`;
-  } else {
-    return `<span class="month-weather-simple-icon" title="${escapedTooltip}">${icon}</span>`;
+  // 2. 우측 2행 최고기온(빨강) / 최저기온(파랑) 표기
+  let tempHtml = '';
+  const hasMax = (w.maxTmp !== null && w.maxTmp !== undefined && !isNaN(w.maxTmp));
+  const hasMin = (w.minTmp !== null && w.minTmp !== undefined && !isNaN(w.minTmp));
+
+  if (hasMax || hasMin) {
+    tempHtml = `
+      <span class="weather-temp-col" title="최고: ${hasMax ? w.maxTmp + '℃' : '-'} / 최저: ${hasMin ? w.minTmp + '℃' : '-'}">
+        ${hasMax ? `<span class="weather-temp-max">${w.maxTmp}℃</span>` : ''}
+        ${hasMin ? `<span class="weather-temp-min">${w.minTmp}℃</span>` : ''}
+      </span>
+    `;
   }
+
+  return `<div class="calendar-weather-widget ${isWeekly ? 'weekly' : 'monthly'}">${iconHtml}${tempHtml}</div>`;
 }
