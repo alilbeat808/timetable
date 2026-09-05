@@ -6210,7 +6210,7 @@ function renderFridayChangcheSelectorBar() {
         <select class="filter-select changche-week-select" onchange="onSelectFridayWeek(this.value)">
           ${cal.fridaySchedule.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)${f.date === '2026-09-04' ? ' ★현재' : ''}
+              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)
             </option>
           `).join('')}
         </select>
@@ -6658,7 +6658,7 @@ function renderCalendarWeekView(cal) {
         <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금) - ${f.grade1.join('/')} ${f.date === '2026-09-04' ? '★이번주' : ''}
+              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)
             </option>
           `).join('')}
         </select>
