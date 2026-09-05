@@ -6119,6 +6119,88 @@ function parseHmlClassTablesInBrowser(tables) {
 // ==========================================================================
 // 학사일정 행사 텍스트 띄어쓰기 및 맞춤법, 학년 표기(1,2,3년 -> 1,2,3학년) 정제 함수
 // ==========================================================================
+
+// 선두에 위치한 학년, 시간, 교시 등 메타 정보를 행사명 직후로 재배치하는 함수 (예: "1,2학년 진학 설명회 예정" -> "진학 설명회 예정 1,2학년")
+function reorderFrontMetaToAfterEvent(line) {
+  if (!line || typeof line !== 'string') return line;
+  let s = line.trim();
+
+  // 후미 부서 뱃지 분리 (예: <생활>, <진학>, <2학년>)
+  let deptMatch = s.match(/\s*(<[가-힣0-9]+>)$/);
+  let deptSuffix = '';
+  if (deptMatch) {
+    deptSuffix = ' ' + deptMatch[1];
+    s = s.slice(0, deptMatch.index).trim();
+  }
+
+  // 1. 학년이 맨 앞에 있는 경우 (예: "1,2학년 진학 설명회 예정", "1,2,3학년 학생 도박 예방 교육 (5교시, 구암관)")
+  const frontGradeMatch = s.match(/^(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1학년|2학년|3학년|전학년)\s+/);
+  if (frontGradeMatch) {
+    const gradeText = frontGradeMatch[1];
+    let rest = s.slice(frontGradeMatch[0].length).trim();
+
+    // 행사명 바로 뒤, 그리고 뒤따르는 괄호/시간/교시/장소 앞 또는 맨 뒤에 학년 배치
+    const parenOrMetaIdx = rest.search(/\s*(?:\([^\)]+\)|[0-9]+교시|[0-9]{1,2}:[0-9]{2}|[0-9]{1,2}시|각\s*교실|구암관|도서관|1층\s*회의실)/);
+    if (parenOrMetaIdx !== -1) {
+      const title = rest.slice(0, parenOrMetaIdx).trim();
+      const tail = rest.slice(parenOrMetaIdx).trim();
+      s = `${title} ${gradeText} ${tail}`;
+    } else {
+      s = `${rest} ${gradeText}`;
+    }
+    return (s + deptSuffix).trim();
+  }
+
+  // 2. 선두 시간 패턴 (예: "08:10 -학업성적관리위원회(...)")
+  const frontTimeMatch = s.match(/^([0-9]{1,2}:[0-9]{2}(?:\s*[-~]\s*[0-9]{1,2}:[0-9]{2})?)\s*[-~:]?\s*/);
+  if (frontTimeMatch) {
+    const timeText = frontTimeMatch[1];
+    let rest = s.slice(frontTimeMatch[0].length).trim();
+    if (rest && !/^시\b/.test(rest)) {
+      const parenOrMetaIdx = rest.search(/\s*(?:\([^\)]+\)|각\s*교실|구암관|도서관|1층\s*회의실)/);
+      if (parenOrMetaIdx !== -1) {
+        const title = rest.slice(0, parenOrMetaIdx).trim();
+        const tail = rest.slice(parenOrMetaIdx).trim();
+        s = `${title} ${timeText} ${tail}`;
+      } else {
+        s = `${rest} ${timeText}`;
+      }
+      return (s + deptSuffix).trim();
+    }
+  }
+
+  return (s + deptSuffix).trim();
+}
+
+// 특정 학년, 교시, 시간, 날짜(기간), 장소만 단독/복합 포함된 괄호는 괄호 제거 (다른 내용 포함 시 괄호 유지)
+function removeMetaOnlyParentheses(text) {
+  if (!text || typeof text !== 'string') return text;
+
+  return text.replace(/\(([^\(\)]+)\)/g, (fullMatch, inner) => {
+    let s = inner.trim();
+
+    // 1. 교시
+    s = s.replace(/([0-9]+(?:\s*[,~]\s*[0-9]+)*\s*교시)/g, ' ');
+    // 2. 시간 (HH:MM)
+    s = s.replace(/([0-9]{1,2}:[0-9]{2}(?:\s*[-~]\s*[0-9]{1,2}:[0-9]{2})?~?)/g, ' ');
+    // 3. 시간 (N시 M분)
+    s = s.replace(/([~]?[0-9]{1,2}시(?:\s*[0-9]{1,2}분)?(?:\s*[-~]\s*[0-9]{1,2}시(?:\s*[0-9]{1,2}분)?)?~?)/g, ' ');
+    // 4. 기간/날짜
+    s = s.replace(/([~]?[0-9]{1,2}\/[0-9]{1,2}(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2})?|~[0-9]{1,2}(?:일)?)/g, ' ');
+    // 5. 학년
+    s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1학년|2학년|3학년|전학년|전교생|[1-3]학년)/g, ' ');
+    s = s.replace(/^[1-3](?:,\s*[1-3])*$/, ' ');
+    // 6. 장소
+    s = s.replace(/(각\s*교실|구암관|도서관|1층\s*회의실|3층\s*사회과실|회의실|운동장|물리실|음악실|동맥꿈터|체육관|홈베이스|교장실|방송실|사회과실|정독실|교실)/g, ' ');
+
+    const rem = s.replace(/[\s,\/~-]/g, '');
+    if (rem === '') {
+      return ` ${inner.trim()} `;
+    }
+    return fullMatch;
+  });
+}
+
 function cleanCalendarEventText(text) {
   if (!text || typeof text !== 'string') return text;
 
@@ -6248,6 +6330,17 @@ function cleanCalendarEventText(text) {
     s = s.replace(/([^\s<])<([가-힣]+)>/g, '$1 <$2>');
     s = s.replace(/([가-힣0-9])\(([0-9]+교시)/g, '$1 ($2');
     s = s.replace(/\(\s+([0-9]+)/g, '($1');
+
+    // 기간 ~숫자만 있는 경우 뒤에 '일' 부가 (~28 -> ~28일, ~24 -> ~24일)
+    s = s.replace(/~\s*([0-9]{1,2})(?![0-9\/\:시교분일월])/g, (m, p1) => '~' + p1 + '일');
+
+    // 선두 메타 정보(학년, 시간 등)를 행사명 직후로 재배치 (예: 1,2학년 진학 설명회 예정 -> 진학 설명회 예정 1,2학년)
+    s = reorderFrontMetaToAfterEvent(s);
+
+    // 순수 메타 정보만 담긴 괄호는 괄호 제거 (평가계획 심의건 등 다른 내용 포함 시 괄호 유지)
+    s = removeMetaOnlyParentheses(s);
+
+    s = s.replace(/[ ]{2,}/g, ' ');
 
     return s.trim();
   }).join('\n');
@@ -6411,8 +6504,8 @@ function highlightEventMeta(text) {
   if (!text || typeof text !== 'string') return text;
   let s = text;
 
-  // 1. 기간/날짜: (~9/11), (9/16-9/22), (~16일), (~28)
-  s = s.replace(/(\([~]?[0-9]{1,2}\/[0-9]{1,2}(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2})?\)|\(~[0-9]{1,2}(?:일)?\))/g, m => {
+  // 1. 기간/날짜: ~9/11, 9/16-9/22, ~16일, ~28일 (괄호 유무 모두 대응)
+  s = s.replace(/(?<![0-9가-힣class="])(\(?[~]?[0-9]{1,2}\/[0-9]{1,2}(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2})?\)?|\(?~[0-9]{1,2}일\)?)(?![0-9가-힣])/g, m => {
     return `<span class="event-meta-tag event-meta-date">${m}</span>`;
   });
 
@@ -6445,6 +6538,9 @@ function highlightEventMeta(text) {
     if (lastOpen > lastClose) return m;
     return `<span class="event-meta-tag event-meta-place">${m}</span>`;
   });
+
+  // 태그 사이 쉼표 공백화 (태그 자체 내부 콤마는 보존)
+  s = s.replace(/<\/span>,\s*<span/g, '</span> <span');
 
   return s;
 }
@@ -7291,8 +7387,9 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
   const ceremonyRegex = /^(?:[\(\[]\s*)?(?:방학식|개학식|졸업식|종업식|시업식|입학식|개교기념식)/;
   const regularMeetingPrefixRegex = /^(?:전문적\s*학습\s*공동체|교과\s*협의회|다모임|교무회의|임시\s*교무회의)/;
 
+  // Pass 1: 주요 의식(~식) 및 단독 정규 회의(전문적 학습 공동체, 다모임 등) 우선 추출
+  const unhandledLines = [];
   for (let line of rawLines) {
-    // 1. 주요 학사 의식 행사 추출 (개학식, 방학식, 졸업식 등)
     if (ceremonyRegex.test(line)) {
       const cleanCeremony = line.replace(/^[\s\(\[]+/, '').replace(/[\s\)\]]+$/, '').trim();
       if (!ceremonyBadges.includes(cleanCeremony)) {
@@ -7301,7 +7398,6 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
       continue;
     }
 
-    // 2. 단독 또는 쉼표 구분 정규 회의 항목 처리 (예: "전문적 학습 공동체", "교무회의", "다모임", "교과협의회")
     if (regularMeetingPrefixRegex.test(line)) {
       if (line.includes(',')) {
         const parts = line.split(',').map(p => p.trim()).filter(Boolean);
@@ -7311,7 +7407,7 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
               meetingBadges.push(p);
             }
           } else {
-            remainingLines.push(p);
+            unhandledLines.push(p);
           }
         }
       } else {
@@ -7321,36 +7417,22 @@ function extractTeacherMeetingBadges(rawEventText, isHoliday, isExam) {
       }
       continue;
     }
+    unhandledLines.push(line);
+  }
 
-    // 3. 행사 텍스트 내 포함된 임시 교무회의 / 교무회의
-    // 해당 일에 이미 정규 회의(전문적 학습 공동체 등)가 있는 경우 부수 회의는 본문 텍스트에 유지하여 핵심 회의가 가려지지 않도록 보호
-    if (/(?:임시\s*교무회의)/.test(line)) {
-      if (meetingBadges.length === 0) {
-        if (!meetingBadges.includes('임시 교무회의')) {
-          meetingBadges.push('임시 교무회의');
-        }
-        line = line.replace(/\s*[\(\[]?임시\s*교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
-      }
-      if (line) {
-        remainingLines.push(line);
-      }
-      continue;
+  // Pass 2: 정규 회의가 없는 경우에만 본문 행사 내 (임시 교무회의) / (교무회의) 추출
+  // 정규 회의(전문적 학습 공동체 등)가 이미 있는 경우 부수 행사는 본문 텍스트에 유지하여 28일 옆 헤더 뱃지 오동작 방지
+  for (let line of unhandledLines) {
+    if (meetingBadges.length === 0 && /(?:임시\s*교무회의)/.test(line)) {
+      meetingBadges.push('임시 교무회의');
+      line = line.replace(/\s*[\(\[]?임시\s*교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
+    } else if (meetingBadges.length === 0 && /(?:교무회의)/.test(line)) {
+      meetingBadges.push('교무회의');
+      line = line.replace(/\s*[\(\[]?교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
     }
-
-    if (/(?:교무회의)/.test(line)) {
-      if (meetingBadges.length === 0) {
-        if (!meetingBadges.includes('교무회의')) {
-          meetingBadges.push('교무회의');
-        }
-        line = line.replace(/\s*[\(\[]?교무회의[\)\]]?\s*/g, ' ').replace(/\s+/g, ' ').replace(/\s*</g, '<').trim();
-      }
-      if (line) {
-        remainingLines.push(line);
-      }
-      continue;
+    if (line) {
+      remainingLines.push(line);
     }
-
-    remainingLines.push(line);
   }
 
   // [중요 규칙] ~식이랑 회의가 겹칠 땐 ~식을 위에/앞에 표기! (2/1 개학식 우선 표기)
