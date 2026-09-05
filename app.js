@@ -5897,8 +5897,8 @@ function formatEventLineWithDeptBadges(line) {
     badges.push(getDepartmentStyleInfo('평가'));
   }
 
-  // Auto-tag '학점제' for 수강신청
-  const isCreditSystem = /수강\s*신청/.test(text);
+  // Auto-tag '학점제' for 수강신청, 교육과정
+  const isCreditSystem = /수강\s*신청|교육\s*과정/.test(text);
   if (isCreditSystem && !badges.some(b => b.name === '학점제' || b.name === '학점')) {
     badges.push(getDepartmentStyleInfo('학점제'));
   }
