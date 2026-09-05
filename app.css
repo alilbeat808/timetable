@@ -3940,8 +3940,8 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1rem;
   box-shadow: var(--shadow-sm);
 }
 
@@ -3949,10 +3949,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.55rem;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -3963,7 +3963,7 @@ body {
 }
 
 .calendar-title-group h2 {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
@@ -4175,13 +4175,14 @@ body {
 
 .calendar-week-select {
   font-weight: 700;
-  font-size: 0.92rem;
-  padding: 0.45rem 2.4rem 0.45rem 1rem !important;
-  min-width: 250px;
+  font-size: 0.88rem;
+  padding: 0.32rem 2.2rem 0.32rem 0.75rem !important;
+  min-width: 210px;
   width: auto;
   max-width: 100%;
-  background-position: right 0.85rem center !important;
+  background-position: right 0.75rem center !important;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 /* Department Badge (담당부서 색상 태그 - 교사별 시간표 업무부서 스타일과 완벽 일치) */
@@ -4399,7 +4400,7 @@ body {
 .calendar-week-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0.85rem;
+  gap: 0.65rem;
 }
 
 @media (max-width: 900px) {
@@ -4423,7 +4424,7 @@ body {
 }
 
 .week-day-header {
-  padding: 0.75rem 0.85rem;
+  padding: 0.45rem 0.65rem;
   background: var(--bg-hover);
   border-bottom: 1px solid var(--border-color);
   display: flex;
@@ -4432,7 +4433,7 @@ body {
 }
 
 .week-day-title {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -4558,11 +4559,11 @@ body {
 }
 
 .week-day-body {
-  padding: 0.85rem;
+  padding: 0.55rem 0.65rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.4rem;
 }
 
 /* Friday Changche Special Section */
@@ -4570,8 +4571,8 @@ body {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
   border: 1px solid rgba(16, 185, 129, 0.28);
   border-radius: var(--radius-md);
-  padding: 0.85rem;
-  margin-top: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  margin-top: 0.35rem;
 }
 
 [data-theme="dark"] .friday-changche-highlight-card {
@@ -4580,7 +4581,7 @@ body {
 }
 
 .changche-grade-box {
-  padding: 0.35rem 0;
+  padding: 0.18rem 0;
   border-bottom: 1px dashed rgba(16, 185, 129, 0.25);
   display: flex;
   flex-direction: column;
@@ -4736,6 +4737,82 @@ body {
   background: rgba(16, 185, 129, 0.25);
   color: #86efac;
   border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* Calendar Week Navigation Bar (주별 캘린더 상단 슬림 일체형 내비게이션 바) */
+.calendar-week-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.38rem 0.65rem;
+  margin-bottom: 0.65rem;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+[data-theme="dark"] .calendar-week-nav-bar {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.week-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.week-nav-btn {
+  padding: 0.28rem 0.6rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.week-today-btn {
+  padding: 0.28rem 0.65rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.week-changche-compact-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #86efac;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .week-changche-compact-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #86efac;
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.week-changche-compact-tag .changche-tag-label {
+  color: #047857;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .week-changche-compact-tag .changche-tag-label {
+  color: #6ee7b7;
+}
+
+.week-changche-compact-tag .changche-tag-val.changche-none {
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
 /* Calendar Day Detail Modal */

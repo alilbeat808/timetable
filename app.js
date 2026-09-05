@@ -6322,6 +6322,8 @@ function formatFridayWeekDropdownText(f) {
 
 function formatCalendarWeekRangeText(f) {
   if (!f || !f.date) return '';
+  const sem = getFridaySemester(f);
+  const wk = getFridayWeekNumber(f);
   const parts = f.date.split('-');
   if (parts.length === 3) {
     const y = parseInt(parts[0], 10);
@@ -6333,7 +6335,7 @@ function formatCalendarWeekRangeText(f) {
     const monD = mon.getDate();
     const friM = fri.getMonth() + 1;
     const friD = fri.getDate();
-    return `${monM}월 ${monD}일 (월) ~ ${friM}월 ${friD}일 (금)`;
+    return `${sem} ${wk}주차 (${monM}.${monD} ~ ${friM}.${friD})`;
   }
   return f.date;
 }
@@ -6426,8 +6428,8 @@ function renderCalendarView(container) {
           <span style="font-size: 1.6rem;">📅</span>
           <div>
             <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.2rem;">
-              연간 학사일정 세안 · 공휴일/고사 연동 · 금요일 5~7교시 창체(여유:학급 부담임교사, 진로:학급 담임교사, 동아리:동아리 담당교사)
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem;">
+              공휴일/고사 및 금요 창체 연동 · 구글 시트 실시간 자동 연동
               ${AppState.lastCalendarSyncTime ? ` · <span style="color:var(--primary); font-weight:600;">동기화: ${formatTime(AppState.lastCalendarSyncTime)}</span>` : ''}
             </p>
           </div>
@@ -6879,30 +6881,32 @@ function renderCalendarWeekView(cal) {
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   let html = `
-    <!-- Week Controls (Responsive & Non-clipping) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem; margin-bottom: 1.25rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; max-width: 100%;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(-1)">◀ 이전 주</button>
-        <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
+    <!-- Week Navigation Bar (Clean, Unified & Space-Efficient) -->
+    <div class="calendar-week-nav-bar">
+      <div class="week-nav-left">
+        <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarWeek(-1)" title="이전 주차">◀ 이전 주</button>
+        <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)" title="주차 선택">
           ${weekList.map(f => `
             <option value="${f.date}" ${f.date === selectedFri.date ? 'selected' : ''}>
               ${formatCalendarWeekRangeText(f)}
             </option>
           `).join('')}
         </select>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(1)">다음 주 ▶</button>
-        <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
+        <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarWeek(1)" title="다음 주차">다음 주 ▶</button>
+        <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarWeek('2026-09-04')" title="현재 주차(9월 4일 주)로 이동">
           이번 주
         </button>
       </div>
 
-      <div class="changche-summary-pill">
+      <div class="week-changche-compact-tag" title="${escapeHtml(selectedFri.hasChangche ? `1학년 [${selectedFri.grade1.join(' ')}] / 2학년 [${selectedFri.grade2.join(' ')}] / 3학년 [${selectedFri.grade3.join(' ')}]` : (selectedFri.event || '금요 창체 없음'))}">
         ${selectedFri.hasChangche ? `
-          🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일) 금요일 창체: 
-          1학년 [${selectedFri.grade1.map(toChangcheShortCode).join('/')}] · 2학년 [${selectedFri.grade2.map(toChangcheShortCode).join('/')}] · 3학년 [${selectedFri.grade3.map(toChangcheShortCode).join('/')}]
+          <span class="changche-tag-icon">🎯</span>
+          <span class="changche-tag-label">금요 창체:</span>
+          <span class="changche-tag-val">1학년 [${selectedFri.grade1.map(toChangcheShortCode).join('/')}] · 2학년 [${selectedFri.grade2.map(toChangcheShortCode).join('/')}] · 3학년 [${selectedFri.grade3.map(toChangcheShortCode).join('/')}]</span>
         ` : `
-          🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일): 
-          금요일 창체 일정 없음 (${selectedFri.event ? selectedFri.event.replace(/\n/g, ', ') : '휴업/고사'})
+          <span class="changche-tag-icon">🎯</span>
+          <span class="changche-tag-label">금요 창체:</span>
+          <span class="changche-tag-val changche-none">${selectedFri.event ? selectedFri.event.replace(/\n/g, ', ') : '일정 없음 (휴업/고사)'}</span>
         `}
       </div>
     </div>
@@ -6924,10 +6928,10 @@ function renderCalendarWeekView(cal) {
         return `
           <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
             <div class="week-day-header">
-              <div style="display: flex; align-items: ${allHeaderBadges.length > 1 ? 'flex-start' : 'center'}; gap: 0.4rem; min-width: 0; flex: 1;">
+              <div style="display: flex; align-items: ${allHeaderBadges.length > 1 ? 'flex-start' : 'center'}; gap: 0.35rem; min-width: 0; flex: 1;">
                 <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0; ${allHeaderBadges.length > 1 ? 'margin-top: 0.1rem;' : ''}">
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
-                  <span style="font-size:0.8rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
+                  <span style="font-size:0.78rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
                 </div>
                 ${allHeaderBadges.length > 0 ? `
                   <div class="week-meeting-badges-col">
@@ -6939,33 +6943,33 @@ function renderCalendarWeekView(cal) {
                   </div>
                 ` : ''}
               </div>
-              ${isToday ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
+              ${isToday ? '<span class="chip-badge" style="background:#059669; color:#fff; font-size:0.68rem; padding: 0.1rem 0.35rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
             </div>
 
             <div class="week-day-body">
               ${isHoliday ? `
-                <div class="calendar-event-pill pill-holiday" style="padding:0.55rem 0.6rem; text-align:center; font-size:0.86rem; font-weight:700;">
+                <div class="calendar-event-pill pill-holiday" style="padding:0.45rem 0.5rem; text-align:center; font-size:0.82rem; font-weight:700;">
                   🌴 ${escapeHtml(dayEvt.event || '공휴일 / 재량휴업일')}
                 </div>
               ` : `
                 <!-- Daily Events -->
                 <div style="flex:1;">
-                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem;">학사 행사 및 일정:</div>
+                  <div style="font-size:0.72rem; font-weight:700; color:var(--text-muted); margin-bottom:0.25rem;">📌 학사 일정:</div>
                   ${eventLines.length > 0 ? `
-                    <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                    <div style="display:flex; flex-direction:column; gap:0.28rem;">
                       ${eventLines.map(e => {
                         const isRegularExam = (e === '1회고사' || e === '2회고사' || e.startsWith('1회고사') || e.startsWith('2회고사'));
                         const isMockOrCsat = (e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
                         const pillClass = isRegularExam ? 'pill-exam' : isMockOrCsat ? 'pill-exam-mock' : 'pill-general';
                         return `
-                          <div class="calendar-event-pill ${pillClass}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
+                          <div class="calendar-event-pill ${pillClass}" style="padding:0.22rem 0.45rem; font-size:0.78rem;" title="${escapeHtml(e)}">
                             ${formatEventLineWithDeptBadges(e)}
                           </div>
                         `;
                       }).join('')}
                     </div>
                   ` : `
-                    <span style="font-size:0.8rem; color:var(--text-muted);">정규 수업 일정</span>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">정규 수업</span>
                   `}
                 </div>
               `}
@@ -6973,14 +6977,14 @@ function renderCalendarWeekView(cal) {
               <!-- Friday Changche Highlight -->
               ${isFri && !isHoliday && selectedFri && selectedFri.hasChangche ? `
                 <div class="friday-changche-highlight-card">
-                  <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
+                  <div style="font-weight:800; font-size:0.8rem; color:#065f46; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.3rem;">
                     <span>🎯</span>
-                    <span>5~7교시 창체 운영계획</span>
+                    <span>5~7교시 창체 운영</span>
                   </div>
                   <div class="changche-grade-box">
                     <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.35rem; min-width: 0;">
-                        <span class="changche-grade-num">1학년 :</span>
+                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
+                        <span class="changche-grade-num">1학년:</span>
                         <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade1)}</span>
                       </div>
                       <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade1)}</span>
@@ -6988,8 +6992,8 @@ function renderCalendarWeekView(cal) {
                   </div>
                   <div class="changche-grade-box">
                     <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.35rem; min-width: 0;">
-                        <span class="changche-grade-num">2학년 :</span>
+                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
+                        <span class="changche-grade-num">2학년:</span>
                         <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade2)}</span>
                       </div>
                       <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade2)}</span>
@@ -6997,8 +7001,8 @@ function renderCalendarWeekView(cal) {
                   </div>
                   <div class="changche-grade-box">
                     <div class="changche-grade-top">
-                      <div style="display: flex; align-items: center; gap: 0.35rem; min-width: 0;">
-                        <span class="changche-grade-num">3학년 :</span>
+                      <div style="display: flex; align-items: center; gap: 0.3rem; min-width: 0;">
+                        <span class="changche-grade-num">3학년:</span>
                         <span class="changche-activity-code">${formatChangcheActivityLine(selectedFri.grade3)}</span>
                       </div>
                       <span class="changche-teacher-tag">${getChangcheTeacherLabel(selectedFri.grade3)}</span>
