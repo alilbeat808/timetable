@@ -8087,12 +8087,14 @@ function exportCurrentTimetableToCsv(entityName) {
 }
 
 /* ==========================================================================
-   KMA Jeonpo-dong Weather Service (기상청 부산광역시 부산진구 전포동 단기예보)
+   KMA Jeonpo-dong Weather Service (기상청 부산진구 전포동 단기예보 + 중기예보 통합)
    ========================================================================== */
 const KMA_SERVICE_KEY = 'oHMyoRaJRwSlkrbmMHISJTQYZ7nifgvtEvYAO%2BH5d3GPR9rqItfIhqDDz0kbulVeezxAhscExc%2Fcxof0Eos84A%3D%3D';
 const KMA_NX = 98; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 X
 const KMA_NY = 75; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 Y
-const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v5';
+const KMA_MID_REG_LAND = '11H20000'; // 부산·울산·경상남도 중기육상예보 구역코드
+const KMA_MID_REG_TA = '11H20201';   // 부산 중기기온 지점코드
+const KMA_CACHE_KEY = 'bdhs_kma_weather_hybrid_cache_v6';
 const KMA_CACHE_TTL_MS = 60 * 60 * 1000; // 1시간 캐시
 
 /**
@@ -8117,12 +8119,15 @@ function getDefaultCalendarWeekDate(now = new Date()) {
   return `${y}-${m}-${day}`;
 }
 
+function getKstDate(d = new Date()) {
+  return new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + (9 * 3600000));
+}
+
 /**
- * Calculates latest available base_date and base_time for KMA VilageFcst
- * KMA 단기예보 발표 시각: 02:10, 05:10, 08:10, 11:10, 14:10, 17:10, 20:10, 23:10
+ * Calculates latest available base_date and base_time for KMA VilageFcst (단기예보)
  */
 function getKmaBaseDateTime(now = new Date()) {
-  const kst = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (9 * 3600000));
+  const kst = getKstDate(now);
   const hour = kst.getHours();
   const min = kst.getMinutes();
   const timeVal = hour * 100 + min;
@@ -8160,8 +8165,37 @@ function getKmaBaseDateTime(now = new Date()) {
 }
 
 /**
- * Parses KMA forecast item list and computes daily summaries.
- * Filters for special adverse weather (Rain, Snow, Lightning, Gale/Typhoon).
+ * Calculates latest available tmFc for KMA MidFcst (중기예보: 매일 06:00, 18:00 발표)
+ */
+function getKmaMidTmFc(now = new Date()) {
+  const kst = getKstDate(now);
+  const hour = kst.getHours();
+  let baseDate = kst;
+  let timeStr = '1800';
+
+  if (hour >= 18) {
+    timeStr = '1800';
+  } else if (hour >= 6) {
+    timeStr = '0600';
+  } else {
+    baseDate = new Date(kst.getTime() - 86400000);
+    timeStr = '1800';
+  }
+
+  const yyyy = baseDate.getFullYear();
+  const mm = String(baseDate.getMonth() + 1).padStart(2, '0');
+  const dd = String(baseDate.getDate()).padStart(2, '0');
+  return {
+    tmFc: `${yyyy}${mm}${dd}${timeStr}`,
+    baseYmd: `${yyyy}${mm}${dd}`,
+    baseYear: yyyy,
+    baseMonth: baseDate.getMonth(),
+    baseDay: baseDate.getDate()
+  };
+}
+
+/**
+ * Parses KMA short-term forecast item list and computes daily summaries (D+0 ~ D+4)
  */
 function parseKmaWeatherItems(items) {
   if (!Array.isArray(items) || items.length === 0) return {};
@@ -8191,9 +8225,7 @@ function parseKmaWeatherItems(items) {
     const lightningHours = [];
     const hourlyList = [];
 
-    // Dominant daytime sky (12:00 ~ 15:00 if available, else first time)
     let daytimeSky = '1';
-    let daytimePty = '0';
 
     for (const t of times) {
       const entry = byDate[ymd][t];
@@ -8218,21 +8250,16 @@ function parseKmaWeatherItems(items) {
 
       if (hourNum >= 12 && hourNum <= 15) {
         daytimeSky = sky;
-        daytimePty = pty;
       } else if (daytimeSky === '1' && (sky === '3' || sky === '4')) {
         daytimeSky = sky;
       }
 
-      // Check Snow
       if (pty === '3' || pty === '2') {
         snowHours.push({ hour: hourNum, pty, pcp, pop, tmp });
-      }
-      // Check Rain (including shower 4)
-      else if (pty === '1' || pty === '4' || (pcp && pcp !== '강수없음' && pcp !== '0' && pcp !== '0.0' && pcp !== '0mm')) {
+      } else if (pty === '1' || pty === '4' || (pcp && pcp !== '강수없음' && pcp !== '0' && pcp !== '0.0' && pcp !== '0mm')) {
         rainHours.push({ hour: hourNum, pty, pcp, pop, tmp });
       }
 
-      // Check Lightning
       if (lgt >= 1) {
         lightningHours.push({ hour: hourNum, lgt });
       }
@@ -8243,10 +8270,10 @@ function parseKmaWeatherItems(items) {
     const hasSnow = snowHours.length > 0;
     const hasRain = rainHours.length > 0;
     const hasLightning = lightningHours.length > 0;
-    const hasWind = maxWindSpeed >= 14; // 기상청 강풍 기준 (14m/s 이상)
+    const hasWind = maxWindSpeed >= 14;
     const isSpecial = hasRain || hasSnow || hasLightning || hasWind;
 
-    // Format rain time ranges & precipitation amounts
+    let rainTimeRange = '';
     let rainSummary = '';
     let rainPcpSummary = '';
 
@@ -8266,7 +8293,7 @@ function parseKmaWeatherItems(items) {
         }
       }
       ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
-      const timeRangeText = ranges.join(', ');
+      rainTimeRange = ranges.join(', ');
 
       const pcpSet = new Set(rainHours.map(r => r.pcp).filter(p => p && p !== '강수없음' && p !== '0'));
       let pcpText = '';
@@ -8277,9 +8304,8 @@ function parseKmaWeatherItems(items) {
         let hasUnder1 = false;
         let purelyNumeric = true;
         for (const p of pcpSet) {
-          if (p.includes('미만')) {
-            hasUnder1 = true;
-          } else {
+          if (p.includes('미만')) hasUnder1 = true;
+          else {
             const m = parseFloat(p);
             if (!isNaN(m)) sum += m;
             else purelyNumeric = false;
@@ -8292,11 +8318,11 @@ function parseKmaWeatherItems(items) {
         pcpText = '비';
       }
 
-      rainSummary = `${timeRangeText} (${pcpText})`;
+      rainSummary = `${rainTimeRange} (${pcpText})`;
       rainPcpSummary = pcpText;
     }
 
-    // Format snow time ranges
+    let snowTimeRange = '';
     let snowSummary = '';
     if (hasSnow) {
       const ranges = [];
@@ -8312,45 +8338,8 @@ function parseKmaWeatherItems(items) {
         }
       }
       ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
-      snowSummary = `${ranges.join(', ')} 눈`;
-    }
-
-    // Tooltips
-    const minT = minTmp !== Infinity ? Math.round(minTmp) : null;
-    const maxT = maxTmp !== -Infinity ? Math.round(maxTmp) : null;
-
-    let tooltip = '';
-    if (hasRain) {
-      tooltip = `🌧️ 부산진구 전포동 비 예보\n• 비 올 시간: ${rainSummary}\n• 예상 강수량: ${rainPcpSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
-    } else if (hasSnow) {
-      tooltip = `❄️ 부산진구 전포동 눈 예보\n• 눈 올 시간: ${snowSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
-    } else if (hasLightning) {
-      tooltip = `⚡ 부산진구 전포동 낙뢰/번개 주의 예보\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
-    } else if (hasWind) {
-      tooltip = `💨 부산진구 전포동 강풍 주의 예보\n• 최대 풍속: ${maxWindSpeed}m/s\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
-    }
-
-    let rainTimeRange = '';
-    if (hasRain && typeof timeRangeText !== 'undefined') {
-      rainTimeRange = timeRangeText;
-    }
-
-    let snowTimeRange = '';
-    if (hasSnow) {
-      const ranges = [];
-      let startH = snowHours[0].hour;
-      let prevH = startH;
-      for (let i = 1; i < snowHours.length; i++) {
-        const curH = snowHours[i].hour;
-        if (curH === prevH + 1) prevH = curH;
-        else {
-          ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
-          startH = curH;
-          prevH = curH;
-        }
-      }
-      ranges.push(startH === prevH ? `${startH}시` : `${startH}~${prevH}시`);
       snowTimeRange = ranges.join(', ');
+      snowSummary = `${snowTimeRange} 눈`;
     }
 
     let lightningTimeRange = '';
@@ -8371,6 +8360,32 @@ function parseKmaWeatherItems(items) {
       lightningTimeRange = ranges.join(', ');
     }
 
+    const minT = minTmp !== Infinity ? Math.round(minTmp) : null;
+    const maxT = maxTmp !== -Infinity ? Math.round(maxTmp) : null;
+
+    let icon = '☀️';
+    if (hasSnow) icon = '❄️';
+    else if (hasRain) icon = '🌧️';
+    else if (hasLightning) icon = '⚡';
+    else if (hasWind) icon = '💨';
+    else if (daytimeSky === '4') icon = '☁️';
+    else if (daytimeSky === '3') icon = '⛅';
+    else icon = '☀️';
+
+    let tooltip = '';
+    if (hasRain) {
+      tooltip = `🌧️ 부산진구 전포동 비 예보\n• 비 올 시간: ${rainSummary}\n• 예상 강수량: ${rainPcpSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasSnow) {
+      tooltip = `❄️ 부산진구 전포동 눈 예보\n• 눈 올 시간: ${snowSummary}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasLightning) {
+      tooltip = `⚡ 부산진구 전포동 낙뢰/번개 주의 예보\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else if (hasWind) {
+      tooltip = `💨 부산진구 전포동 강풍 주의 예보\n• 최대 풍속: ${maxWindSpeed}m/s\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    } else {
+      const skyName = daytimeSky === '4' ? '흐림' : (daytimeSky === '3' ? '구름많음' : '맑음');
+      tooltip = `${icon} 부산진구 전포동 날씨\n• 상태: ${skyName}\n• 최고 강수확률: ${maxPop}%\n• 기온: ${minT !== null ? minT + '℃' : ''} ~ ${maxT !== null ? maxT + '℃' : ''}`;
+    }
+
     const dayWeather = {
       date: dateFormatted,
       ymd,
@@ -8379,6 +8394,7 @@ function parseKmaWeatherItems(items) {
       hasSnow,
       hasLightning,
       hasWind,
+      icon,
       rainTimeRange,
       rainSummary,
       rainPcpSummary,
@@ -8401,7 +8417,114 @@ function parseKmaWeatherItems(items) {
 }
 
 /**
- * Fetches Jeonpo-dong weather from KMA Open API with localStorage caching
+ * Parses KMA mid-term forecast items and computes daily summaries (D+5 ~ D+10)
+ */
+function parseKmaMidWeatherItems(midLandItem, midTaItem, tmFcInfo) {
+  if (!midLandItem || !tmFcInfo) return {};
+  const midWeatherByDate = {};
+
+  for (let offset = 5; offset <= 10; offset++) {
+    const targetDate = new Date(tmFcInfo.baseYear, tmFcInfo.baseMonth, tmFcInfo.baseDay + offset);
+    const yyyy = targetDate.getFullYear();
+    const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(targetDate.getDate()).padStart(2, '0');
+    const ymd = `${yyyy}${mm}${dd}`;
+    const dateFormatted = `${yyyy}-${mm}-${dd}`;
+
+    let wf = '';
+    let wfAm = '';
+    let wfPm = '';
+    let rnSt = 0;
+    let rnStAm = 0;
+    let rnStPm = 0;
+
+    if (offset <= 7) {
+      wfAm = midLandItem[`wf${offset}Am`] || '';
+      wfPm = midLandItem[`wf${offset}Pm`] || '';
+      rnStAm = midLandItem[`rnSt${offset}Am`] || 0;
+      rnStPm = midLandItem[`rnSt${offset}Pm`] || 0;
+      wf = wfAm === wfPm ? wfAm : `${wfAm} / ${wfPm}`;
+      rnSt = Math.max(rnStAm, rnStPm);
+    } else {
+      wf = midLandItem[`wf${offset}`] || '';
+      rnSt = midLandItem[`rnSt${offset}`] || 0;
+    }
+
+    const minTmp = midTaItem && midTaItem[`taMin${offset}`] !== undefined ? midTaItem[`taMin${offset}`] : null;
+    const maxTmp = midTaItem && midTaItem[`taMax${offset}`] !== undefined ? midTaItem[`taMax${offset}`] : null;
+
+    const isRain = wf.includes('비') || wf.includes('소나기');
+    const isSnow = wf.includes('눈');
+    const isSpecial = isRain || isSnow;
+
+    let icon = '☀️';
+    if (isSnow) icon = '❄️';
+    else if (wf.includes('소나기')) icon = '🌦️';
+    else if (isRain) icon = '🌧️';
+    else if (wf.includes('흐림')) icon = '☁️';
+    else if (wf.includes('구름많음')) icon = '⛅';
+
+    let rainTimeRange = '';
+    let rainPcpSummary = '';
+    if (isRain) {
+      if (offset <= 7) {
+        if (wfAm.includes('비') && wfPm.includes('비')) rainTimeRange = '종일 비';
+        else if (wfAm.includes('비')) rainTimeRange = '오전 비';
+        else if (wfPm.includes('비')) rainTimeRange = '오후 비';
+        else rainTimeRange = '비';
+      } else {
+        rainTimeRange = '비';
+      }
+      rainPcpSummary = `강수 ${rnSt}%`;
+    }
+
+    let snowTimeRange = '';
+    let snowPcpSummary = '';
+    if (isSnow) {
+      snowTimeRange = '눈';
+      snowPcpSummary = `확률 ${rnSt}%`;
+    }
+
+    let tooltip = '';
+    if (isSpecial) {
+      tooltip = `🌧️ 부산진구 전포동 날씨 (중기예보)\n• 상태: ${wf}\n• 최고 강수확률: ${rnSt}%\n• 기온: ${minTmp !== null ? minTmp + '℃' : ''} ~ ${maxTmp !== null ? maxTmp + '℃' : ''}`;
+    } else {
+      tooltip = `${icon} 부산진구 전포동 날씨 (중기예보)\n• 상태: ${wf}\n• 최고 강수확률: ${rnSt}%\n• 기온: ${minTmp !== null ? minTmp + '℃' : ''} ~ ${maxTmp !== null ? maxTmp + '℃' : ''}`;
+    }
+
+    const dayWeather = {
+      date: dateFormatted,
+      ymd,
+      isSpecial,
+      hasRain: isRain,
+      hasSnow: isSnow,
+      hasLightning: false,
+      hasWind: false,
+      icon,
+      wf,
+      rainTimeRange,
+      rainSummary: isRain ? `${rainTimeRange} (${rainPcpSummary})` : '',
+      rainPcpSummary,
+      snowTimeRange,
+      snowSummary: isSnow ? `${snowTimeRange} (${snowPcpSummary})` : '',
+      snowPcpSummary,
+      maxPop: rnSt,
+      minTmp,
+      maxTmp,
+      isMidTerm: true,
+      tooltip
+    };
+
+    midWeatherByDate[dateFormatted] = dayWeather;
+    midWeatherByDate[ymd] = dayWeather;
+  }
+
+  return midWeatherByDate;
+}
+
+/**
+ * Fetches Jeonpo-dong weather from KMA Open API with localStorage caching:
+ * Hybrid combination of 단기예보 (D+0 ~ D+4) and 중기예보 (D+5 ~ D+10)
  */
 async function fetchJeonpoWeather(force = false) {
   try {
@@ -8422,17 +8545,41 @@ async function fetchJeonpoWeather(force = false) {
       } catch (e) {}
     }
 
+    // 1. 단기예보 (getVilageFcst)
     const dt = getKmaBaseDateTime();
-    const url = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=1100&dataType=JSON&base_date=${dt.baseDate}&base_time=${dt.baseTime}&nx=${KMA_NX}&ny=${KMA_NY}`;
+    const urlVilage = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=1100&dataType=JSON&base_date=${dt.baseDate}&base_time=${dt.baseTime}&nx=${KMA_NX}&ny=${KMA_NY}`;
+    
+    // 2. 중기예보 (getMidLandFcst, getMidTa)
+    const tmFcInfo = getKmaMidTmFc();
+    const urlMidLand = `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=JSON&regId=${KMA_MID_REG_LAND}&tmFc=${tmFcInfo.tmFc}`;
+    const urlMidTa = `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=JSON&regId=${KMA_MID_REG_TA}&tmFc=${tmFcInfo.tmFc}`;
 
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    const items = json.response?.body?.items?.item || [];
+    const [resVilage, resMidLand, resMidTa] = await Promise.allSettled([
+      fetch(urlVilage).then(r => r.ok ? r.json() : null),
+      fetch(urlMidLand).then(r => r.ok ? r.json() : null),
+      fetch(urlMidTa).then(r => r.ok ? r.json() : null)
+    ]);
 
-    if (items.length > 0) {
-      const parsed = parseKmaWeatherItems(items);
-      AppState.weatherDataByDate = parsed;
+    let shortData = {};
+    if (resVilage.status === 'fulfilled' && resVilage.value) {
+      const items = resVilage.value.response?.body?.items?.item || [];
+      if (items.length > 0) {
+        shortData = parseKmaWeatherItems(items);
+      }
+    }
+
+    let midData = {};
+    if (resMidLand.status === 'fulfilled' && resMidLand.value) {
+      const landItem = resMidLand.value.response?.body?.items?.item?.[0] || {};
+      const taItem = (resMidTa.status === 'fulfilled' && resMidTa.value) ? resMidTa.value.response?.body?.items?.item?.[0] || {} : {};
+      midData = parseKmaMidWeatherItems(landItem, taItem, tmFcInfo);
+    }
+
+    // Merge: shortData takes priority, midData extends future days up to D+10
+    const merged = { ...midData, ...shortData };
+
+    if (Object.keys(merged).length > 0) {
+      AppState.weatherDataByDate = merged;
       AppState.weatherLoaded = true;
       AppState.weatherLastFetched = new Date();
 
@@ -8441,7 +8588,7 @@ async function fetchJeonpoWeather(force = false) {
           timestamp: Date.now(),
           baseDate: dt.baseDate,
           baseTime: dt.baseTime,
-          weatherDataByDate: parsed
+          weatherDataByDate: merged
         }));
       } catch (e) {}
 
@@ -8449,7 +8596,7 @@ async function fetchJeonpoWeather(force = false) {
         renderApp();
       }
 
-      return parsed;
+      return merged;
     }
   } catch (err) {
     console.warn('KMA Weather fetch failed:', err);
@@ -8458,61 +8605,66 @@ async function fetchJeonpoWeather(force = false) {
 }
 
 /**
- * Returns special weather HTML badge for Monthly or Weekly calendar.
- * ONLY displays when special adverse weather is forecast (Rain, Snow, Lightning, Gale).
- * Fair/clear weather (맑음, 구름많음, 흐림) returns empty string as requested.
+ * Returns weather HTML for Monthly or Weekly calendar.
+ * - 비 / 눈 등 특이날씨: 상세 정보 뱃지 표기 (주별: 2행 축소, 월별: 상세 뱃지)
+ * - 나머지 맑음, 구름많음, 흐림 등 일반 날씨: 아이콘으로만 표기 (☀️, ⛅, ☁️)
  */
 function getWeatherBadgeForDate(dateStr, isWeekly = false) {
   if (!AppState.weatherDataByDate || !dateStr) return '';
   const w = AppState.weatherDataByDate[dateStr];
-  if (!w || !w.isSpecial) return ''; // 맑음/구름/흐림 등 일반 날씨는 숨김!
+  if (!w) return '';
 
   const escapedTooltip = escapeHtml(w.tooltip || '');
 
-  if (isWeekly) {
-    // Weekly calendar header tag: 폰트 축소 및 2행 구조 (우측 끝 정렬)
-    // 1행 : 날씨 종류:예상시간
-    // 2행 : 예상 양 예상 퍼센테이지
-    if (w.hasRain) {
-      const timeStr = w.rainTimeRange || (w.rainSummary ? w.rainSummary.split(' ')[0] : '');
-      const pcpStr = w.rainPcpSummary || '비';
-      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
-      return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">
-        <span class="week-weather-line1">🌧️ 비: ${escapeHtml(timeStr)}</span>
-        <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
-      </span>`;
-    } else if (w.hasSnow) {
-      const timeStr = w.snowTimeRange || (w.snowSummary ? w.snowSummary.split(' ')[0] : '');
-      const pcpStr = w.snowPcpSummary || '눈';
-      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
-      return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">
-        <span class="week-weather-line1">❄️ 눈: ${escapeHtml(timeStr)}</span>
-        <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
-      </span>`;
-    } else if (w.hasLightning) {
-      const timeStr = w.lightningTimeRange || '주의';
-      const popStr = w.maxPop ? `(${w.maxPop}%)` : '';
-      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
-        <span class="week-weather-line1">⚡ 번개: ${escapeHtml(timeStr)}</span>
-        <span class="week-weather-line2">낙뢰 주의 ${popStr}</span>
-      </span>`;
-    } else if (w.hasWind) {
-      return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
-        <span class="week-weather-line1">💨 강풍: 주의</span>
-        <span class="week-weather-line2">최대 ${w.maxWindSpeed}m/s</span>
-      </span>`;
-    }
-  } else {
-    // Monthly calendar day cell badge (우측 끝 정렬)
-    if (w.hasRain) {
-      return `<span class="weather-day-badge rain-alert" title="${escapedTooltip}">🌧️ ${escapeHtml(w.rainSummary)}</span>`;
-    } else if (w.hasSnow) {
-      return `<span class="weather-day-badge snow-alert" title="${escapedTooltip}">❄️ ${escapeHtml(w.snowSummary)}</span>`;
-    } else if (w.hasLightning) {
-      return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">⚡ 번개</span>`;
-    } else if (w.hasWind) {
-      return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">💨 강풍</span>`;
+  // 1. 특이날씨 (비, 눈, 번개, 강풍) -> 상세 정보 표기
+  if (w.isSpecial) {
+    if (isWeekly) {
+      if (w.hasRain) {
+        const timeStr = w.rainTimeRange || (w.rainSummary ? w.rainSummary.split(' ')[0] : '비');
+        const pcpStr = w.rainPcpSummary || (w.maxPop ? `강수 ${w.maxPop}%` : '비');
+        const popStr = !pcpStr.includes('%') && w.maxPop ? `(${w.maxPop}%)` : '';
+        return `<span class="week-weather-tag rain-alert" title="${escapedTooltip}">
+          <span class="week-weather-line1">🌧️ 비: ${escapeHtml(timeStr)}</span>
+          <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
+        </span>`;
+      } else if (w.hasSnow) {
+        const timeStr = w.snowTimeRange || '눈';
+        const pcpStr = w.snowPcpSummary || (w.maxPop ? `확률 ${w.maxPop}%` : '눈');
+        const popStr = !pcpStr.includes('%') && w.maxPop ? `(${w.maxPop}%)` : '';
+        return `<span class="week-weather-tag snow-alert" title="${escapedTooltip}">
+          <span class="week-weather-line1">❄️ 눈: ${escapeHtml(timeStr)}</span>
+          <span class="week-weather-line2">${escapeHtml(pcpStr)} ${popStr}</span>
+        </span>`;
+      } else if (w.hasLightning) {
+        const timeStr = w.lightningTimeRange || '주의';
+        return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+          <span class="week-weather-line1">⚡ 번개: ${escapeHtml(timeStr)}</span>
+          <span class="week-weather-line2">낙뢰 주의</span>
+        </span>`;
+      } else if (w.hasWind) {
+        return `<span class="week-weather-tag storm-alert" title="${escapedTooltip}">
+          <span class="week-weather-line1">💨 강풍: 주의</span>
+          <span class="week-weather-line2">최대 ${w.maxWindSpeed}m/s</span>
+        </span>`;
+      }
+    } else {
+      if (w.hasRain) {
+        return `<span class="weather-day-badge rain-alert" title="${escapedTooltip}">🌧️ ${escapeHtml(w.rainSummary || '비')}</span>`;
+      } else if (w.hasSnow) {
+        return `<span class="weather-day-badge snow-alert" title="${escapedTooltip}">❄️ ${escapeHtml(w.snowSummary || '눈')}</span>`;
+      } else if (w.hasLightning) {
+        return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">⚡ 번개</span>`;
+      } else if (w.hasWind) {
+        return `<span class="weather-day-badge storm-alert" title="${escapedTooltip}">💨 강풍</span>`;
+      }
     }
   }
-  return '';
+
+  // 2. 나머지 맑은 날씨나 그런건 아이콘으로만 표시
+  const icon = w.icon || '☀️';
+  if (isWeekly) {
+    return `<span class="week-weather-simple-icon" title="${escapedTooltip}">${icon}</span>`;
+  } else {
+    return `<span class="month-weather-simple-icon" title="${escapedTooltip}">${icon}</span>`;
+  }
 }
