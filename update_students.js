@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const projectDir = 'c:\\Users\\user\\OneDrive\\Desktop\\jindo';
+const projectDir = __dirname;
 const XLSX = require(path.join(projectDir, 'node_modules', 'xlsx'));
 const CFB = XLSX.CFB;
 
