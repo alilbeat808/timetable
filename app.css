@@ -873,6 +873,9 @@ body {
 /* View Mode Segmented Switcher */
 .view-mode-switcher {
   display: inline-flex;
+  align-self: flex-start;
+  width: fit-content;
+  max-width: fit-content;
   background: var(--bg-hover);
   padding: 0.2rem;
   border-radius: var(--radius-md);
@@ -3967,6 +3970,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 0.75rem;
   flex: 1 1 auto;
   min-width: 0;
@@ -5110,9 +5114,7 @@ body {
 }
 
 .week-today-btn {
-  padding: 0.28rem 0.65rem !important;
-  font-size: 0.8rem !important;
-  font-weight: 700;
+  /* Harmonized with month view today button (inherits standard .btn padding & typography) */
   white-space: nowrap;
 }
 

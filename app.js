@@ -7013,8 +7013,8 @@ function renderCalendarMonthView(cal) {
           `).join('')}
         </select>
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(1)">다음 달 ▶</button>
-        <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})">
-          오늘 (${now.getMonth() + 1}월)로 이동
+        <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})" title="현재 월(${now.getMonth() + 1}월)로 이동">
+          이번 달로 이동
         </button>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
           🔄 지금 즉시 동기화
@@ -7193,7 +7193,7 @@ function renderCalendarWeekView(cal) {
         </select>
         <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarWeek(1)" title="다음 주차">다음 주 ▶</button>
         <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarWeek('2026-09-04')" title="현재 주차(9월 4일 주)로 이동">
-          이번 주
+          이번 주로 이동
         </button>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
           🔄 지금 즉시 동기화
