@@ -4258,6 +4258,7 @@ body {
 
 /* Meal Detail Modal Styles */
 .meal-modal-card {
+  background: var(--bg-surface, #ffffff) !important;
   max-width: 560px !important;
 }
 
@@ -4278,6 +4279,7 @@ body {
 }
 
 .meal-modal-body {
+  background: var(--bg-surface, #ffffff) !important;
   padding: 1rem 1.15rem;
   max-height: 65vh;
   overflow-y: auto;
@@ -5193,12 +5195,12 @@ body {
   font-weight: 600;
 }
 
-/* Calendar Day Detail Modal */
+/* Calendar Day Detail Modal & Meal Detail Modal (완전 불투명 배경 & 카드) */
 .calendar-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
+  background: #0f172a; /* 뒤 배경을 완전히 불투명하게 차단 */
+  backdrop-filter: none;
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -5208,12 +5210,12 @@ body {
 }
 
 .calendar-modal-card {
-  background: var(--card-bg);
+  background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   max-width: 480px;
   width: 100%;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }

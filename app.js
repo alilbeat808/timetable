@@ -8027,6 +8027,26 @@ function stepMealDetailDate(step) {
   let cur = AppState.mealModalActiveDate ? new Date(AppState.mealModalActiveDate + 'T00:00:00') : new Date();
   if (step === 0) {
     cur = typeof getTodayMealTargetDate === 'function' ? getTodayMealTargetDate().targetDate : new Date();
+  } else if (step === 1) {
+    // 금요일(5)에서 다음 날 클릭 시 주말(토, 일)을 건너뛰고 월요일(+3일)로 점프!
+    const day = cur.getDay();
+    if (day === 5) {
+      cur.setDate(cur.getDate() + 3);
+    } else if (day === 6) {
+      cur.setDate(cur.getDate() + 2);
+    } else {
+      cur.setDate(cur.getDate() + 1);
+    }
+  } else if (step === -1) {
+    // 월요일(1)에서 이전 날 클릭 시 주말(일, 토)을 건너뛰고 금요일(-3일)로 점프!
+    const day = cur.getDay();
+    if (day === 1) {
+      cur.setDate(cur.getDate() - 3);
+    } else if (day === 0) {
+      cur.setDate(cur.getDate() - 2);
+    } else {
+      cur.setDate(cur.getDate() - 1);
+    }
   } else {
     cur.setDate(cur.getDate() + step);
   }
