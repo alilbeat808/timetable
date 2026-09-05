@@ -4581,17 +4581,20 @@ body {
   opacity: 0.25;
 }
 
-/* Calendar Month & Week Selects - Prevent Overlapping with Dropdown Arrow */
+/* Calendar Month & Week Selects - Compact Width & Center Aligned (글자-화살표 공백 최적화) */
 .calendar-month-select {
   height: 32px !important;
   box-sizing: border-box !important;
   font-weight: 700;
   font-size: 0.84rem;
-  padding: 0 2.2rem 0 0.75rem !important;
-  min-width: 140px;
+  padding: 0 1.65rem 0 0.65rem !important;
+  min-width: 112px;
+  width: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
-  background-position: right 0.75rem center !important;
+  background-position: right 0.55rem center !important;
+  text-align: center !important;
+  text-align-last: center !important;
   cursor: pointer;
 }
 
@@ -4600,11 +4603,13 @@ body {
   box-sizing: border-box !important;
   font-weight: 700;
   font-size: 0.84rem;
-  padding: 0 2.2rem 0 0.75rem !important;
-  min-width: 210px;
+  padding: 0 1.65rem 0 0.65rem !important;
+  min-width: 192px;
   width: auto;
   max-width: 100%;
-  background-position: right 0.75rem center !important;
+  background-position: right 0.55rem center !important;
+  text-align: center !important;
+  text-align-last: center !important;
   cursor: pointer;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
