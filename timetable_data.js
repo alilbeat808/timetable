@@ -108461,7 +108461,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 16,
         "dayOfWeek": "월",
         "week": 3,
-        "event": "교과협의회\n교직원인성교육(1교시)<생활>\n지함관(정독실)2,3학년 시작",
+        "event": "교과협의회\n교직원인성교육(1교시)<생활>\n지함관(정독실)2,3학년 시작<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -108581,7 +108581,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 30,
         "dayOfWeek": "월",
         "week": 5,
-        "event": "전문적 학습 공동체\n학생회 간부 임명장 수여식(08:30)\n원안작성연수(1교시) \n급식 안면인식기 회의(교감, 학년부장, 보건, 영양사) 14:20~14:40\n일반고 자기주도학습 예산 편성 회의(08:50)<진학>",
+        "event": "전문적 학습 공동체\n학생회 간부 임명장 수여식(08:30)\n원안작성연수(1교시) (평가)\n급식 안면인식기 회의(교감, 학년부장, 보건, 영양사) 14:20~14:40\n일반고 자기주도학습 예산 편성 회의(08:50)<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109097,7 +109097,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 28,
         "dayOfWeek": "목",
         "week": 13,
-        "event": "수업나눔\n(1교시, 고급물리학, 박주현교사, 물리실)(평가)",
+        "event": "수업나눔(평가)\n(1교시, 고급물리학, 박주현교사, 물리실)(평가)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109961,7 +109961,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 7,
         "dayOfWeek": "월",
         "week": 4,
-        "event": "교무회의\n자전거 및 개인형 이동장치(PM) 교육(1교시)<생활>\n대입수시전형 원서접수(~9/11)",
+        "event": "교무회의\n자전거 및 개인형 이동장치(PM) 교육(1교시)<생활>\n대입수시전형 원서접수(~9/11)<진학>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110021,7 +110021,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 14,
         "dayOfWeek": "월",
         "week": 5,
-        "event": "전문적 학습 공동체\n원안작성연수(1교시)\n행복한등굣길행사 흡연예방캠페인<생활>\n학교운영위원회<행정실>\n원안작성연수(평가)\n전국체전 대비 배드민턴부 오후 운동<운동부>",
+        "event": "전문적 학습 공동체\n원안작성연수(1교시)(평가)\n행복한등굣길행사 흡연예방캠페인<생활>\n학교운영위원회<행정실>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110153,7 +110153,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 29,
         "dayOfWeek": "화",
         "week": 7,
-        "event": "학부모대상공개수업(6,7교시)\n찾아가는 A+++ 디지털직무연수<정보>\n부별 협의회(~9/19)",
+        "event": "학부모대상공개수업(6,7교시)(평가)\n찾아가는 A+++ 디지털직무연수<정보>\n부별 협의회(~9/19)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110561,7 +110561,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 16,
         "dayOfWeek": "월",
         "week": 14,
-        "event": "교과 협의회\n원안작성연수(1교시)\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>",
+        "event": "교과 협의회\n원안작성연수(1교시)(평가)\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""

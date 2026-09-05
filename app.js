@@ -5822,6 +5822,7 @@ const ACADEMIC_KNOWN_DEPTS = {
   '교무부': { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
   '연구': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
   '학점': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
+  '학점제': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
   '과중': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
   '영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
   '과중,영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
@@ -5872,8 +5873,8 @@ function formatEventLineWithDeptBadges(line) {
     return '';
   });
 
-  // Match parenthesized known department keywords (평가, 3학년, 행정실, etc.)
-  text = text.replace(/\s*\(\s*(평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부)\s*\)/g, (m, g1) => {
+  // Match parenthesized known department keywords (평가, 학점제, 3학년, 행정실, etc.)
+  text = text.replace(/\s*\(\s*(평가|학점제|학점|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부)\s*\)/g, (m, g1) => {
     badges.push(getDepartmentStyleInfo(g1));
     return '';
   });
@@ -5881,6 +5882,24 @@ function formatEventLineWithDeptBadges(line) {
   // Auto-tag '운동부' for badminton-related events if not already tagged
   if (/배드민턴/.test(text) && !badges.some(b => b.name === '운동부')) {
     badges.push(getDepartmentStyleInfo('운동부'));
+  }
+
+  // Auto-tag '평가' for 수업나눔, 원안 작성 연수, 시험범위 공지, 학부모대상 공개수업
+  const isEvaluation = /수업\s*나눔|원안\s*작성\s*연수|시험범위\s*공지|학부모\s*대상\s*공개\s*수업/.test(text);
+  if (isEvaluation && !badges.some(b => b.name === '평가')) {
+    badges.push(getDepartmentStyleInfo('평가'));
+  }
+
+  // Auto-tag '학점제' for 수강신청
+  const isCreditSystem = /수강\s*신청/.test(text);
+  if (isCreditSystem && !badges.some(b => b.name === '학점제' || b.name === '학점')) {
+    badges.push(getDepartmentStyleInfo('학점제'));
+  }
+
+  // Auto-tag '진학' for 수능접수, 수시접수, 지함관
+  const isAdmissions = /(?:지함관|수시\s*접수|수시.*원서\s*접수|대입\s*수시.*접수|수능\s*접수|수능.*원서\s*접수|수능원서\s*접수|수능원서\s*작성)/.test(text);
+  if (isAdmissions && !badges.some(b => b.name === '진학' || b.name === '진학부')) {
+    badges.push(getDepartmentStyleInfo('진학'));
   }
 
   text = text.trim();
