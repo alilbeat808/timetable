@@ -7270,10 +7270,10 @@ function renderCalendarWeekView(cal) {
         return `
           <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
             <div class="week-day-header">
-              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; min-width: 0; flex: 1;">
-                <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0;">
+              <div style="display: flex; align-items: center; gap: 0.25rem; min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: baseline; gap: 0.2rem; white-space: nowrap; flex-shrink: 0;">
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
-                  <span style="font-size:0.78rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
+                  <span style="font-size:0.75rem; color:var(--text-muted); flex-shrink: 0;">(${wd.month}/${wd.day})</span>
                 </div>
                 ${allHeaderBadges.length > 0 ? `
                   <div class="week-meeting-badges-col">
@@ -8092,7 +8092,7 @@ function exportCurrentTimetableToCsv(entityName) {
 const KMA_SERVICE_KEY = 'oHMyoRaJRwSlkrbmMHISJTQYZ7nifgvtEvYAO%2BH5d3GPR9rqItfIhqDDz0kbulVeezxAhscExc%2Fcxof0Eos84A%3D%3D';
 const KMA_NX = 98; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 X
 const KMA_NY = 75; // 부산광역시 부산진구 전포동 (부산동고등학교) 격자 Y
-const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v4';
+const KMA_CACHE_KEY = 'bdhs_kma_jeonpo_weather_cache_v5';
 const KMA_CACHE_TTL_MS = 60 * 60 * 1000; // 1시간 캐시
 
 /**
@@ -8423,7 +8423,7 @@ async function fetchJeonpoWeather(force = false) {
     }
 
     const dt = getKmaBaseDateTime();
-    const url = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${dt.baseDate}&base_time=${dt.baseTime}&nx=${KMA_NX}&ny=${KMA_NY}`;
+    const url = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${KMA_SERVICE_KEY}&pageNo=1&numOfRows=1100&dataType=JSON&base_date=${dt.baseDate}&base_time=${dt.baseTime}&nx=${KMA_NX}&ny=${KMA_NY}`;
 
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
