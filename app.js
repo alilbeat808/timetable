@@ -5806,118 +5806,163 @@ function parseCSV(text) {
 }
 
 
-/* Department Color Palette & Badge Formatter */
-const ACADEMIC_KNOWN_DEPTS = {
-  '평가': { bg: '#fee2e2', text: '#b91c1c', border: '#fca5a5' },
-  '진로': { bg: '#dcfce7', text: '#15803d', border: '#86efac' },
-  '진학': { bg: '#ccfbf1', text: '#0f766e', border: '#5eead4' },
-  '진학부': { bg: '#ccfbf1', text: '#0f766e', border: '#5eead4' },
-  '행정실': { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
-  '행정': { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
-  '생활': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
-  '생안': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
-  '생안부': { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
-  '정보': { bg: '#e0f2fe', text: '#0369a1', border: '#7dd3fc' },
-  '교무': { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
-  '교무부': { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
-  '연구': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
-  '학점': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
-  '학점제': { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
-  '과중': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
-  '영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
-  '과중,영재': { bg: '#ecfccb', text: '#4d7c0f', border: '#bef264' },
-  '보건': { bg: '#fce7f3', text: '#be185d', border: '#f472b6' },
-  '도서관': { bg: '#fef9c3', text: '#854d0e', border: '#fde047' },
-  '방송부': { bg: '#fae8ff', text: '#a21caf', border: '#f0abfc' },
-  '1학년부': { bg: '#dbeafe', text: '#1d4ed8', border: '#93c5fd' },
-  '1학년': { bg: '#dbeafe', text: '#1d4ed8', border: '#93c5fd' },
-  '2학년부': { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
-  '2학년': { bg: '#e0e7ff', text: '#3730a3', border: '#a5b4fc' },
-  '3학년부': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
-  '3학년': { bg: '#ede9fe', text: '#5b21b6', border: '#c4b5fd' },
-  '교장': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
-  '교감': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
-  '인문': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  '인문사회': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  '인문사회부': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  '영어': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  '운동부': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' }
+/* Department Color Palette & Badge Formatter (교사별 시간표 업무부서 필터 스타일 및 아이콘 완벽 연동) */
+const ACADEMIC_DEPT_FULLNAME_MAP = {
+  // Official Administrative Departments (12개 공식 업무부서)
+  '교무기획부': '교무기획부',
+  '교무': '교무기획부',
+  '교무부': '교무기획부',
+  '교무기획': '교무기획부',
+
+  '생활안전부': '생활안전부',
+  '생활': '생활안전부',
+  '생안': '생활안전부',
+  '생안부': '생활안전부',
+  '생활안전': '생활안전부',
+
+  '진로상담부': '진로상담부',
+  '진로': '진로상담부',
+  '진로부': '진로상담부',
+  '진로상담': '진로상담부',
+
+  '진학지도부': '진학지도부',
+  '진학': '진학지도부',
+  '진학부': '진학지도부',
+  '진학지도': '진학지도부',
+
+  '교육정보부': '교육정보부',
+  '정보': '교육정보부',
+  '교육정보': '교육정보부',
+
+  '고교학점제부': '고교학점제부',
+  '학점': '고교학점제부',
+  '학점제': '고교학점제부',
+  '연구': '고교학점제부',
+  '고교학점': '고교학점제부',
+  '고교학점제': '고교학점제부',
+
+  '교육평가부': '교육평가부',
+  '평가': '교육평가부',
+  '교육평가': '교육평가부',
+
+  '인문사회부': '인문사회부',
+  '인문': '인문사회부',
+  '인문사회': '인문사회부',
+
+  '과학중점부': '과학중점부',
+  '과중': '과학중점부',
+  '영재': '과학중점부',
+  '과중,영재': '과학중점부',
+  '과학중점': '과학중점부',
+
+  '1학년부': '1학년부',
+  '1학년': '1학년부',
+
+  '2학년부': '2학년부',
+  '2학년': '2학년부',
+
+  '3학년부': '3학년부',
+  '3학년': '3학년부',
+
+  // Non-official / Special Departments (기존 업무부서 외 뱃지)
+  '행정실': '행정실',
+  '행정': '행정실',
+
+  '운동부': '운동부',
+
+  '보건': '보건',
+
+  '도서관': '도서관',
+
+  '방송부': '방송부',
+
+  '교장': '교장',
+  '교감': '교감',
+
+  '영어': '영어'
 };
 
-const ACADEMIC_DYNAMIC_PALETTES = [
-  { bg: '#fee2e2', text: '#b91c1c', border: '#fca5a5' },
-  { bg: '#dcfce7', text: '#15803d', border: '#86efac' },
-  { bg: '#e0e7ff', text: '#4338ca', border: '#a5b4fc' },
-  { bg: '#fef3c7', text: '#b45309', border: '#fcd34d' },
-  { bg: '#f3e8ff', text: '#7e22ce', border: '#d8b4fe' },
-  { bg: '#cffafe', text: '#0e7490', border: '#67e8f9' },
-  { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  { bg: '#fae8ff', text: '#a21caf', border: '#f0abfc' }
-];
+const ACADEMIC_DEPT_ICONS = {
+  ...ADMIN_DEPT_ICONS,
+  '행정실': '💼',
+  '운동부': '🏸',
+  '보건': '🩺',
+  '도서관': '📚',
+  '방송부': '🎙️',
+  '교장': '👔',
+  '교감': '👔',
+  '영어': '🌐'
+};
 
 function getDepartmentStyleInfo(deptName) {
   let clean = deptName.replace(/[<>()]/g, '').trim();
-  if (clean === '인문' || clean === '인문사회부') clean = '인문사회';
-  if (clean === '진학부') clean = '진학';
-  if (clean === '교무부') clean = '교무';
-  if (clean === '생안' || clean === '생안부') clean = '생활';
-  if (clean === '학점') clean = '학점제';
-  if (ACADEMIC_KNOWN_DEPTS[clean]) return { ...ACADEMIC_KNOWN_DEPTS[clean], name: clean };
-  let hash = 0;
-  for (let i = 0; i < clean.length; i++) hash = (hash * 31 + clean.charCodeAt(i)) & 0xffffffff;
-  const p = ACADEMIC_DYNAMIC_PALETTES[Math.abs(hash) % ACADEMIC_DYNAMIC_PALETTES.length];
-  return { ...p, name: clean };
+  const fullName = ACADEMIC_DEPT_FULLNAME_MAP[clean] || clean;
+  const icon = ACADEMIC_DEPT_ICONS[fullName] || '🏢';
+  const className = 'badge-admin-' + fullName;
+  return {
+    name: fullName,
+    icon: icon,
+    className: className
+  };
 }
 
 function formatEventLineWithDeptBadges(line) {
   let text = line;
   const badges = [];
 
-  // Match angle brackets <부서>
+  // 1. Match angle brackets <부서>
   text = text.replace(/<([^>]+)>/g, (m, g1) => {
     const parts = g1.split(/[,/]/).map(x => x.trim()).filter(Boolean);
-    parts.forEach(p => badges.push(getDepartmentStyleInfo(p)));
+    parts.forEach(p => {
+      const info = getDepartmentStyleInfo(p);
+      if (info && !badges.some(b => b.name === info.name)) {
+        badges.push(info);
+      }
+    });
     return '';
   });
 
-  // Match parenthesized known department keywords (평가, 학점제, 3학년, 행정실, etc.)
-  text = text.replace(/\s*\(\s*(평가|학점제|학점|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부|인문사회|인문사회부|인문)\s*\)/g, (m, g1) => {
-    badges.push(getDepartmentStyleInfo(g1));
+  // 2. Match parenthesized known department keywords (교육평가부, 평가, 고교학점제부, 학점제, 3학년부, 3학년, 행정실 등)
+  text = text.replace(/\s*\(\s*(교육평가부|고교학점제부|진학지도부|진로상담부|교무기획부|생활안전부|교육정보부|인문사회부|과학중점부|1학년부|2학년부|3학년부|평가|학점제|학점|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년|2학년|3학년|연구|정보|도서관|방송부|운동부|인문사회|인문사회부|인문)\s*\)/g, (m, g1) => {
+    const info = getDepartmentStyleInfo(g1);
+    if (info && !badges.some(b => b.name === info.name)) {
+      badges.push(info);
+    }
     return '';
   });
 
-  // Auto-tag '운동부' for badminton-related events if not already tagged
+  // 3. Auto-tag '운동부' for badminton-related events if not already tagged
   if (/배드민턴/.test(text) && !badges.some(b => b.name === '운동부')) {
     badges.push(getDepartmentStyleInfo('운동부'));
   }
 
-  // Auto-tag '평가' for 원안, 고사감독, 성적이의, 수업나눔, 시험범위 공지, 학부모대상 공개수업
+  // 4. Auto-tag '교육평가부' for 원안, 고사감독, 성적이의, 수업나눔, 시험범위 공지, 학부모대상 공개수업
   const isEvaluation = /원안|고사\s*감독|성적\s*이의|수업\s*나눔|시험범위\s*공지|학부모\s*대상\s*공개\s*수업/.test(text);
-  if (isEvaluation && !badges.some(b => b.name === '평가')) {
-    badges.push(getDepartmentStyleInfo('평가'));
+  if (isEvaluation && !badges.some(b => b.name === '교육평가부')) {
+    badges.push(getDepartmentStyleInfo('교육평가부'));
   }
 
-  // Auto-tag '학점제' for 수강신청, 교육과정
+  // 5. Auto-tag '고교학점제부' for 수강신청, 교육과정
   const isCreditSystem = /수강\s*신청|교육\s*과정/.test(text);
-  if (isCreditSystem && !badges.some(b => b.name === '학점제' || b.name === '학점')) {
-    badges.push(getDepartmentStyleInfo('학점제'));
+  if (isCreditSystem && !badges.some(b => b.name === '고교학점제부')) {
+    badges.push(getDepartmentStyleInfo('고교학점제부'));
   }
 
-  // Auto-tag '진학' for 수능접수, 수시접수, 지함관, 학부모 상담주간, 진학설명회
+  // 6. Auto-tag '진학지도부' for 수능접수, 수시접수, 지함관, 학부모 상담주간, 진학설명회
   const isAdmissions = /(?:지함관|수시\s*접수|수시.*원서\s*접수|대입\s*수시.*접수|수능\s*접수|수능.*원서\s*접수|수능원서\s*접수|수능원서\s*작성|학부모\s*상담\s*주간|진학\s*설명회)/.test(text);
-  if (isAdmissions && !badges.some(b => b.name === '진학' || b.name === '진학부')) {
-    badges.push(getDepartmentStyleInfo('진학'));
+  if (isAdmissions && !badges.some(b => b.name === '진학지도부')) {
+    badges.push(getDepartmentStyleInfo('진학지도부'));
   }
 
-  // Auto-tag '인문사회' for 방과후, 동아리활동 related events if not already tagged
-  if (/(?:방과\s*후|동아리\s*활동)/.test(text) && !badges.some(b => b.name === '인문사회' || b.name === '인문')) {
-    badges.push(getDepartmentStyleInfo('인문사회'));
+  // 7. Auto-tag '인문사회부' for 방과후, 동아리활동 related events if not already tagged
+  if (/(?:방과\s*후|동아리\s*활동)/.test(text) && !badges.some(b => b.name === '인문사회부')) {
+    badges.push(getDepartmentStyleInfo('인문사회부'));
   }
 
   text = text.trim();
   const escapedText = escapeHtml(text);
   const badgeHtml = badges.map(b => 
-    `<span class="calendar-dept-badge" data-dept="${escapeHtml(b.name)}" style="background:${b.bg}; color:${b.text}; border-color:${b.border};">${escapeHtml(b.name)}</span>`
+    `<span class="calendar-dept-badge ${escapeHtml(b.className)}" data-dept="${escapeHtml(b.name)}">${b.icon ? `<span class="dept-badge-icon">${b.icon}</span> ` : ''}${escapeHtml(b.name)}</span>`
   ).join('');
 
   return escapedText + badgeHtml;
