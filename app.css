@@ -4216,9 +4216,15 @@ body {
 }
 
 .week-nav-action-btn {
-  padding: 0.28rem 0.65rem !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 0.65rem !important;
   font-size: 0.8rem !important;
-  font-weight: 700;
+  font-weight: 700 !important;
+  line-height: 1 !important;
   white-space: nowrap;
 }
 
@@ -4524,24 +4530,31 @@ body {
 
 /* Calendar Month & Week Selects - Prevent Overlapping with Dropdown Arrow */
 .calendar-month-select {
+  height: 32px !important;
+  box-sizing: border-box !important;
   font-weight: 700;
-  font-size: 1rem;
-  padding: 0.45rem 2.6rem 0.45rem 1rem !important;
-  min-width: 165px;
-  background-position: right 0.85rem center !important;
+  font-size: 0.84rem;
+  padding: 0 2.2rem 0 0.75rem !important;
+  min-width: 140px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background-position: right 0.75rem center !important;
   cursor: pointer;
 }
 
 .calendar-week-select {
+  height: 32px !important;
+  box-sizing: border-box !important;
   font-weight: 700;
-  font-size: 0.88rem;
-  padding: 0.32rem 2.2rem 0.32rem 0.75rem !important;
+  font-size: 0.84rem;
+  padding: 0 2.2rem 0 0.75rem !important;
   min-width: 210px;
   width: auto;
   max-width: 100%;
   background-position: right 0.75rem center !important;
   cursor: pointer;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
 }
 
 /* Department Badge (담당부서 색상 태그 - 교사별 시간표 업무부서 스타일과 완벽 일치) */
@@ -5107,14 +5120,28 @@ body {
 }
 
 .week-nav-btn {
-  padding: 0.28rem 0.6rem !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 0.65rem !important;
   font-size: 0.8rem !important;
-  font-weight: 700;
+  font-weight: 700 !important;
+  line-height: 1 !important;
   white-space: nowrap;
 }
 
 .week-today-btn {
-  /* Harmonized with month view today button (inherits standard .btn padding & typography) */
+  height: 32px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 0.75rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
   white-space: nowrap;
 }
 
@@ -5232,8 +5259,14 @@ body {
 
 
 .week-sync-btn {
-  padding: 0.28rem 0.65rem !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 0.65rem !important;
   font-size: 0.8rem !important;
-  font-weight: 700;
+  font-weight: 700 !important;
+  line-height: 1 !important;
   white-space: nowrap;
 }

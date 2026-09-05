@@ -7004,16 +7004,16 @@ function renderCalendarMonthView(cal) {
     <!-- Month Controls -->
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
       <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(-1)">◀ 이전 달</button>
-        <select class="filter-select calendar-month-select" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);">
+        <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarMonth(-1)" title="이전 달">◀ 이전 달</button>
+        <select class="filter-select calendar-month-select" onchange="const [sy, sm] = this.value.split('-').map(Number); selectCalendarMonth(sy, sm);" title="월 선택">
           ${monthOptions.map(opt => `
             <option value="${opt.y}-${opt.m}" ${opt.y === y && opt.m === m ? 'selected' : ''}>
               ${opt.label}
             </option>
           `).join('')}
         </select>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarMonth(1)">다음 달 ▶</button>
-        <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})" title="현재 월(${now.getMonth() + 1}월)로 이동">
+        <button type="button" class="btn btn-secondary btn-sm week-nav-btn" onclick="stepCalendarMonth(1)" title="다음 달">다음 달 ▶</button>
+        <button type="button" class="btn btn-sm ${isCurrentMonth ? 'btn-primary' : 'btn-secondary'} week-today-btn" onclick="selectCalendarMonth(${now.getFullYear()}, ${now.getMonth() + 1})" title="현재 월(${now.getMonth() + 1}월)로 이동">
           이번 달로 이동
         </button>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
