@@ -6758,16 +6758,22 @@ function renderCalendarView(container) {
             const sm = getCachedTodayMealSummary();
             return `
               <div class="calendar-meal-expanded-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 식단 상세 모달)">
-                <div class="meal-card-compact lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
+                <div class="meal-card-compact lunch" onclick="openMealDetailModal('lunch')" title="${sm.dateLabel} 점심(중식) 메뉴 상세 보기 (클릭)">
                   <div class="meal-card-head">
-                    <span class="meal-card-badge lunch">🍱 점심</span>
+                    <div class="meal-card-title-wrap">
+                      <span class="meal-card-badge lunch">🍱 점심</span>
+                      <span class="meal-card-date-badge" id="mealLunchDate">${sm.dateLabel}</span>
+                    </div>
                     <span class="meal-card-cal" id="mealLunchCal">${sm.lunchCal}</span>
                   </div>
                   <div class="meal-card-dishes" id="mealLunchMenu">${escapeHtml(sm.lunchText)}</div>
                 </div>
-                <div class="meal-card-compact dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
+                <div class="meal-card-compact dinner" onclick="openMealDetailModal('dinner')" title="${sm.dateLabel} 저녁(석식) 메뉴 상세 보기 (클릭)">
                   <div class="meal-card-head">
-                    <span class="meal-card-badge dinner">🌙 저녁</span>
+                    <div class="meal-card-title-wrap">
+                      <span class="meal-card-badge dinner">🌙 저녁</span>
+                      <span class="meal-card-date-badge" id="mealDinnerDate">${sm.dateLabel}</span>
+                    </div>
                     <span class="meal-card-cal" id="mealDinnerCal">${sm.dinnerCal}</span>
                   </div>
                   <div class="meal-card-dishes" id="mealDinnerMenu">${escapeHtml(sm.dinnerText)}</div>
@@ -7629,12 +7635,17 @@ function getTodayMealTargetDate(baseDate = new Date()) {
   const y = target.getFullYear();
   const m = String(target.getMonth() + 1).padStart(2, '0');
   const d = String(target.getDate()).padStart(2, '0');
+  const dowNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dowName = dowNames[target.getDay()];
+  const dateLabel = `${target.getMonth() + 1}/${target.getDate()}(${dowName})`;
 
   return {
     ymd: `${y}${m}${d}`,
     dateStr: `${y}-${m}-${d}`,
     isWeekend,
-    dow: target.getDay()
+    dow: target.getDay(),
+    dowName,
+    dateLabel
   };
 }
 
@@ -7653,13 +7664,14 @@ function getCachedTodayMealSummary() {
       ? cached.dinner.dishes.map(x => x.name).join(', ')
       : (target.isWeekend ? '주말 급식 없음' : '급식 없음');
     const dinnerCal = cached.dinner && cached.dinner.cal ? cached.dinner.cal.replace(/\s*Kcal/i, '') + ' kcal' : '';
-    return { lunchText, lunchCal, dinnerText, dinnerCal, target };
+    return { lunchText, lunchCal, dinnerText, dinnerCal, dateLabel: target.dateLabel, target };
   }
   return {
     lunchText: '식단 불러오는 중...',
     lunchCal: '',
     dinnerText: '식단 불러오는 중...',
     dinnerCal: '',
+    dateLabel: target.dateLabel,
     target
   };
 }
@@ -7742,8 +7754,13 @@ async function loadTodayMealInfo(force = false) {
   const dinnerMenuEl = document.getElementById('mealDinnerMenu');
   const lunchCalEl = document.getElementById('mealLunchCal');
   const dinnerCalEl = document.getElementById('mealDinnerCal');
+  const lunchDateEl = document.getElementById('mealLunchDate');
+  const dinnerDateEl = document.getElementById('mealDinnerDate');
 
   const target = getTodayMealTargetDate();
+  if (lunchDateEl) lunchDateEl.textContent = target.dateLabel;
+  if (dinnerDateEl) dinnerDateEl.textContent = target.dateLabel;
+
   const mealData = await fetchNeisMeal(target.ymd);
 
   if (!lunchMenuEl || !dinnerMenuEl) return;
