@@ -6244,6 +6244,24 @@ function formatFridayWeekDropdownText(f) {
   return `${sem} ${wk}주차 (${m}월 ${d}일 금)`;
 }
 
+function formatCalendarWeekRangeText(f) {
+  if (!f || !f.date) return '';
+  const parts = f.date.split('-');
+  if (parts.length === 3) {
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    const d = parseInt(parts[2], 10);
+    const fri = new Date(y, m - 1, d);
+    const mon = new Date(y, m - 1, d - 4);
+    const monM = mon.getMonth() + 1;
+    const monD = mon.getDate();
+    const friM = fri.getMonth() + 1;
+    const friD = fri.getDate();
+    return `${monM}월 ${monD}일 (월) ~ ${friM}월 ${friD}일 (금)`;
+  }
+  return f.date;
+}
+
 function onSelectFridayWeek(dateStr) {
   AppState.selectedFridayWeekDate = dateStr;
   renderApp();
@@ -6656,13 +6674,13 @@ function renderCalendarWeekView(cal) {
         <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${formatFridayWeekDropdownText(f)}
+              ${formatCalendarWeekRangeText(f)}
             </option>
           `).join('')}
         </select>
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(1)">다음 주 ▶</button>
         <button type="button" class="btn btn-sm ${selectedDate === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
-          이번 주 (9/4)
+          이번 주
         </button>
       </div>
 
