@@ -5038,16 +5038,18 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* 1. 교시 & 시간 (월요일 회의 파란색과 명확히 구별되는 쿨 슬레이트/차콜 톤) */
+/* 1. 교시 & 시간 (선명하고 시인성 높은 다크 슬레이트 뱃지 & 화이트 텍스트) */
 .event-meta-time {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #cbd5e1;
+  background: #334155;
+  color: #ffffff;
+  border: 1px solid #1e293b;
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 [data-theme="dark"] .event-meta-time {
-  background: rgba(148, 163, 184, 0.16);
-  color: #cbd5e1;
-  border-color: rgba(148, 163, 184, 0.35);
+  background: #334155;
+  color: #f8fafc;
+  border-color: #64748b;
 }
 
 /* 2. 대상 학년 (교시 태그처럼 담백하고 깔끔한 라운드 알약형, 학년별 고유 색상 구별) */

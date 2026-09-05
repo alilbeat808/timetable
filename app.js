@@ -4296,7 +4296,7 @@ function renderMeetingView(container) {
       <div class="control-header">
         <div class="control-title">
           <span>🤝</span>
-          <span>공강 시간 교집합 · 회의 시간 추천</span>
+          <span>회의 시간 추천</span>
           <span class="chip-badge">${selectedTeacherObjs.length}명 선택됨</span>
         </div>
         <div class="control-tools">
@@ -6271,11 +6271,13 @@ function cleanCalendarEventText(text) {
     s = s.replace(/([123])년(?=[,\)\]>\s]|$)(?![차간도])/g, '$1학년');
 
     // 2-1. 생략된 학년 표기(1,2,3 또는 1,2 또는 2,3 단독 숫자) 자동 학년 인식 교정
-    s = s.replace(/(?<![0-9가-힣])1\s*,\s*2\s*,\s*3(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '1,2,3학년');
+    s = s.replace(/(?<![0-9가-힣])1\s*,\s*2\s*,\s*3(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '전 학년');
     s = s.replace(/(?<![0-9가-힣])1\s*,\s*2(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '1,2학년');
     s = s.replace(/(?<![0-9가-힣])2\s*,\s*3(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '2,3학년');
     s = s.replace(/(학평|모평|학력평가|모의평가)\s*([123])(?!\s*(?:교시|[0-9]|학년|,))/g, '$1 $2학년');
-    s = s.replace(/1\s*,\s*2\s*,\s*3학년/g, '1,2,3학년');
+    s = s.replace(/1\s*,\s*2\s*,\s*3학년/g, '전 학년');
+    s = s.replace(/1,2,3학년/g, '전 학년');
+    s = s.replace(/전학년/g, '전 학년');
     s = s.replace(/1\s*,\s*2학년/g, '1,2학년');
     s = s.replace(/2\s*,\s*3학년/g, '2,3학년');
 
@@ -6566,9 +6568,9 @@ function highlightEventMeta(text) {
     return `<span class="event-meta-tag event-meta-date">${m}</span>`;
   });
 
-  // 2. 학년: 1, 2, 3학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년, 전학년
+  // 2. 학년: 전 학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년
   // 교시 뱃지처럼 담백하고 깔끔한 라운드 알약형 (학년별 고유 색상 구별)
-  s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, m => {
+  s = s.replace(/(전\s*학년|1,\s*2,\s*3학년|1,2,3학년|1,\s*2학년|2,\s*3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, m => {
     if (m === '1학년') {
       return `<span class="event-meta-tag event-meta-grade-1">1학년</span>`;
     }
@@ -6579,6 +6581,9 @@ function highlightEventMeta(text) {
       return `<span class="event-meta-tag event-meta-grade-3">3학년</span>`;
     }
     const cleanGrade = m.replace(/\s+/g, '');
+    if (cleanGrade === '1,2,3학년' || cleanGrade === '전학년' || cleanGrade === '전 학년') {
+      return `<span class="event-meta-tag event-meta-grade-multi">전 학년</span>`;
+    }
     return `<span class="event-meta-tag event-meta-grade-multi">${cleanGrade}</span>`;
   });
 
@@ -6798,8 +6803,13 @@ function formatEventLineWithDeptBadges(line) {
 
   // 3. 대상 학년 추출 (행사명 바로 뒤 배치)
   const gradeMatches = [];
-  remText = remText.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, (m) => {
-    gradeMatches.push(m.replace(/\s+/g, ''));
+  remText = remText.replace(/(전\s*학년|1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, (m) => {
+    const clean = m.replace(/\s+/g, '');
+    if (clean === '1,2,3학년' || clean === '전학년' || clean === '전 학년') {
+      gradeMatches.push('전 학년');
+    } else {
+      gradeMatches.push(clean);
+    }
     return ' ';
   });
 
