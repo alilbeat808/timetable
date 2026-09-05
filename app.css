@@ -2437,6 +2437,8 @@ body {
   .calendar-dday-compact,
   .calendar-dday-strip,
   .calendar-dday-2x2,
+  .calendar-dday-1col,
+  .calendar-header-right-widgets,
   .calendar-meal-widget,
   .calendar-meal-expanded-widget,
   #calendarMealDetailModal,
@@ -3960,22 +3962,14 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Left Panel: Top row (Title + D-Day) and Bottom row (Mode + Print) aligned */
-.calendar-toolbar-left-panel {
+/* Left Side: Title & Sync time (Top) + View Mode Switcher (Bottom) */
+.calendar-title-and-modes {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 0.75rem;
-  flex: 1 1 640px;
-  max-width: 660px;
+  flex: 1 1 auto;
   min-width: 0;
-}
-
-.calendar-toolbar-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
 .calendar-title-group {
@@ -4013,62 +4007,68 @@ body {
   font-weight: 700;
 }
 
-/* 2x2 D-Day Widget (Right edge strictly aligned with Print button below!) */
-.calendar-dday-2x2 {
+/* Right Side: 1-Column 4-Row D-Day + School Meal Cards (Lunch & Dinner) */
+.calendar-header-right-widgets {
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* 1-Column 4-Row D-Day Widget (Identical height to meal cards) */
+.calendar-dday-1col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 3px 8px;
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.65rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   user-select: none;
   flex-shrink: 0;
+  box-sizing: border-box;
+  width: 126px;
+  min-width: 120px;
+  height: 100%;
 }
 
-[data-theme="dark"] .calendar-dday-2x2 {
+[data-theme="dark"] .calendar-dday-1col {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-.dday-2x2-grid {
-  display: grid;
-  grid-template-columns: 96px 96px;
-  gap: 3px 10px;
-}
-
-.dday-2x2-item {
+.dday-1col-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 5px;
+  justify-content: space-between;
+  gap: 6px;
   background: none;
   border: none;
-  padding: 1px 2px;
+  padding: 2px 3px;
   border-radius: 3px;
   cursor: pointer;
   font-family: inherit;
   line-height: 1.2;
   transition: all 0.15s ease;
+  width: 100%;
   text-align: left;
 }
 
-.dday-2x2-item:hover {
+.dday-1col-item:hover {
   background: var(--bg-hover);
-  transform: translateY(-0.5px);
 }
 
-.dday-2x2-name {
+.dday-1col-name {
   color: var(--text-secondary);
   font-weight: 700;
   font-size: 0.72rem;
   letter-spacing: -0.2px;
-  width: 44px;
-  text-align: left;
-  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-.dday-2x2-badge {
+.dday-1col-badge {
   font-size: 0.68rem;
   font-weight: 800;
   padding: 1px 5px;
@@ -4077,48 +4077,26 @@ body {
   min-width: 38px;
   text-align: center;
   display: inline-block;
+  white-space: nowrap;
 }
 
-.dday-2x2-badge.exam {
+.dday-1col-badge.exam {
   background: #7c3aed;
 }
 
-.dday-2x2-badge.suneung {
+.dday-1col-badge.suneung {
   background: #0284c7;
 }
 
-.dday-2x2-badge.vac {
+.dday-1col-badge.vac {
   background: #10b981;
 }
 
-/* Bottom Row (Mode Switcher + Action Buttons, right edge matches D-Day above!) */
-.calendar-toolbar-bottom-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.calendar-action-buttons-group {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex-shrink: 0;
-}
-
-/* Right Panel: School Meal Menu Widget (Compact Width ~250px each, Full Vertical Height, Docked Right) */
-.calendar-meal-expanded-widget {
-  display: flex;
-  align-items: stretch;
-  gap: 0.65rem;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
+/* Meal Cards (Compact Width ~250px each, Full Height matching D-Day) */
 .meal-card-compact {
-  width: 255px;
-  min-width: 230px;
-  max-width: 270px;
+  width: 250px;
+  min-width: 220px;
+  max-width: 265px;
   height: 100%;
   min-height: 86px;
   background: var(--bg-surface);
@@ -4233,30 +4211,32 @@ body {
   word-break: keep-all;
 }
 
+.week-nav-action-btn {
+  padding: 0.28rem 0.65rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 @media (max-width: 1100px) {
   .calendar-header-toolbar {
     flex-direction: column;
     gap: 0.85rem;
   }
-  .calendar-toolbar-left-panel {
-    max-width: 100%;
-    width: 100%;
-  }
-  .calendar-meal-expanded-widget {
+  .calendar-header-right-widgets {
     width: 100%;
     justify-content: flex-end;
   }
 }
 
 @media (max-width: 650px) {
-  .calendar-toolbar-top-row,
-  .calendar-toolbar-bottom-row {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .calendar-meal-expanded-widget {
+  .calendar-header-right-widgets {
     flex-direction: column;
     width: 100%;
+  }
+  .calendar-dday-1col {
+    width: 100%;
+    max-width: 100%;
   }
   .meal-card-compact {
     width: 100%;

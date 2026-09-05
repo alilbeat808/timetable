@@ -6688,74 +6688,58 @@ function renderCalendarView(container) {
     <!-- Top Calendar Card -->
     <div class="calendar-view-card">
       <div class="calendar-header-toolbar">
-        <!-- Left Panel: Top row (Title + D-Day) & Bottom row (Mode + Sheet/Print), right edges strictly aligned! -->
-        <div class="calendar-toolbar-left-panel">
-          <!-- Top Row: Title + Sync Time (Left) & 2x2 D-Day Widget (Right - flush to right edge) -->
-          <div class="calendar-toolbar-top-row">
-            <div class="calendar-title-group">
-              <span style="font-size: 1.6rem; flex-shrink: 0;">📅</span>
-              <div>
-                <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
-                <p class="calendar-sync-time-sub">
-                  <span class="sync-dot">●</span> 동기화 시간: <span class="sync-time-val">${AppState.lastCalendarSyncTime ? formatTime(AppState.lastCalendarSyncTime) : '연결됨 (실시간)'}</span>
-                </p>
-              </div>
-            </div>
-
-            <!-- 2x2 D-Day Widget (Right side of Left Panel, right edge matches Print button below!) -->
-            <div class="calendar-dday-2x2" title="주요 학사일정 D-Day (클릭 시 해당 주차 캘린더로 이동)">
-              <div class="dday-2x2-grid">
-                <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월)">
-                  <span class="dday-2x2-name">1회고사</span>
-                  <span class="dday-2x2-badge exam">${d1}</span>
-                </button>
-                <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금)">
-                  <span class="dday-2x2-name">2회고사</span>
-                  <span class="dday-2x2-badge exam">${d2}</span>
-                </button>
-                <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험: 2026. 11. 19.(목)">
-                  <span class="dday-2x2-name">수능</span>
-                  <span class="dday-2x2-badge suneung">${dSuneung}</span>
-                </button>
-                <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식: 2026. 12. 30.(수)">
-                  <span class="dday-2x2-name">방학식</span>
-                  <span class="dday-2x2-badge vac">${dVac}</span>
-                </button>
-              </div>
+        <!-- Left Side: Title & Sync Time (Top) + View Mode Switcher (Bottom) -->
+        <div class="calendar-title-and-modes">
+          <div class="calendar-title-group">
+            <span style="font-size: 1.6rem; flex-shrink: 0;">📅</span>
+            <div>
+              <h2>2026학년도 학사일정 및 주차별 창체 계획</h2>
+              <p class="calendar-sync-time-sub">
+                <span class="sync-dot">●</span> 동기화 시간: <span class="sync-time-val">${AppState.lastCalendarSyncTime ? formatTime(AppState.lastCalendarSyncTime) : '연결됨 (실시간)'}</span>
+              </p>
             </div>
           </div>
 
-          <!-- Bottom Row: Mode Switcher (Left) & Sheet/Print Buttons (Right - flush to right edge matching D-Day!) -->
-          <div class="calendar-toolbar-bottom-row">
-            <div class="view-mode-switcher">
-              <button class="view-mode-btn ${AppState.calendarViewMode === 'year' ? 'active' : ''}" onclick="setCalendarViewMode('year')">
-                🗓️ 연간 캘린더
-              </button>
-              <button class="view-mode-btn ${AppState.calendarViewMode === 'month' ? 'active' : ''}" onclick="setCalendarViewMode('month')">
-                📆 월별 캘린더
-              </button>
-              <button class="view-mode-btn ${AppState.calendarViewMode === 'week' ? 'active' : ''}" onclick="setCalendarViewMode('week')">
-                📋 주별 캘린더
-              </button>
-            </div>
-
-            <!-- 시트 원본 & 인쇄 버튼 (D-Day 오른쪽 끝선과 정확히 수직 일치) -->
-            <div class="calendar-action-buttons-group">
-              <a class="btn btn-secondary btn-sm" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
-                🔗 시트 원본 열기
-              </a>
-              <button class="btn btn-secondary btn-sm" onclick="window.print()" title="학사일정 인쇄">
-                🖨️ 인쇄
-              </button>
-            </div>
+          <!-- Mode Switcher -->
+          <div class="view-mode-switcher">
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'year' ? 'active' : ''}" onclick="setCalendarViewMode('year')">
+              🗓️ 연간 캘린더
+            </button>
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'month' ? 'active' : ''}" onclick="setCalendarViewMode('month')">
+              📆 월별 캘린더
+            </button>
+            <button class="view-mode-btn ${AppState.calendarViewMode === 'week' ? 'active' : ''}" onclick="setCalendarViewMode('week')">
+              📋 주별 캘린더
+            </button>
           </div>
         </div>
 
-        <!-- Right Panel: School Meal Menu Widget (Spanning full toolbar height, compact width, docked to far right!) -->
-        ${(() => {
-          const sm = getCachedTodayMealSummary();
-          return `
-            <div class="calendar-meal-expanded-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 식단 상세 모달)">
+        <!-- Right Side: 1-Column 4-Row D-Day + School Meal Cards (Lunch & Dinner), identical height, stuck to right! -->
+        <div class="calendar-header-right-widgets">
+          <!-- 1-Column 4-Row D-Day Widget (Height identical to meal cards) -->
+          <div class="calendar-dday-1col" title="주요 학사일정 D-Day (클릭 시 해당 주차 캘린더로 이동)">
+            <button type="button" class="dday-1col-item" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월)">
+              <span class="dday-1col-name">1회고사</span>
+              <span class="dday-1col-badge exam">${d1}</span>
+            </button>
+            <button type="button" class="dday-1col-item" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금)">
+              <span class="dday-1col-name">2회고사</span>
+              <span class="dday-1col-badge exam">${d2}</span>
+            </button>
+            <button type="button" class="dday-1col-item" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험: 2026. 11. 19.(목)">
+              <span class="dday-1col-name">수능</span>
+              <span class="dday-1col-badge suneung">${dSuneung}</span>
+            </button>
+            <button type="button" class="dday-1col-item" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식: 2026. 12. 30.(수)">
+              <span class="dday-1col-name">방학식</span>
+              <span class="dday-1col-badge vac">${dVac}</span>
+            </button>
+          </div>
+
+          <!-- School Meal Menu Cards (Lunch & Dinner) -->
+          ${(() => {
+            const sm = getCachedTodayMealSummary();
+            return `
               <div class="meal-card-compact lunch" onclick="openMealDetailModal('lunch')" title="${sm.dateLabel} 점심(중식) 메뉴 상세 보기 (클릭)">
                 <div class="meal-card-head">
                   <div class="meal-card-title-wrap">
@@ -6776,9 +6760,9 @@ function renderCalendarView(container) {
                 </div>
                 <div class="meal-card-dishes" id="mealDinnerMenu">${escapeHtml(sm.dinnerText)}</div>
               </div>
-            </div>
-          `;
-        })()}
+            `;
+          })()}
+        </div>
       </div>
 
       <!-- Render Selected Mode -->
@@ -6829,6 +6813,12 @@ function renderCalendarYearView(cal) {
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6ee7b7; border:1px solid #10b981; border-radius:2px;"></span> 오늘</span>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" style="margin-left: 0.35rem;" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
           🔄 지금 즉시 동기화
+        </button>
+        <a class="btn btn-secondary btn-sm week-nav-action-btn" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+          🔗 시트 원본 열기
+        </a>
+        <button class="btn btn-secondary btn-sm week-nav-action-btn" onclick="window.print()" title="학사일정 인쇄">
+          🖨️ 인쇄
         </button>
       </div>
     </div>
@@ -7029,6 +7019,12 @@ function renderCalendarMonthView(cal) {
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
           🔄 지금 즉시 동기화
         </button>
+        <a class="btn btn-secondary btn-sm week-nav-action-btn" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+          🔗 시트 원본 열기
+        </a>
+        <button class="btn btn-secondary btn-sm week-nav-action-btn" onclick="window.print()" title="학사일정 인쇄">
+          🖨️ 인쇄
+        </button>
       </div>
     </div>
 
@@ -7201,6 +7197,12 @@ function renderCalendarWeekView(cal) {
         </button>
         <button type="button" class="btn btn-primary btn-sm week-sync-btn" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 지금 즉시 동기화합니다">
           🔄 지금 즉시 동기화
+        </button>
+        <a class="btn btn-secondary btn-sm week-nav-action-btn" href="${GOOGLE_SHEET_VIEW_URL}" target="_blank" rel="noopener noreferrer" title="구글 스프레드시트 원본 열기">
+          🔗 시트 원본 열기
+        </a>
+        <button class="btn btn-secondary btn-sm week-nav-action-btn" onclick="window.print()" title="학사일정 인쇄">
+          🖨️ 인쇄
         </button>
       </div>
 
