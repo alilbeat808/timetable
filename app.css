@@ -4281,8 +4281,10 @@ body {
 .meal-modal-body {
   background: var(--bg-surface, #ffffff) !important;
   padding: 1rem 1.15rem;
+  min-height: 290px;
   max-height: 65vh;
   overflow-y: auto;
+  transition: opacity 0.15s ease;
 }
 
 .meal-cards-row {
