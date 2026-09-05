@@ -5835,7 +5835,8 @@ const ACADEMIC_KNOWN_DEPTS = {
   '교장': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
   '교감': { bg: '#f1f5f9', text: '#334155', border: '#cbd5e1' },
   '인문': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
-  '영어': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' }
+  '영어': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' },
+  '운동부': { bg: '#ffedd5', text: '#c2410c', border: '#fdba74' }
 };
 
 const ACADEMIC_DYNAMIC_PALETTES = [
@@ -5870,10 +5871,15 @@ function formatEventLineWithDeptBadges(line) {
   });
 
   // Match parenthesized known department keywords (평가, 행정실, etc.)
-  text = text.replace(/\((평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|연구|정보|도서관|방송부)\)/g, (m, g1) => {
+  text = text.replace(/\((평가|과중|진로|진학|교무|생활|생안|생안부|행정실|행정|보건|진학부|1학년부|2학년부|3학년부|연구|정보|도서관|방송부|운동부)\)/g, (m, g1) => {
     badges.push(getDepartmentStyleInfo(g1));
     return '';
   });
+
+  // Auto-tag '운동부' for badminton-related events if not already tagged
+  if (/배드민턴/.test(text) && !badges.some(b => b.name === '운동부')) {
+    badges.push(getDepartmentStyleInfo('운동부'));
+  }
 
   text = text.trim();
   const escapedText = escapeHtml(text);

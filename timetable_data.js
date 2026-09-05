@@ -109661,7 +109661,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 3,
         "dayOfWeek": "월",
         "week": 8,
-        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류",
+        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109673,7 +109673,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 4,
         "dayOfWeek": "화",
         "week": 8,
-        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류\n방과후학교 마지막 수업일",
+        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류<운동부>\n방과후학교 마지막 수업일",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109685,7 +109685,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 5,
         "dayOfWeek": "수",
         "week": 8,
-        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류",
+        "event": "울산 문수고, 밀양 밀양고 배드민턴부 본교 방문 교류<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109853,7 +109853,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 25,
         "dayOfWeek": "화",
         "week": 2,
-        "event": "학업성적관리위원회(08:05)<교무>\n동아대학교 입시설명회(3학년)(6교시)\n대명여고 배드민턴부 본교 체육관 훈련(4명)",
+        "event": "학업성적관리위원회(08:05)<교무>\n동아대학교 입시설명회(3학년)(6교시)\n대명여고 배드민턴부 본교 체육관 훈련(4명)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109865,7 +109865,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 26,
         "dayOfWeek": "수",
         "week": 2,
-        "event": "방과후 수업 온라인 신청\n대명여고 배드민턴부 본교 체육관 훈련(4명)",
+        "event": "방과후 수업 온라인 신청\n대명여고 배드민턴부 본교 체육관 훈련(4명)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -109877,7 +109877,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 27,
         "dayOfWeek": "목",
         "week": 2,
-        "event": "대명여고 배드민턴부 본교 체육관 훈련(4명)",
+        "event": "대명여고 배드민턴부 본교 체육관 훈련(4명)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110021,7 +110021,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 14,
         "dayOfWeek": "월",
         "week": 5,
-        "event": "전문적 학습 공동체\n원안작성연수(1교시)\n행복한등굣길행사 흡연예방캠페인<생활>\n학교운영위원회<행정실>\n원안작성연수(평가)\n전국체전 대비 배드민턴부 오후 운동",
+        "event": "전문적 학습 공동체\n원안작성연수(1교시)\n행복한등굣길행사 흡연예방캠페인<생활>\n학교운영위원회<행정실>\n원안작성연수(평가)\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110033,7 +110033,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 15,
         "dayOfWeek": "화",
         "week": 5,
-        "event": "진로 페스티벌 3차 1학년 (7:30~8:10) <진로>\n전국체전 대비 배드민턴부 오후 운동",
+        "event": "진로 페스티벌 3차 1학년 (7:30~8:10) <진로>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110045,7 +110045,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 16,
         "dayOfWeek": "수",
         "week": 5,
-        "event": "학부모 상담주간(9/16-9/22)\n전국체전 대비 배드민턴부 전지 훈련(광주)",
+        "event": "학부모 상담주간(9/16-9/22)\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110057,7 +110057,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 17,
         "dayOfWeek": "목",
         "week": 5,
-        "event": "1,2학년 진학설명회 예정\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)",
+        "event": "1,2학년 진학설명회 예정\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110069,7 +110069,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 18,
         "dayOfWeek": "금",
         "week": 5,
-        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
+        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110081,7 +110081,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 21,
         "dayOfWeek": "월",
         "week": 6,
-        "event": "교무회의\n학부모 상담주간\n　딥페이크 성범죄예방교육(1교시)<생활>\n전국체전 대비 배드민턴부 오후 운동",
+        "event": "교무회의\n학부모 상담주간\n　딥페이크 성범죄예방교육(1교시)<생활>\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110093,7 +110093,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 22,
         "dayOfWeek": "화",
         "week": 6,
-        "event": "학부모 상담주간\n전국체전 대비 배드민턴부 오후 운동",
+        "event": "학부모 상담주간\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110105,7 +110105,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 23,
         "dayOfWeek": "수",
         "week": 6,
-        "event": "시험범위취합마감(평가)\n전국체전 대비 배드민턴부 오후 운동",
+        "event": "시험범위취합마감(평가)\n전국체전 대비 배드민턴부 오후 운동<운동부>",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -110141,7 +110141,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "day": 28,
         "dayOfWeek": "월",
         "week": 7,
-        "event": "배드민턴 전국체전 출정 인사(임시 교무회의)\n전문적 학습 공동체\n원안마감\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
+        "event": "배드민턴 전국체전 출정 인사(임시 교무회의)<운동부>\n전문적 학습 공동체\n원안마감\n생활안전교육(1교시)<생활>\n교통안전교육(1교시)<생활>\n1회고사원안마감,시험범위공지(평가)",
         "isHoliday": false,
         "isExam": false,
         "examTitle": ""
@@ -111592,7 +111592,7 @@ window.SCHOOL_TIMETABLE_DATA = {
         "month": 9,
         "day": 18,
         "week": 5,
-        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
+        "event": "미니진로박람회 2차 1, 2학년(5~7교시)<진로>\n학부모 상담주간\n전국체전 대비 배드민턴부 전지 훈련(광주)<운동부>\n남부2지구자율장학협의회(14:00~ 개금고)<교감>",
         "grade1": [
           "진",
           "진",
