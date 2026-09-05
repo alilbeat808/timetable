@@ -4109,21 +4109,39 @@ body {
   background: rgba(239, 68, 68, 0.14);
 }
 
-.mini-day-cell.is-exam {
-  color: #4338ca;
+.mini-day-cell.is-regular-exam {
+  color: #6d28d9;
   font-weight: 800;
-  background: rgba(99, 102, 241, 0.18);
+  background: rgba(124, 58, 237, 0.18);
 }
 
-[data-theme="dark"] .mini-day-cell.is-exam {
-  color: #c7d2fe;
-  background: rgba(99, 102, 241, 0.35);
+[data-theme="dark"] .mini-day-cell.is-regular-exam {
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.35);
+}
+
+.mini-day-cell.is-mock-exam {
+  color: #0369a1;
+  font-weight: 800;
+  background: rgba(2, 132, 199, 0.18);
+}
+
+[data-theme="dark"] .mini-day-cell.is-mock-exam {
+  color: #7dd3fc;
+  background: rgba(2, 132, 199, 0.35);
 }
 
 .mini-day-cell.is-today {
-  background: var(--primary);
-  color: #ffffff;
+  background: #ea580c !important;
+  color: #ffffff !important;
   font-weight: 800;
+  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.4);
+}
+
+[data-theme="dark"] .mini-day-cell.is-today {
+  background: #f97316 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(249, 115, 22, 0.5);
 }
 
 .mini-day-cell.other-month {
@@ -4245,8 +4263,8 @@ body {
 }
 
 .month-day-cell.is-today {
-  background: rgba(99, 102, 241, 0.06);
-  border: 2px solid var(--primary);
+  background: rgba(234, 88, 12, 0.05);
+  border: 2px solid #ea580c;
 }
 
 .month-day-cell.is-holiday {
@@ -4276,7 +4294,7 @@ body {
 }
 
 .month-day-cell.is-today .day-number {
-  background: var(--primary);
+  background: #ea580c;
   color: #ffffff;
   width: 22px;
   height: 22px;
@@ -4330,6 +4348,19 @@ body {
   border-color: rgba(139, 92, 246, 0.45);
 }
 
+.calendar-event-pill.pill-exam-mock {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .calendar-event-pill.pill-exam-mock {
+  background: rgba(2, 132, 199, 0.28);
+  color: #7dd3fc;
+  border-color: rgba(2, 132, 199, 0.45);
+}
+
 .calendar-event-pill.pill-changche {
   background: #ecfdf5;
   color: #065f46;
@@ -4372,8 +4403,8 @@ body {
 }
 
 .week-day-col.is-today {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-light);
+  border-color: #ea580c;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
 }
 
 .week-day-header {

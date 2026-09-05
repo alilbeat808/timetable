@@ -6523,10 +6523,11 @@ function renderCalendarYearView(cal) {
       <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
         🗓️ 2026학년도 연간 학사일정 전체 보기 (3월 ~ 2월, 월~금 일과 기준)
       </h3>
-      <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 0.85rem; font-size: 0.82rem; flex-wrap: wrap;">
         <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#dc2626; border-radius:2px;"></span> 공휴일</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#4f46e5; border-radius:2px;"></span> 1·2회고사 / 모의고사 / 수능</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:var(--primary); border-radius:2px;"></span> 오늘</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#7c3aed; border-radius:2px;"></span> 1·2회고사</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span> 모의고사 / 수능</span>
+        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#ea580c; border-radius:2px;"></span> 오늘</span>
       </div>
     </div>
 
@@ -6551,7 +6552,7 @@ function renderCalendarYearView(cal) {
           <div class="mini-month-card ${isCurMonth ? 'is-current-month' : ''}" onclick="selectCalendarMonth(${item.y}, ${item.m})">
             <div class="mini-month-header">
               <span>${item.y}년 ${item.label}</span>
-              ${isCurMonth ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.68rem;">이번 달</span>' : ''}
+              ${isCurMonth ? '<span class="chip-badge" style="background:#ea580c; color:#fff; font-size:0.68rem;">이번 달</span>' : ''}
             </div>
 
             <div class="mini-month-grid">
@@ -6571,12 +6572,16 @@ function renderCalendarYearView(cal) {
                 const dayEvent = monthEvents.find(d => d.date === dateStr);
                 const isHoliday = dayEvent && dayEvent.isHoliday;
                 const isExam = dayEvent && dayEvent.isExam;
+                const isRegularExam = isExam && (dayEvent.examTitle === '1회고사' || dayEvent.examTitle === '2회고사' || /1회고사|2회고사/.test(dayEvent.event || ''));
+                const isMockOrCsat = isExam && !isRegularExam;
                 const isToday = isCurMonth && (day === now.getDate());
                 const eventText = dayEvent && dayEvent.event ? dayEvent.event.replace(/\n/g, ' ') : '';
                 const tooltipTitle = escapeHtml(eventText ? `${item.m}월 ${day}일: ${eventText}` : `${item.m}월 ${day}일`);
 
+                const examClass = isRegularExam ? 'is-exam is-regular-exam' : isMockOrCsat ? 'is-exam is-mock-exam' : '';
+
                 return `
-                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${isExam ? 'is-exam' : ''}" title="${tooltipTitle}">
+                  <span class="mini-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''} ${examClass}" title="${tooltipTitle}">
                     ${day}
                   </span>
                 `;
@@ -6691,12 +6696,6 @@ function renderCalendarMonthView(cal) {
           오늘 (${now.getMonth() + 1}월)로 이동
         </button>
       </div>
-
-      <div style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.8rem; flex-wrap: wrap;">
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#ef4444; border-radius:2px;"></span> 공휴일</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#6366f1; border-radius:2px;"></span> 1·2회고사/학평</span>
-        <span style="display:inline-flex; align-items:center; gap:0.25rem;"><span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span> 금요일 창체(여유/진/동)</span>
-      </div>
     </div>
 
     <!-- Month Table (5 Columns: Mon ~ Fri) -->
@@ -6751,7 +6750,7 @@ function renderCalendarMonthView(cal) {
                 </div>
               ` : ''}
             </div>
-            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:var(--primary); flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
+            ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:#ea580c; flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
           </div>
 
           <div class="day-events-list">
@@ -6761,9 +6760,11 @@ function renderCalendarMonthView(cal) {
               </span>
             ` : ''}
             ${monthEventLines.map(e => {
-              const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+              const isRegularExam = (e === '1회고사' || e === '2회고사' || e.startsWith('1회고사') || e.startsWith('2회고사'));
+              const isMockOrCsat = (e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+              const pillClass = isRegularExam ? 'pill-exam' : isMockOrCsat ? 'pill-exam-mock' : isHoliday ? 'pill-holiday' : 'pill-general';
               return `
-                <span class="calendar-event-pill ${isActualExam ? 'pill-exam' : isHoliday ? 'pill-holiday' : 'pill-general'}" title="${escapeHtml(e)}">
+                <span class="calendar-event-pill ${pillClass}" title="${escapeHtml(e)}">
                   ${formatEventLineWithDeptBadges(e)}
                 </span>
               `;
@@ -6908,7 +6909,7 @@ function renderCalendarWeekView(cal) {
                   </div>
                 ` : ''}
               </div>
-              ${isToday ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
+              ${isToday ? '<span class="chip-badge" style="background:#ea580c; color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
             </div>
 
             <div class="week-day-body">
@@ -6923,9 +6924,11 @@ function renderCalendarWeekView(cal) {
                   ${eventLines.length > 0 ? `
                     <div style="display:flex; flex-direction:column; gap:0.35rem;">
                       ${eventLines.map(e => {
-                        const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+                        const isRegularExam = (e === '1회고사' || e === '2회고사' || e.startsWith('1회고사') || e.startsWith('2회고사'));
+                        const isMockOrCsat = (e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+                        const pillClass = isRegularExam ? 'pill-exam' : isMockOrCsat ? 'pill-exam-mock' : 'pill-general';
                         return `
-                          <div class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
+                          <div class="calendar-event-pill ${pillClass}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
                             ${formatEventLineWithDeptBadges(e)}
                           </div>
                         `;
@@ -7144,11 +7147,14 @@ function openCalendarDayDetailModal(dateStr) {
               ${modalEventLines.length > 0 ? `
                 <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.5rem;">
                   ${modalEventLines.map(line => {
-                    const isActualExam = (line === '1회고사' || line === '2회고사' || line.startsWith('대학수학능력시험') || line.startsWith('학평') || line.startsWith('모의평가'));
+                    const isRegularExam = (line === '1회고사' || line === '2회고사' || line.startsWith('1회고사') || line.startsWith('2회고사'));
+                    const isMockOrCsat = (line.startsWith('대학수학능력시험') || line.startsWith('학평') || line.startsWith('모의평가'));
+                    const bulletColor = isRegularExam ? '#7c3aed' : isMockOrCsat ? '#0284c7' : 'var(--primary)';
+                    const textColor = isRegularExam ? '#6d28d9' : isMockOrCsat ? '#0369a1' : 'inherit';
                     return `
                       <div style="display: flex; align-items: baseline; gap: 0.4rem;">
-                        <span style="color: ${isActualExam ? '#6366f1' : 'var(--primary)'}; font-weight: bold;">•</span>
-                        <span ${isActualExam ? 'style="font-weight:700; color:#4f46e5;"' : ''}>${formatEventLineWithDeptBadges(line)}</span>
+                        <span style="color: ${bulletColor}; font-weight: bold;">•</span>
+                        <span ${isRegularExam || isMockOrCsat ? `style="font-weight:700; color:${textColor};"` : ''}>${formatEventLineWithDeptBadges(line)}</span>
                       </div>
                     `;
                   }).join('')}
