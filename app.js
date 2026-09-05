@@ -6210,7 +6210,7 @@ function renderFridayChangcheSelectorBar() {
         <select class="filter-select changche-week-select" onchange="onSelectFridayWeek(this.value)">
           ${cal.fridaySchedule.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)
+              ${formatFridayWeekDropdownText(f)}
             </option>
           `).join('')}
         </select>
@@ -6223,12 +6223,25 @@ function renderFridayChangcheSelectorBar() {
   `;
 }
 
+function getFridaySemester(f) {
+  if (!f) return '2학기';
+  const m = f.month || (new Date(f.date).getMonth() + 1);
+  return (m >= 3 && m <= 7) ? '1학기' : '2학기';
+}
+
 function getFridayWeekNumber(f) {
   if (!f) return 1;
-  if (typeof f.week === 'number' && f.week >= 1 && f.week <= 5) return f.week;
-  if (f.monthWeek) return f.monthWeek;
-  const day = f.day || (new Date(f.date).getDate());
-  return Math.ceil(day / 7);
+  if (typeof f.week === 'number' && f.week >= 1) return f.week;
+  return 1;
+}
+
+function formatFridayWeekDropdownText(f) {
+  if (!f) return '';
+  const sem = getFridaySemester(f);
+  const wk = getFridayWeekNumber(f);
+  const m = f.month || (new Date(f.date).getMonth() + 1);
+  const d = f.day || (new Date(f.date).getDate());
+  return `${sem} ${wk}주차 (${m}월 ${d}일 금)`;
 }
 
 function onSelectFridayWeek(dateStr) {
@@ -6354,41 +6367,26 @@ function renderCalendarView(container) {
           <button class="btn btn-secondary" onclick="window.print()" title="학사일정 인쇄">
             🖨️ 인쇄
           </button>
-        </div>
-      </div>
-
-      <!-- Exam D-Day Banner -->
-      <div class="exam-dday-banner">
-        <div class="exam-dday-card">
-          <div class="exam-dday-info">
-            <span class="exam-dday-title">📝 2학기 1회고사</span>
-            <span class="exam-dday-date">2026. 10. 13.(화) ~ 10. 19.(월)</span>
+          
+          <!-- Compact Vertical D-Day Widget (Next to Print Button) -->
+          <div class="calendar-dday-compact" title="주요 학사일정 D-Day">
+            <div class="dday-compact-item" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월)">
+              <span class="dday-compact-name">1회고사</span>
+              <span class="dday-compact-badge exam">${d1}</span>
+            </div>
+            <div class="dday-compact-item" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금)">
+              <span class="dday-compact-name">2회고사</span>
+              <span class="dday-compact-badge exam">${d2}</span>
+            </div>
+            <div class="dday-compact-item" title="2027 대학수학능력시험: 2026. 11. 19.(목) (예비소집 11. 18.)">
+              <span class="dday-compact-name">수능</span>
+              <span class="dday-compact-badge suneung">${dSuneung}</span>
+            </div>
+            <div class="dday-compact-item" title="2학기 겨울방학식: 2026. 12. 30.(수)">
+              <span class="dday-compact-name">방학식</span>
+              <span class="dday-compact-badge vac">${dVac}</span>
+            </div>
           </div>
-          <span class="exam-dday-badge">${d1}</span>
-        </div>
-
-        <div class="exam-dday-card">
-          <div class="exam-dday-info">
-            <span class="exam-dday-title">📝 2학기 2회고사</span>
-            <span class="exam-dday-date">2026. 12. 07.(월) ~ 12. 11.(금)</span>
-          </div>
-          <span class="exam-dday-badge">${d2}</span>
-        </div>
-
-        <div class="exam-dday-card">
-          <div class="exam-dday-info">
-            <span class="exam-dday-title">🎓 2027 대학수학능력시험</span>
-            <span class="exam-dday-date">2026. 11. 19.(목) (예비소집 11. 18.)</span>
-          </div>
-          <span class="exam-dday-badge" style="background: #0ea5e9;">${dSuneung}</span>
-        </div>
-
-        <div class="exam-dday-card">
-          <div class="exam-dday-info">
-            <span class="exam-dday-title">❄️ 2학기 겨울방학식</span>
-            <span class="exam-dday-date">2026. 12. 30.(수)</span>
-          </div>
-          <span class="exam-dday-badge" style="background: #10b981;">${dVac}</span>
         </div>
       </div>
 
@@ -6658,7 +6656,7 @@ function renderCalendarWeekView(cal) {
         <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
           ${fridayList.map(f => `
             <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
-              ${f.month}월 ${getFridayWeekNumber(f)}주차 (${f.date} 금)
+              ${formatFridayWeekDropdownText(f)}
             </option>
           `).join('')}
         </select>
@@ -6669,7 +6667,7 @@ function renderCalendarWeekView(cal) {
       </div>
 
       <div class="changche-summary-pill">
-        🎯 ${selectedFri.month}월 ${getFridayWeekNumber(selectedFri)}주차 금요일 창체: 
+        🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일) 금요일 창체: 
         1학년 [${selectedFri.grade1.join('/')}] · 2학년 [${selectedFri.grade2.join('/')}] · 3학년 [${selectedFri.grade3.join('/')}]
       </div>
     </div>

@@ -2418,6 +2418,7 @@ body {
   .btn,
   .icon-btn,
   .toast-msg,
+  .calendar-dday-compact,
   button {
     display: none !important;
   }
@@ -3959,60 +3960,64 @@ body {
   flex-wrap: wrap;
 }
 
-/* Exam D-Day Banner */
-.exam-dday-banner {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+/* Compact Vertical D-Day Widget (Next to Print Button) */
+.calendar-dday-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  user-select: none;
+  min-width: 108px;
 }
 
-.exam-dday-card {
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.22);
+[data-theme="dark"] .calendar-dday-compact {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dday-compact-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  transition: transform var(--transition-fast);
+  gap: 8px;
+  line-height: 1.25;
+  cursor: default;
 }
 
-.exam-dday-card:hover {
-  transform: translateY(-2px);
-}
-
-[data-theme="dark"] .exam-dday-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(168, 85, 247, 0.16) 100%);
-  border-color: rgba(129, 140, 248, 0.35);
-}
-
-.exam-dday-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.exam-dday-title {
-  font-size: 0.88rem;
+.dday-compact-name {
+  color: var(--text-secondary);
   font-weight: 700;
-  color: var(--text-primary);
-}
-
-.exam-dday-date {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.exam-dday-badge {
-  font-size: 0.95rem;
-  font-weight: 800;
-  padding: 0.3rem 0.65rem;
-  border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: #ffffff;
+  font-size: 0.68rem;
+  letter-spacing: -0.2px;
   white-space: nowrap;
+}
+
+.dday-compact-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #ffffff;
+  min-width: 38px;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.dday-compact-badge.exam {
+  background: var(--primary);
+}
+
+.dday-compact-badge.suneung {
+  background: #0ea5e9;
+}
+
+.dday-compact-badge.vac {
+  background: #10b981;
 }
 
 /* Year View (연간 캘린더) */
