@@ -4281,21 +4281,37 @@ body {
 .meal-modal-body {
   background: var(--bg-surface, #ffffff) !important;
   padding: 1rem 1.15rem;
-  min-height: 290px;
-  max-height: 65vh;
+  height: 380px; /* 메뉴가 많아도 세로 스크롤 없이 시원하게 표시 & 창 높이 완전 고정 */
+  box-sizing: border-box;
   overflow-y: auto;
   transition: opacity 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+@media (max-height: 620px) {
+  .meal-modal-body {
+    height: auto;
+    max-height: 65vh;
+  }
 }
 
 .meal-cards-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
+  flex: 1;
+  align-items: stretch;
 }
 
 @media (max-width: 560px) {
   .meal-cards-row {
     grid-template-columns: 1fr;
+  }
+  .meal-modal-body {
+    height: auto;
+    max-height: 65vh;
   }
 }
 
@@ -4306,6 +4322,32 @@ body {
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.meal-detail-content {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.meal-dish-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.meal-dish-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem;
+  font-size: 0.83rem;
+  color: var(--text-primary);
+  line-height: 1.35;
 }
 
 .meal-detail-card.lunch {
@@ -4394,8 +4436,13 @@ body {
 }
 
 .meal-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
   text-align: center;
-  padding: 2.2rem 1rem;
 }
 
 .meal-modal-footer {

@@ -7938,7 +7938,7 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
           </div>
 
           <!-- Meal Content Area -->
-          <div class="meal-modal-body" id="mealModalBody" style="min-height: 290px; transition: opacity 0.15s ease;">
+          <div class="meal-modal-body" id="mealModalBody">
             <div style="text-align:center; padding: 3rem 1rem; color: var(--text-muted);">
               ⏳ NEIS에서 ${m}월 ${d}일 급식 식단을 가져오는 중입니다...
             </div>
@@ -7966,7 +7966,7 @@ async function openMealDetailModal(initialType = 'lunch', specificDateStr = null
 
   if (!mealData.lunch && !mealData.dinner) {
     bodyEl.innerHTML = `
-      <div class="meal-empty-state" style="padding: 2.5rem 1rem;">
+      <div class="meal-empty-state">
         <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🏖️</div>
         <h4 style="margin: 0 0 0.35rem; color: var(--text-primary); font-size: 1rem;">급식 일정이 없습니다</h4>
         <p style="margin: 0; color: var(--text-muted); font-size: 0.82rem;">
