@@ -4818,8 +4818,9 @@ body {
 }
 
 .calendar-event-pill {
+  display: block;
   font-size: 0.74rem;
-  padding: 0.2rem 0.45rem;
+  padding: 0.22rem 0.45rem;
   border-radius: 4px;
   white-space: normal;
   word-break: keep-all;
@@ -5044,77 +5045,87 @@ body {
 .event-meta-tag {
   display: inline-flex;
   align-items: center;
-  border-radius: 4px;
-  padding: 0.05rem 0.28rem;
+  border-radius: 3px;
+  padding: 0.05rem 0.32rem;
   font-weight: 700;
-  font-size: 0.71rem;
+  font-size: 0.7rem;
   line-height: 1.25;
   white-space: nowrap;
   vertical-align: middle;
-  margin: 0 0.12rem;
   letter-spacing: -0.01em;
 }
 
-/* 1. 교시 & 시간 (선명하고 시인성 높은 다크 슬레이트 뱃지 & 화이트 텍스트) */
+/* Event Pill Flex Row for Hanging Indent */
+.calendar-event-flex-row {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  gap: 0.32rem;
+}
+
+.calendar-event-dept-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  margin-top: 0.06rem;
+}
+
+.calendar-event-content-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.event-title-line {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.event-meta-subrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.22rem;
+}
+
+/* 1. 교시 & 시간 (화사한 파스텔 웜 앰버/오렌지 동그라미 뱃지) */
 .event-meta-time {
-  background: #334155;
-  color: #ffffff;
-  border: 1px solid #1e293b;
-  font-weight: 800;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+  border-radius: 9999px; /* 동그라미/캡슐 */
+  padding: 0.05rem 0.42rem;
+  font-weight: 700;
+  box-shadow: none;
 }
 [data-theme="dark"] .event-meta-time {
-  background: #334155;
-  color: #f8fafc;
-  border-color: #64748b;
+  background: rgba(234, 88, 12, 0.18);
+  color: #fdba74;
+  border-color: rgba(251, 146, 60, 0.35);
 }
 
-/* 2. 대상 학년 (교시 태그처럼 담백하고 깔끔한 라운드 알약형, 학년별 고유 색상 구별) */
-.event-meta-grade-1 {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-
-.event-meta-grade-2 {
-  background: #fff1f2;
-  color: #be123c;
-  border: 1px solid #fecdd3;
-}
-
-.event-meta-grade-3 {
-  background: #fefce8;
-  color: #a16207;
-  border: 1px solid #fde047;
-}
-
-/* 복수 학년 (1,2,3학년, 1,2학년, 2,3학년 등) 별도 고유 로열 바이올렛 테마 */
-.event-meta-grade-multi, .event-meta-grade {
+/* 2. 대상 학년 (학년 무관 일괄 보랏빛 파스텔톤 & 네모 유지) */
+.event-meta-grade,
+.event-meta-grade-1,
+.event-meta-grade-2,
+.event-meta-grade-3,
+.event-meta-grade-multi {
   background: #f5f3ff;
   color: #6d28d9;
   border: 1px solid #ddd6fe;
+  border-radius: 3px; /* 네모 */
 }
 
-[data-theme="dark"] .event-meta-grade-1 {
-  background: rgba(34, 197, 94, 0.16);
-  color: #86efac;
-  border: 1px solid rgba(34, 197, 94, 0.35);
-}
-
-[data-theme="dark"] .event-meta-grade-2 {
-  background: rgba(244, 63, 94, 0.16);
-  color: #fda4af;
-  border: 1px solid rgba(244, 63, 94, 0.35);
-}
-
-[data-theme="dark"] .event-meta-grade-3 {
-  background: rgba(234, 179, 8, 0.16);
-  color: #fde047;
-  border: 1px solid rgba(234, 179, 8, 0.35);
-}
-
-[data-theme="dark"] .event-meta-grade-multi,
-[data-theme="dark"] .event-meta-grade {
+[data-theme="dark"] .event-meta-grade,
+[data-theme="dark"] .event-meta-grade-1,
+[data-theme="dark"] .event-meta-grade-2,
+[data-theme="dark"] .event-meta-grade-3,
+[data-theme="dark"] .event-meta-grade-multi {
   background: rgba(139, 92, 246, 0.16);
   color: #c4b5fd;
   border: 1px solid rgba(139, 92, 246, 0.35);
@@ -5125,6 +5136,7 @@ body {
   background: rgba(13, 148, 136, 0.09);
   color: #0f766e;
   border: 1px solid rgba(20, 184, 166, 0.28);
+  border-radius: 3px;
 }
 [data-theme="dark"] .event-meta-date {
   background: rgba(13, 148, 136, 0.22);
@@ -5132,16 +5144,24 @@ body {
   border-color: rgba(45, 212, 191, 0.4);
 }
 
-/* 4. 장소 (로즈/코랄 톤) */
+/* 4. 장소 (옵션 B: 📍 핀 아이콘 + 라운드 뱃지 + 코랄 로즈 파스텔 톤) */
 .event-meta-place {
-  background: rgba(225, 29, 72, 0.08);
+  background: #fff1f2;
   color: #be123c;
-  border: 1px solid rgba(244, 63, 94, 0.28);
+  border: 1px solid #fecdd3;
+  border-radius: 6px;
+  padding: 0.05rem 0.38rem;
+}
+.event-meta-place-icon {
+  font-size: 0.65rem;
+  margin-right: 0.12rem;
+  vertical-align: middle;
+  line-height: 1;
 }
 [data-theme="dark"] .event-meta-place {
-  background: rgba(225, 29, 72, 0.2);
+  background: rgba(225, 29, 72, 0.18);
   color: #fda4af;
-  border-color: rgba(251, 113, 133, 0.4);
+  border-color: rgba(244, 63, 94, 0.35);
 }
 
 /* Week & Month View Meeting Badges Column (주별 및 월별 다중 회의 세로 열 정렬) */

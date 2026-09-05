@@ -6609,7 +6609,7 @@ function highlightEventMeta(text) {
     const lastOpen = before.lastIndexOf('<');
     const lastClose = before.lastIndexOf('>');
     if (lastOpen > lastClose) return m;
-    return `<span class="event-meta-tag event-meta-place">${m}</span>`;
+    return `<span class="event-meta-tag event-meta-place"><span class="event-meta-place-icon">📍</span>${m}</span>`;
   });
 
   // 태그 사이 쉼표 공백화 (태그 자체 내부 콤마는 보존)
@@ -6813,18 +6813,9 @@ function formatEventLineWithDeptBadges(line) {
     return ' ';
   });
 
-  const gradeHtml = gradeMatches.map(g => {
-    if (g === '1학년') {
-      return `<span class="event-meta-tag event-meta-grade-1">1학년</span>`;
-    }
-    if (g === '2학년') {
-      return `<span class="event-meta-tag event-meta-grade-2">2학년</span>`;
-    }
-    if (g === '3학년') {
-      return `<span class="event-meta-tag event-meta-grade-3">3학년</span>`;
-    }
-    return `<span class="event-meta-tag event-meta-grade-multi">${escapeHtml(g)}</span>`;
-  }).join(' ');
+  const gradeHtml = gradeMatches.map(g =>
+    `<span class="event-meta-tag event-meta-grade">${escapeHtml(g)}</span>`
+  ).join(' ');
 
   // 4. 기간/날짜 추출 (대상 학년 바로 뒤 배치)
   const dateMatches = [];
@@ -6846,7 +6837,7 @@ function formatEventLineWithDeptBadges(line) {
   });
 
   const placeHtml = placeMatches.map(p =>
-    `<span class="event-meta-tag event-meta-place">${escapeHtml(p)}</span>`
+    `<span class="event-meta-tag event-meta-place"><span class="event-meta-place-icon">📍</span>${escapeHtml(p)}</span>`
   ).join(' ');
 
   // 남은 행사명 텍스트 정리 및 이스케이프
@@ -6860,17 +6851,22 @@ function formatEventLineWithDeptBadges(line) {
     escapedTitle = escapedTitle.replace(`__PAREN_${idx}__`, styledParen);
   });
 
-  // 최종 표기 순서 결합:
-  // [주관 부서 뱃지] -> 행사명 -> [교시/시간] -> [대상 학년] -> [날짜(기간)] -> [장소]
-  const pieces = [];
-  if (deptBadgesHtml) pieces.push(deptBadgesHtml);
-  if (escapedTitle) pieces.push(escapedTitle);
-  if (timeHtml) pieces.push(timeHtml);
-  if (gradeHtml) pieces.push(gradeHtml);
-  if (dateHtml) pieces.push(dateHtml);
-  if (placeHtml) pieces.push(placeHtml);
+  // 최종 표기 구조 결합:
+  // 1행: [주관 부서 뱃지] 행사명
+  // 2행: [교시/시간] [대상 학년] [장소] [날짜(기간)] (행사명 시작 위치에 행잉 인덴트 수직 정렬)
+  const metaPieces = [];
+  if (timeHtml) metaPieces.push(timeHtml);
+  if (gradeHtml) metaPieces.push(gradeHtml);
+  if (placeHtml) metaPieces.push(placeHtml);
+  if (dateHtml) metaPieces.push(dateHtml);
+  const metaSubrowHtml = metaPieces.length > 0
+    ? `<div class="event-meta-subrow">${metaPieces.join(' ')}</div>`
+    : '';
 
-  return pieces.join(' ');
+  const titleHtml = escapedTitle ? `<div class="event-title-line">${escapedTitle}</div>` : '';
+  const deptGroupHtml = deptBadgesHtml ? `<div class="calendar-event-dept-group">${deptBadgesHtml}</div>` : '';
+
+  return `<div class="calendar-event-flex-row">${deptGroupHtml}<div class="calendar-event-content-body">${titleHtml}${metaSubrowHtml}</div></div>`;
 }
 
 function parseGoogleSheetCalendarCSV(csvText) {
@@ -7751,9 +7747,9 @@ function renderCalendarMonthView(cal) {
               const isMockOrCsat = (e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
               const pillClass = isRegularExam ? 'pill-exam' : isMockOrCsat ? 'pill-exam-mock' : isHoliday ? 'pill-holiday' : 'pill-general';
               return `
-                <span class="calendar-event-pill ${pillClass}" title="${escapeHtml(e)}">
+                <div class="calendar-event-pill ${pillClass}" title="${escapeHtml(e)}">
                   ${formatEventLineWithDeptBadges(e)}
-                </span>
+                </div>
               `;
             }).join('')}
           </div>
@@ -8163,9 +8159,9 @@ function openCalendarDayDetailModal(dateStr) {
                     const bulletColor = isRegularExam ? '#7c3aed' : isMockOrCsat ? '#0284c7' : 'var(--primary)';
                     const textColor = isRegularExam ? '#6d28d9' : isMockOrCsat ? '#0369a1' : 'inherit';
                     return `
-                      <div style="display: flex; align-items: baseline; gap: 0.4rem;">
-                        <span style="color: ${bulletColor}; font-weight: bold;">•</span>
-                        <span ${isRegularExam || isMockOrCsat ? `style="font-weight:700; color:${textColor};"` : ''}>${formatEventLineWithDeptBadges(line)}</span>
+                      <div style="display: flex; align-items: flex-start; gap: 0.4rem; width: 100%;">
+                        <span style="color: ${bulletColor}; font-weight: bold; flex-shrink: 0; margin-top: 1px;">•</span>
+                        <div style="flex: 1; min-width: 0;" ${isRegularExam || isMockOrCsat ? `style="font-weight:700; color:${textColor};"` : ''}>${formatEventLineWithDeptBadges(line)}</div>
                       </div>
                     `;
                   }).join('')}
