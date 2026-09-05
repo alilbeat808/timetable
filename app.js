@@ -6270,6 +6270,15 @@ function cleanCalendarEventText(text) {
     s = s.replace(/2\s*,\s*3년(?=[\s,\)\]>]|$)/g, '2, 3학년');
     s = s.replace(/([123])년(?=[,\)\]>\s]|$)(?![차간도])/g, '$1학년');
 
+    // 2-1. 생략된 학년 표기(1,2,3 또는 1,2 또는 2,3 단독 숫자) 자동 학년 인식 교정
+    s = s.replace(/(?<![0-9가-힣])1\s*,\s*2\s*,\s*3(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '1,2,3학년');
+    s = s.replace(/(?<![0-9가-힣])1\s*,\s*2(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '1,2학년');
+    s = s.replace(/(?<![0-9가-힣])2\s*,\s*3(?![0-9]|,\s*[0-9])(?!\s*교시|\s*학년)/g, '2,3학년');
+    s = s.replace(/(학평|모평|학력평가|모의평가)\s*([123])(?!\s*(?:교시|[0-9]|학년|,))/g, '$1 $2학년');
+    s = s.replace(/1\s*,\s*2\s*,\s*3학년/g, '1,2,3학년');
+    s = s.replace(/1\s*,\s*2학년/g, '1,2학년');
+    s = s.replace(/2\s*,\s*3학년/g, '2,3학년');
+
     s = s.replace(/문화체험\(1,2\)/g, '문화체험 (1, 2학년)');
     s = s.replace(/메이커체험\(1,2\)/g, '메이커 체험 (1, 2학년)');
 
@@ -6548,14 +6557,14 @@ function highlightEventMeta(text) {
   if (!text || typeof text !== 'string') return text;
   let s = text;
 
-  // 1. 기간/날짜: ~9/11, 9/16-9/22, ~16일, ~28일 (괄호 유무 모두 대응)
-  s = s.replace(/(?<![0-9가-힣class="])(\(?[~]?[0-9]{1,2}\/[0-9]{1,2}(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2})?\)?|\(?~[0-9]{1,2}일\)?)(?![0-9가-힣])/g, m => {
+  // 1. 기간/날짜: ~9/11, 9/16-9/22, ~16일, ~28일, ~9/24일 (괄호 유무 모두 대응)
+  s = s.replace(/(?<![0-9가-힣class="])(\(?[~]?[0-9]{1,2}\/[0-9]{1,2}(?:일)?(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2}(?:일)?)?\)?|\(?~[0-9]{1,2}일\)?)(?![0-9가-힣])/g, m => {
     return `<span class="event-meta-tag event-meta-date">${m}</span>`;
   });
 
   // 2. 학년: 1, 2, 3학년, 1, 2학년, 2, 3학년, 1학년, 2학년, 3학년, 전학년
-  // 교사별 시간표 업무부서(1학년부, 2학년부, 3학년부)의 고유 스타일을 가져와서 적용 (아이콘 제외)
-  s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1학년|2학년|3학년|전학년)/g, m => {
+  // 단일 학년은 1·2·3학년부 고유 스타일 적용, 복수 학년은 별도 고유 로열 바이올렛 테마(.event-meta-grade-multi) 단일 뱃지 적용
+  s = s.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, m => {
     if (m === '1학년') {
       return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span>`;
     }
@@ -6565,19 +6574,8 @@ function highlightEventMeta(text) {
     if (m === '3학년') {
       return `<span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
     }
-    if (m.includes('1') && m.includes('2') && m.includes('3')) {
-      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
-    }
-    if (m.includes('1') && m.includes('2')) {
-      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
-    }
-    if (m.includes('2') && m.includes('3')) {
-      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
-    }
-    if (m === '전학년') {
-      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span> <span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span> <span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
-    }
-    return `<span class="event-meta-tag event-meta-grade">${m}</span>`;
+    const cleanGrade = m.replace(/\s+/g, '');
+    return `<span class="event-meta-tag event-meta-grade-multi">${cleanGrade}</span>`;
   });
 
   // 3. 교시: 1교시, 5, 6교시, 5,6,7교시, 5~7교시
@@ -6749,7 +6747,7 @@ function formatEventLineWithDeptBadges(line) {
 
   text = text.trim();
 
-  // 본문 텍스트 내에 이미 특정 학년이 명시되어 스타일 태그로 표기된 경우, 후미 부서 뱃지 중복 부착 방지
+  // 본문 텍스트 내에 이미 특정 학년이 명시되어 스타일 태그로 표기된 경우, 부서 뱃지 중복 부착 방지
   const finalBadges = badges.filter(b => {
     if (b.name === '1학년' && /1학년/.test(text)) return false;
     if (b.name === '2학년' && /2학년/.test(text)) return false;
@@ -6757,13 +6755,108 @@ function formatEventLineWithDeptBadges(line) {
     return true;
   });
 
-  const escapedText = escapeHtml(text);
-  const highlightedText = highlightEventMeta(escapedText);
-  const badgeHtml = finalBadges.map(b => 
+  // 1. 주관 부서 뱃지 (행사 줄 맨 앞 배치)
+  const deptBadgesHtml = finalBadges.map(b => 
     `<span class="calendar-dept-badge ${escapeHtml(b.className)}" data-dept="${escapeHtml(b.name)}">${escapeHtml(b.name)}</span>`
-  ).join('');
+  ).join(' ');
 
-  return highlightedText + badgeHtml;
+  let remText = text.trim();
+
+  // 비메타 괄호 임시 보호
+  const parenPlaceholders = [];
+  remText = remText.replace(/\([^\(\)]+\)/g, (parenMatch) => {
+    const idx = parenPlaceholders.length;
+    parenPlaceholders.push(parenMatch);
+    return ` __PAREN_${idx}__ `;
+  });
+
+  // 2. 교시 및 시간 추출 (주관 부서 바로 다음 배치)
+  const timeMatches = [];
+  // HH:MM (예: 08:10, 19:00, 13:30~15:30)
+  remText = remText.replace(/\b([0-9]{1,2}:[0-9]{2}(?:\s*[-~]\s*[0-9]{1,2}:[0-9]{2})?~?)/g, (m) => {
+    timeMatches.push(m.trim());
+    return ' ';
+  });
+  // 한글 시/분 (예: 16시 10분, 14시, 10시 20분~)
+  remText = remText.replace(/(?<![0-9가-힣class="])([0-9]{1,2}시(?:\s*[0-9]{1,2}분)?(?:\s*[-~]\s*[0-9]{1,2}시(?:\s*[0-9]{1,2}분)?)?~?)(?!\s*간)/g, (m) => {
+    timeMatches.push(m.trim());
+    return ' ';
+  });
+  // 교시 (예: 1교시, 5~7교시, 5,6교시, 2,3,4교시)
+  remText = remText.replace(/([0-9]+(?:\s*[,~]\s*[0-9]+)*\s*교시~?)/g, (m) => {
+    timeMatches.push(m.trim());
+    return ' ';
+  });
+
+  const timeHtml = timeMatches.map(t =>
+    `<span class="event-meta-tag event-meta-time">${escapeHtml(t)}</span>`
+  ).join(' ');
+
+  // 3. 대상 학년 추출 (행사명 바로 뒤 배치)
+  const gradeMatches = [];
+  remText = remText.replace(/(1,\s*2,\s*3학년|1,\s*2학년|2,\s*3학년|1,2,3학년|1,2학년|2,3학년|1학년|2학년|3학년|전학년)/g, (m) => {
+    gradeMatches.push(m.replace(/\s+/g, ''));
+    return ' ';
+  });
+
+  const gradeHtml = gradeMatches.map(g => {
+    if (g === '1학년') {
+      return `<span class="event-meta-tag badge-admin-1학년부 event-meta-grade-1">1학년</span>`;
+    }
+    if (g === '2학년') {
+      return `<span class="event-meta-tag badge-admin-2학년부 event-meta-grade-2">2학년</span>`;
+    }
+    if (g === '3학년') {
+      return `<span class="event-meta-tag badge-admin-3학년부 event-meta-grade-3">3학년</span>`;
+    }
+    return `<span class="event-meta-tag event-meta-grade-multi">${escapeHtml(g)}</span>`;
+  }).join(' ');
+
+  // 4. 기간/날짜 추출 (대상 학년 바로 뒤 배치)
+  const dateMatches = [];
+  remText = remText.replace(/(?<![0-9가-힣class="])([~]?[0-9]{1,2}\/[0-9]{1,2}(?:일)?(?:\s*[-~]\s*[0-9]{1,2}\/[0-9]{1,2}(?:일)?)?|~[0-9]{1,2}일)(?![0-9가-힣])/g, (m) => {
+    dateMatches.push(m.trim());
+    return ' ';
+  });
+
+  const dateHtml = dateMatches.map(d =>
+    `<span class="event-meta-tag event-meta-date">${escapeHtml(d)}</span>`
+  ).join(' ');
+
+  // 5. 장소 추출 (기간 바로 뒤 배치)
+  const placeMatches = [];
+  const placeRegex = /(?:각\s*교실|구암관|도서관|1층\s*회의실|3층\s*사회과실|회의실|운동장|물리실|음악실|동맥꿈터|체육관|홈베이스|교장실|방송실|사회과실|교실)/g;
+  remText = remText.replace(placeRegex, (m) => {
+    placeMatches.push(m.trim());
+    return ' ';
+  });
+
+  const placeHtml = placeMatches.map(p =>
+    `<span class="event-meta-tag event-meta-place">${escapeHtml(p)}</span>`
+  ).join(' ');
+
+  // 남은 행사명 텍스트 정리 및 이스케이프
+  remText = remText.replace(/^[\s\-–—,:]+|[\s\-–—,:]+$/g, '');
+  remText = remText.replace(/[ ]{2,}/g, ' ').trim();
+  let escapedTitle = escapeHtml(remText);
+
+  // 보존된 비메타 괄호 복원 (내부 텍스트 이스케이프 및 메타 스타일 적용)
+  parenPlaceholders.forEach((p, idx) => {
+    const styledParen = highlightEventMeta(escapeHtml(p));
+    escapedTitle = escapedTitle.replace(`__PAREN_${idx}__`, styledParen);
+  });
+
+  // 최종 표기 순서 결합:
+  // [주관 부서 뱃지] -> [교시/시간] -> 행사명 -> [대상 학년] -> [날짜(기간)] -> [장소]
+  const pieces = [];
+  if (deptBadgesHtml) pieces.push(deptBadgesHtml);
+  if (timeHtml) pieces.push(timeHtml);
+  if (escapedTitle) pieces.push(escapedTitle);
+  if (gradeHtml) pieces.push(gradeHtml);
+  if (dateHtml) pieces.push(dateHtml);
+  if (placeHtml) pieces.push(placeHtml);
+
+  return pieces.join(' ');
 }
 
 function parseGoogleSheetCalendarCSV(csvText) {
