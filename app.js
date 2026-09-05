@@ -6755,7 +6755,7 @@ function renderCalendarMonthView(cal) {
           </div>
 
           <div class="day-events-list">
-            ${friChangche ? `
+            ${friChangche && !isHoliday ? `
               <span class="calendar-event-pill pill-changche" title="금 5~7교시 창체: 1학년 [${friChangche.grade1.join('/')}] · 2학년 [${friChangche.grade2.join('/')}] · 3학년 [${friChangche.grade3.join('/')}]">
                 🎯 창체 1:${friChangche.grade1[0]}·2:${friChangche.grade2[0]}·3:${friChangche.grade3[0]}
               </span>
@@ -6763,7 +6763,7 @@ function renderCalendarMonthView(cal) {
             ${monthEventLines.map(e => {
               const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
               return `
-                <span class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" title="${escapeHtml(e)}">
+                <span class="calendar-event-pill ${isActualExam ? 'pill-exam' : isHoliday ? 'pill-holiday' : 'pill-general'}" title="${escapeHtml(e)}">
                   ${formatEventLineWithDeptBadges(e)}
                 </span>
               `;
@@ -6913,32 +6913,32 @@ function renderCalendarWeekView(cal) {
 
             <div class="week-day-body">
               ${isHoliday ? `
-                <div class="calendar-event-pill pill-holiday" style="padding:0.4rem 0.6rem; text-align:center;">
-                  🌴 ${dayEvt.event || '공휴일 / 재량휴업일'}
+                <div class="calendar-event-pill pill-holiday" style="padding:0.55rem 0.6rem; text-align:center; font-size:0.86rem; font-weight:700;">
+                  🌴 ${escapeHtml(dayEvt.event || '공휴일 / 재량휴업일')}
                 </div>
-              ` : ''}
-
-              <!-- Daily Events -->
-              <div style="flex:1;">
-                <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem;">학사 행사 및 일정:</div>
-                ${eventLines.length > 0 ? `
-                  <div style="display:flex; flex-direction:column; gap:0.35rem;">
-                    ${eventLines.map(e => {
-                      const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
-                      return `
-                        <div class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
-                          ${formatEventLineWithDeptBadges(e)}
-                        </div>
-                      `;
-                    }).join('')}
-                  </div>
-                ` : `
-                  <span style="font-size:0.8rem; color:var(--text-muted);">정규 수업 일정</span>
-                `}
-              </div>
+              ` : `
+                <!-- Daily Events -->
+                <div style="flex:1;">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem;">학사 행사 및 일정:</div>
+                  ${eventLines.length > 0 ? `
+                    <div style="display:flex; flex-direction:column; gap:0.35rem;">
+                      ${eventLines.map(e => {
+                        const isActualExam = (e === '1회고사' || e === '2회고사' || e.startsWith('대학수학능력시험') || e.startsWith('학평') || e.startsWith('모의평가'));
+                        return `
+                          <div class="calendar-event-pill ${isActualExam ? 'pill-exam' : 'pill-general'}" style="padding:0.35rem 0.55rem; font-size:0.82rem;" title="${escapeHtml(e)}">
+                            ${formatEventLineWithDeptBadges(e)}
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  ` : `
+                    <span style="font-size:0.8rem; color:var(--text-muted);">정규 수업 일정</span>
+                  `}
+                </div>
+              `}
 
               <!-- Friday Changche Highlight -->
-              ${isFri && selectedFri && selectedFri.hasChangche ? `
+              ${isFri && !isHoliday && selectedFri && selectedFri.hasChangche ? `
                 <div class="friday-changche-highlight-card">
                   <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
                     <span>🎯</span>
@@ -7118,8 +7118,8 @@ function openCalendarDayDetailModal(dateStr) {
 
         <div style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
           ${dayEvt && dayEvt.isHoliday ? `
-            <div class="calendar-event-pill pill-holiday" style="margin-bottom: 1rem; font-size: 0.9rem; padding: 0.5rem 0.8rem; text-align: center;">
-              🌴 공식 공휴일 / 재량휴업일
+            <div class="calendar-event-pill pill-holiday" style="margin-bottom: 1rem; font-size: 0.95rem; font-weight: 700; padding: 0.6rem 0.8rem; text-align: center;">
+              🌴 ${escapeHtml(dayEvt.event || '공식 공휴일 / 재량휴업일')}
             </div>
           ` : ''}
 
@@ -7135,26 +7135,28 @@ function openCalendarDayDetailModal(dateStr) {
             </div>
           `).join('')}
 
-          <div style="margin-bottom: 1.25rem;">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem;">주요 학사 행사:</div>
-            ${modalEventLines.length > 0 ? `
-              <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.5rem;">
-                ${modalEventLines.map(line => {
-                  const isActualExam = (line === '1회고사' || line === '2회고사' || line.startsWith('대학수학능력시험') || line.startsWith('학평') || line.startsWith('모의평가'));
-                  return `
-                    <div style="display: flex; align-items: baseline; gap: 0.4rem;">
-                      <span style="color: ${isActualExam ? '#6366f1' : 'var(--primary)'}; font-weight: bold;">•</span>
-                      <span ${isActualExam ? 'style="font-weight:700; color:#4f46e5;"' : ''}>${formatEventLineWithDeptBadges(line)}</span>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            ` : `
-              <div style="color: var(--text-muted); font-size: 0.88rem; font-style: italic;">별도의 특별 학사 일정이 없는 정규 일과일입니다.</div>
-            `}
-          </div>
+          ${dayEvt && dayEvt.isHoliday ? '' : `
+            <div style="margin-bottom: 1.25rem;">
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.35rem;">주요 학사 행사:</div>
+              ${modalEventLines.length > 0 ? `
+                <div style="font-size: 0.95rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-hover); padding: 0.85rem; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.5rem;">
+                  ${modalEventLines.map(line => {
+                    const isActualExam = (line === '1회고사' || line === '2회고사' || line.startsWith('대학수학능력시험') || line.startsWith('학평') || line.startsWith('모의평가'));
+                    return `
+                      <div style="display: flex; align-items: baseline; gap: 0.4rem;">
+                        <span style="color: ${isActualExam ? '#6366f1' : 'var(--primary)'}; font-weight: bold;">•</span>
+                        <span ${isActualExam ? 'style="font-weight:700; color:#4f46e5;"' : ''}>${formatEventLineWithDeptBadges(line)}</span>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : `
+                <div style="color: var(--text-muted); font-size: 0.88rem; font-style: italic;">별도의 특별 학사 일정이 없는 정규 일과일입니다.</div>
+              `}
+            </div>
+          `}
 
-          ${friChangche ? `
+          ${!dayEvt?.isHoliday && friChangche ? `
             <div class="friday-changche-highlight-card" style="margin-top: 1rem;">
               <div style="font-weight: 800; font-size: 0.9rem; color: #065f46; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.35rem;">
                 <span>🎯</span>
