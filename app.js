@@ -1652,6 +1652,7 @@ function renderTeacherView(container) {
     }
 
   container.innerHTML = html;
+  loadTodayMealInfo();
 }
 
 /* ==========================================================================
@@ -6711,6 +6712,31 @@ function renderCalendarView(container) {
             실시간 자동 연동
             <span style="font-size: 0.72rem; opacity: 0.85;">(${AppState.lastCalendarSyncTime ? '최근 ' + String(AppState.lastCalendarSyncTime.getHours()).padStart(2, '0') + ':' + String(AppState.lastCalendarSyncTime.getMinutes()).padStart(2, '0') : '연결됨'})</span>
           </div>
+
+          <!-- 2x2 D-Day Widget (Right Beside Sync Status Time) -->
+          <div class="calendar-dday-2x2" title="주요 학사일정 D-Day (클릭 시 해당 주차 캘린더로 이동)">
+            <div class="dday-2x2-row">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사 (10.13 화 ~ 10.19 월) · 클릭 시 이동">
+                <span class="dday-2x2-name">1회고사</span>
+                <span class="dday-2x2-badge exam">${d1}</span>
+              </button>
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사 (12.07 월 ~ 12.11 금) · 클릭 시 이동">
+                <span class="dday-2x2-name">2회고사</span>
+                <span class="dday-2x2-badge exam">${d2}</span>
+              </button>
+            </div>
+            <div class="dday-2x2-row">
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험 (11.19 목) · 클릭 시 이동">
+                <span class="dday-2x2-name">수능</span>
+                <span class="dday-2x2-badge suneung">${dSuneung}</span>
+              </button>
+              <button type="button" class="dday-2x2-item" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식 (12.30 수) · 클릭 시 이동">
+                <span class="dday-2x2-name">방학식</span>
+                <span class="dday-2x2-badge vac">${dVac}</span>
+              </button>
+            </div>
+          </div>
+
           <button class="btn btn-primary" onclick="syncGoogleSheetCalendar(true)" title="구글 스프레드시트의 최신 내용을 즉시 다시 가져옵니다">
             🔄 지금 즉시 새로고침
           </button>
@@ -6720,37 +6746,24 @@ function renderCalendarView(container) {
           <button class="btn btn-secondary" onclick="window.print()" title="학사일정 인쇄">
             🖨️ 인쇄
           </button>
-          
-        </div>
-      </div>
 
-      <!-- Elegant Horizontal D-Day Strip (Clickable Milestone Badges) -->
-      <div class="calendar-dday-strip" role="region" aria-label="주요 학사일정 D-Day">
-        <div class="dday-strip-label">
-          <span class="dday-strip-icon">⏳</span>
-          <span class="dday-strip-text">주요 D-Day</span>
-        </div>
-        <div class="dday-strip-chips">
-          <button type="button" class="dday-chip chip-exam" onclick="onSelectCalendarMonthDay('2026-10-13')" title="2학기 1회고사: 2026. 10. 13.(화) ~ 10. 19.(월) · 클릭 시 해당 주별 캘린더로 이동">
-            <span class="dday-chip-name">1회고사</span>
-            <span class="dday-chip-val">${d1}</span>
-            <span class="dday-chip-date">10.13(화)</span>
-          </button>
-          <button type="button" class="dday-chip chip-exam" onclick="onSelectCalendarMonthDay('2026-12-07')" title="2학기 2회고사: 2026. 12. 07.(월) ~ 12. 11.(금) · 클릭 시 해당 주별 캘린더로 이동">
-            <span class="dday-chip-name">2회고사</span>
-            <span class="dday-chip-val">${d2}</span>
-            <span class="dday-chip-date">12.07(월)</span>
-          </button>
-          <button type="button" class="dday-chip chip-suneung" onclick="onSelectCalendarMonthDay('2026-11-19')" title="2027 대학수학능력시험: 2026. 11. 19.(목) (예비소집 11. 18.) · 클릭 시 해당 주별 캘린더로 이동">
-            <span class="dday-chip-name">수능</span>
-            <span class="dday-chip-val">${dSuneung}</span>
-            <span class="dday-chip-date">11.19(목)</span>
-          </button>
-          <button type="button" class="dday-chip chip-vac" onclick="onSelectCalendarMonthDay('2026-12-30')" title="2학기 겨울방학식: 2026. 12. 30.(수) · 클릭 시 해당 주별 캘린더로 이동">
-            <span class="dday-chip-name">겨울방학식</span>
-            <span class="dday-chip-val">${dVac}</span>
-            <span class="dday-chip-date">12.30(수)</span>
-          </button>
+          <!-- NEIS School Meal Menu Widget (Right of Print Button, Split Lunch/Dinner) -->
+          <div class="calendar-meal-widget" id="calendarMealWidget" title="부산동고 급식 식단 (클릭 시 전체 메뉴 및 상세 확인)">
+            <div class="meal-box lunch" onclick="openMealDetailModal('lunch')" title="오늘 점심(중식) 메뉴 상세 보기 (클릭)">
+              <div class="meal-box-header">
+                <span class="meal-box-tag lunch">🍱 점심</span>
+                <span class="meal-box-cal" id="mealLunchCal"></span>
+              </div>
+              <div class="meal-box-menu" id="mealLunchMenu">식단 불러오는 중...</div>
+            </div>
+            <div class="meal-box dinner" onclick="openMealDetailModal('dinner')" title="오늘 저녁(석식) 메뉴 상세 보기 (클릭)">
+              <div class="meal-box-header">
+                <span class="meal-box-tag dinner">🌙 저녁</span>
+                <span class="meal-box-cal" id="mealDinnerCal"></span>
+              </div>
+              <div class="meal-box-menu" id="mealDinnerMenu">식단 불러오는 중...</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -7572,6 +7585,359 @@ function closeCalendarDayDetailModal(e) {
   if (modalElem) {
     modalElem.remove();
   }
+}
+
+/* ==========================================================================
+   NEIS School Meal Service Integration (부산동고등학교 급식 식단 실시간 연동)
+   ========================================================================== */
+const NEIS_CONFIG = {
+  ATPT_OFCDC_SC_CODE: 'C10',       // 부산광역시교육청
+  SD_SCHUL_CODE: '7150138',         // 부산동고등학교
+  SCHUL_NM: '부산동고등학교',
+  API_BASE_URL: 'https://open.neis.go.kr/hub/mealServiceDietInfo'
+};
+
+function getNeisApiKey() {
+  return localStorage.getItem('NEIS_API_KEY') || '';
+}
+
+function setNeisApiKey(key) {
+  if (key === null) return;
+  key = (key || '').trim();
+  if (key) {
+    localStorage.setItem('NEIS_API_KEY', key);
+    showToast('🔑 NEIS API 인증키가 정상 등록되었습니다.');
+  } else {
+    localStorage.removeItem('NEIS_API_KEY');
+    showToast('ℹ️ NEIS 기본 공개 모드로 전환되었습니다.');
+  }
+  if (!AppState.mealCache) AppState.mealCache = {};
+  AppState.mealCache = {};
+  loadTodayMealInfo(true);
+}
+
+function promptNeisApiKey() {
+  const currentKey = getNeisApiKey();
+  const input = prompt(
+    '🔑 NEIS Open API 인증키 설정 (부산동고 급식 연동):\n\n발급받으신 인증키(32자리)를 붙여넣으시면 일일 호출량 제한 없이 안정적으로 조회할 수 있습니다.\n(비워두시면 기본 공개 모드로 동작합니다)',
+    currentKey
+  );
+  if (input !== null) {
+    setNeisApiKey(input);
+    if (AppState.mealModalActiveDate) {
+      openMealDetailModal('refresh', AppState.mealModalActiveDate);
+    }
+  }
+}
+
+/**
+ * Parses raw DDISH_NM into clean array of dishes with allergy numbers
+ */
+function parseMealDishes(rawText) {
+  if (!rawText) return [];
+  return rawText.split('<br/>').map(item => {
+    const trimmed = item.trim();
+    if (!trimmed) return null;
+    const match = trimmed.match(/^(.+?)(?:\s*\(([\d\.\s]+)\))?$/);
+    const name = match ? match[1].trim() : trimmed;
+    const allergies = match && match[2] ? match[2].trim() : '';
+    return { name, allergies, raw: trimmed };
+  }).filter(Boolean);
+}
+
+/**
+ * Fetch meal data for YYYY-MM-DD or YYYYMMDD from NEIS API
+ */
+async function fetchNeisMeal(dateStr) {
+  if (!AppState.mealCache) AppState.mealCache = {};
+  const ymd = String(dateStr).replace(/[^0-9]/g, '');
+  if (AppState.mealCache[ymd]) {
+    return AppState.mealCache[ymd];
+  }
+
+  const key = getNeisApiKey();
+  let url = `${NEIS_CONFIG.API_BASE_URL}?Type=json&pIndex=1&pSize=10&ATPT_OFCDC_SC_CODE=${NEIS_CONFIG.ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${NEIS_CONFIG.SD_SCHUL_CODE}&MLSV_YMD=${ymd}`;
+  if (key) {
+    url += `&KEY=${encodeURIComponent(key)}`;
+  }
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    let lunch = null;
+    let dinner = null;
+
+    if (data.mealServiceDietInfo && data.mealServiceDietInfo[1] && data.mealServiceDietInfo[1].row) {
+      const rows = data.mealServiceDietInfo[1].row;
+      const lunchRow = rows.find(r => r.MMEAL_SC_CODE === '2');
+      const dinnerRow = rows.find(r => r.MMEAL_SC_CODE === '3');
+
+      if (lunchRow) {
+        lunch = {
+          code: '2',
+          name: '중식 (점심)',
+          cal: lunchRow.CAL_INFO || '',
+          dishes: parseMealDishes(lunchRow.DDISH_NM),
+          origin: lunchRow.ORPLC_INFO ? lunchRow.ORPLC_INFO.replace(/<br\/>/g, '\n') : '',
+          raw: lunchRow
+        };
+      }
+
+      if (dinnerRow) {
+        dinner = {
+          code: '3',
+          name: '석식 (저녁)',
+          cal: dinnerRow.CAL_INFO || '',
+          dishes: parseMealDishes(dinnerRow.DDISH_NM),
+          origin: dinnerRow.ORPLC_INFO ? dinnerRow.ORPLC_INFO.replace(/<br\/>/g, '\n') : '',
+          raw: dinnerRow
+        };
+      }
+    }
+
+    const result = { ymd, lunch, dinner, hasMeal: !!(lunch || dinner) };
+    AppState.mealCache[ymd] = result;
+    return result;
+  } catch (err) {
+    console.warn('NEIS Meal fetch error for', ymd, err);
+    return { ymd, lunch: null, dinner: null, hasMeal: false, error: err };
+  }
+}
+
+/**
+ * Loads today's meal info and updates the header meal boxes
+ */
+async function loadTodayMealInfo(force = false) {
+  const lunchMenuEl = document.getElementById('mealLunchMenu');
+  const dinnerMenuEl = document.getElementById('mealDinnerMenu');
+  const lunchCalEl = document.getElementById('mealLunchCal');
+  const dinnerCalEl = document.getElementById('mealDinnerCal');
+
+  if (!lunchMenuEl || !dinnerMenuEl) return;
+
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  let targetYmd = `${y}${m}${d}`;
+  const dow = now.getDay(); // 0=Sun, 6=Sat
+
+  let isWeekendFallback = false;
+  if (dow === 6) { // Saturday -> Friday
+    const fri = new Date(now);
+    fri.setDate(now.getDate() - 1);
+    targetYmd = `${fri.getFullYear()}${String(fri.getMonth() + 1).padStart(2, '0')}${String(fri.getDate()).padStart(2, '0')}`;
+    isWeekendFallback = true;
+  } else if (dow === 0) { // Sunday -> Friday
+    const fri = new Date(now);
+    fri.setDate(now.getDate() - 2);
+    targetYmd = `${fri.getFullYear()}${String(fri.getMonth() + 1).padStart(2, '0')}${String(fri.getDate()).padStart(2, '0')}`;
+    isWeekendFallback = true;
+  }
+
+  const mealData = await fetchNeisMeal(targetYmd);
+  
+  // Update lunch
+  if (mealData.lunch && mealData.lunch.dishes.length > 0) {
+    const preview = mealData.lunch.dishes.map(x => x.name).slice(0, 2).join(', ');
+    lunchMenuEl.textContent = preview;
+    lunchMenuEl.title = `점심: ${mealData.lunch.dishes.map(x => x.name).join(', ')} (${mealData.lunch.cal || ''})`;
+    if (lunchCalEl) lunchCalEl.textContent = mealData.lunch.cal ? mealData.lunch.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+  } else {
+    lunchMenuEl.textContent = isWeekendFallback ? '주말 급식 없음' : '급식 없음';
+    lunchMenuEl.title = isWeekendFallback ? '주말에는 급식이 운영되지 않습니다.' : '오늘 점심 급식 일정이 없습니다.';
+    if (lunchCalEl) lunchCalEl.textContent = '';
+  }
+
+  // Update dinner
+  if (mealData.dinner && mealData.dinner.dishes.length > 0) {
+    const preview = mealData.dinner.dishes.map(x => x.name).slice(0, 2).join(', ');
+    dinnerMenuEl.textContent = preview;
+    dinnerMenuEl.title = `저녁: ${mealData.dinner.dishes.map(x => x.name).join(', ')} (${mealData.dinner.cal || ''})`;
+    if (dinnerCalEl) dinnerCalEl.textContent = mealData.dinner.cal ? mealData.dinner.cal.replace(/\s*Kcal/i, '') + 'kcal' : '';
+  } else {
+    dinnerMenuEl.textContent = isWeekendFallback ? '주말 급식 없음' : '급식 없음';
+    dinnerMenuEl.title = isWeekendFallback ? '주말에는 급식이 운영되지 않습니다.' : '오늘 저녁 급식 일정이 없습니다.';
+    if (dinnerCalEl) dinnerCalEl.textContent = '';
+  }
+}
+
+/**
+ * Open Meal Detail Modal with Date Navigation and API Key Setting
+ */
+async function openMealDetailModal(initialType = 'lunch', specificDateStr = null) {
+  let targetDate = specificDateStr ? new Date(specificDateStr + 'T00:00:00') : new Date();
+  if (!specificDateStr && (targetDate.getDay() === 0 || targetDate.getDay() === 6)) {
+    const diff = targetDate.getDay() === 6 ? -1 : -2;
+    targetDate.setDate(targetDate.getDate() + diff);
+  }
+
+  const y = targetDate.getFullYear();
+  const m = targetDate.getMonth() + 1;
+  const d = targetDate.getDate();
+  const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  AppState.mealModalActiveDate = dateStr;
+
+  let modalElem = document.getElementById('calendarMealDetailModal');
+  if (!modalElem) {
+    modalElem = document.createElement('div');
+    modalElem.id = 'calendarMealDetailModal';
+    document.body.appendChild(modalElem);
+  }
+
+  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dowName = dayNames[targetDate.getDay()];
+  const hasKey = !!getNeisApiKey();
+
+  modalElem.innerHTML = `
+    <div class="calendar-modal-backdrop" onclick="closeMealDetailModal(event)">
+      <div class="calendar-modal-card meal-modal-card" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div style="padding: 0.85rem 1.15rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface);">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.35rem;">🍱</span>
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                부산동고등학교 급식 식단
+              </h3>
+              <p style="font-size: 0.72rem; color: var(--text-secondary); margin: 0.1rem 0 0;">
+                교육부 NEIS 개방포털 실시간 연동
+                ${hasKey ? '· <span style="color:#10b981; font-weight:700;">인증키 적용됨</span>' : '· <span style="color:var(--text-muted);">기본 공개 모드</span>'}
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()" style="padding: 0.2rem 0.55rem; font-size: 0.8rem;">✕</button>
+        </div>
+
+        <!-- Date Navigation Bar -->
+        <div class="meal-modal-date-bar">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(-1)">◀ 이전 날</button>
+          <div class="meal-modal-cur-date">
+            📅 <strong>${y}년 ${m}월 ${d}일 (${dowName}요일)</strong>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="stepMealDetailDate(1)">다음 날 ▶</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="stepMealDetailDate(0)">오늘</button>
+        </div>
+
+        <!-- Meal Content Area -->
+        <div class="meal-modal-body" id="mealModalBody">
+          <div style="text-align:center; padding: 2rem; color: var(--text-muted);">
+            ⏳ NEIS에서 ${m}월 ${d}일 급식 식단을 가져오는 중입니다...
+          </div>
+        </div>
+
+        <!-- Footer with API Key Setting -->
+        <div class="meal-modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="promptNeisApiKey()" style="font-size: 0.74rem;">
+            🔑 NEIS 인증키 설정
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeMealDetailModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Fetch and update body
+  const mealData = await fetchNeisMeal(dateStr);
+  const bodyEl = document.getElementById('mealModalBody');
+  if (!bodyEl) return;
+
+  if (!mealData.lunch && !mealData.dinner) {
+    bodyEl.innerHTML = `
+      <div class="meal-empty-state">
+        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🏖️</div>
+        <h4 style="margin: 0 0 0.35rem; color: var(--text-primary); font-size: 1rem;">급식 일정이 없습니다</h4>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.82rem;">
+          ${m}월 ${d}일(${dowName})은 주말, 공휴일, 방학 또는 급식 미실시 일자입니다.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  let bodyHtml = `<div class="meal-cards-row">`;
+
+  // Lunch Card
+  bodyHtml += `
+    <div class="meal-detail-card lunch">
+      <div class="meal-detail-header">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+          <span class="meal-card-pill lunch">🍱 점심 (중식)</span>
+          ${mealData.lunch && mealData.lunch.cal ? `<span class="meal-card-cal">${mealData.lunch.cal}</span>` : ''}
+        </div>
+      </div>
+      <div class="meal-detail-content">
+        ${mealData.lunch && mealData.lunch.dishes.length > 0 ? `
+          <ul class="meal-dish-list">
+            ${mealData.lunch.dishes.map(d => `
+              <li class="meal-dish-item">
+                <span class="dish-name">${escapeHtml(d.name)}</span>
+                ${d.allergies ? `<span class="dish-allergy" title="알레르기 번호: ${d.allergies}">(${d.allergies})</span>` : ''}
+              </li>
+            `).join('')}
+          </ul>
+        ` : `<p class="meal-none-text">점심 급식 정보가 없습니다.</p>`}
+      </div>
+    </div>
+  `;
+
+  // Dinner Card
+  bodyHtml += `
+    <div class="meal-detail-card dinner">
+      <div class="meal-detail-header">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+          <span class="meal-card-pill dinner">🌙 저녁 (석식)</span>
+          ${mealData.dinner && mealData.dinner.cal ? `<span class="meal-card-cal">${mealData.dinner.cal}</span>` : ''}
+        </div>
+      </div>
+      <div class="meal-detail-content">
+        ${mealData.dinner && mealData.dinner.dishes.length > 0 ? `
+          <ul class="meal-dish-list">
+            ${mealData.dinner.dishes.map(d => `
+              <li class="meal-dish-item">
+                <span class="dish-name">${escapeHtml(d.name)}</span>
+                ${d.allergies ? `<span class="dish-allergy" title="알레르기 번호: ${d.allergies}">(${d.allergies})</span>` : ''}
+              </li>
+            `).join('')}
+          </ul>
+        ` : `<p class="meal-none-text">저녁 급식 정보가 없습니다.</p>`}
+      </div>
+    </div>
+  `;
+
+  bodyHtml += `</div>`;
+
+  // Allergy reference note
+  bodyHtml += `
+    <div class="meal-allergy-legend">
+      <strong>* 알레르기 유발물질:</strong> 
+      ①난류 ②우유 ③메밀 ④땅콩 ⑤대두 ⑥밀 ⑦고등어 ⑧게 ⑨새우 ⑩돼지고기 ⑪복숭아 ⑫토마토 ⑬아황산염 ⑭호두 ⑮닭고기 ⑯쇠고기 ⑰오징어 ⑱조개류 ⑲잣
+    </div>
+  `;
+
+  bodyEl.innerHTML = bodyHtml;
+}
+
+function closeMealDetailModal(e) {
+  if (e && e.target && !e.target.classList.contains('calendar-modal-backdrop') && !e.target.classList.contains('btn')) {
+    return;
+  }
+  const modalElem = document.getElementById('calendarMealDetailModal');
+  if (modalElem) modalElem.remove();
+}
+
+function stepMealDetailDate(step) {
+  let cur = AppState.mealModalActiveDate ? new Date(AppState.mealModalActiveDate + 'T00:00:00') : new Date();
+  if (step === 0) {
+    cur = new Date();
+  } else {
+    cur.setDate(cur.getDate() + step);
+  }
+  const y = cur.getFullYear();
+  const m = String(cur.getMonth() + 1).padStart(2, '0');
+  const d = String(cur.getDate()).padStart(2, '0');
+  const newDateStr = `${y}-${m}-${d}`;
+  openMealDetailModal('lunch', newDateStr);
 }
 
 /* ==========================================================================
