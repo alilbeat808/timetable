@@ -6740,12 +6740,16 @@ function renderCalendarMonthView(cal) {
         <td class="month-day-cell ${isToday ? 'is-today' : ''} ${isHoliday ? 'is-holiday' : ''}" onclick="openCalendarDayDetailModal('${dateStr}')" title="${tooltipTitle}">
           <div class="day-header-num">
             <div class="day-header-left">
-              <span class="day-number" ${isHoliday ? 'style="color:#ef4444; flex-shrink:0;"' : 'style="flex-shrink:0;"'}>${dayNum}</span>
-              ${meetingBadges.map(b => `
-                <span class="monday-meeting-badge month-meeting-badge" title="${escapeHtml(b)}">
-                  ${escapeHtml(b)}
-                </span>
-              `).join('')}
+              <span class="day-number" ${isHoliday ? 'style="color:#ef4444; flex-shrink:0;' : 'style="flex-shrink:0;'} ${meetingBadges.length > 1 ? 'margin-top:0.05rem;' : ''}">${dayNum}</span>
+              ${meetingBadges.length > 0 ? `
+                <div class="month-meeting-badges-col">
+                  ${meetingBadges.map(b => `
+                    <span class="monday-meeting-badge month-meeting-badge" title="${escapeHtml(b)}">
+                      ${escapeHtml(b)}
+                    </span>
+                  `).join('')}
+                </div>
+              ` : ''}
             </div>
             ${isToday ? '<span style="font-size:0.68rem; font-weight:800; color:var(--primary); flex-shrink:0; margin-left:0.2rem;">오늘</span>' : ''}
           </div>
@@ -6889,18 +6893,22 @@ function renderCalendarWeekView(cal) {
         return `
           <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
             <div class="week-day-header">
-              <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; min-width: 0;">
-                <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap;">
+              <div style="display: flex; align-items: ${meetingBadges.length > 1 ? 'flex-start' : 'center'}; gap: 0.4rem; min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: baseline; gap: 0.25rem; white-space: nowrap; flex-shrink: 0; ${meetingBadges.length > 1 ? 'margin-top: 0.1rem;' : ''}">
                   <span class="week-day-title">${wd.dayOfWeek}요일</span>
                   <span style="font-size:0.8rem; color:var(--text-muted);">(${wd.month}/${wd.day})</span>
                 </div>
-                ${meetingBadges.map(b => `
-                  <span class="monday-meeting-badge" title="${isMon ? '매주 월요일 1교시 교원 정례 회의' : '교원 회의 (휴일 대체/임시)'}">
-                    ${escapeHtml(b)}
-                  </span>
-                `).join('')}
+                ${meetingBadges.length > 0 ? `
+                  <div class="week-meeting-badges-col">
+                    ${meetingBadges.map(b => `
+                      <span class="monday-meeting-badge" title="${isMon ? '매주 월요일 1교시 교원 정례 회의' : '교원 회의 (휴일 대체/임시)'}">
+                        ${escapeHtml(b)}
+                      </span>
+                    `).join('')}
+                  </div>
+                ` : ''}
               </div>
-              ${isToday ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.7rem; flex-shrink:0;">오늘</span>' : ''}
+              ${isToday ? '<span class="chip-badge" style="background:var(--primary); color:#fff; font-size:0.7rem; flex-shrink:0; margin-left: 0.25rem;">오늘</span>' : ''}
             </div>
 
             <div class="week-day-body">
