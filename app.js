@@ -6636,12 +6636,45 @@ function renderCalendarMonthView(cal) {
   return html;
 }
 
+function getAllCalendarWeeks(cal) {
+  cal = cal || getAcademicCalendar();
+  if (!cal || !cal.calendarDays) return [];
+
+  const friDays = cal.calendarDays.filter(d => d.dayOfWeek === '금');
+  const changcheMap = new Map();
+  if (cal.fridaySchedule) {
+    cal.fridaySchedule.forEach(cs => changcheMap.set(cs.date, cs));
+  }
+
+  return friDays.map(fd => {
+    const cs = changcheMap.get(fd.date);
+    return {
+      date: fd.date,
+      year: fd.year,
+      month: fd.month,
+      day: fd.day,
+      week: fd.week,
+      event: fd.event,
+      isHoliday: fd.isHoliday,
+      isExam: fd.isExam,
+      examTitle: fd.examTitle,
+      hasChangche: !!(cs && cs.grade1 && cs.grade1.some(x => x && x !== '5' && x !== '1학년')),
+      grade1: cs ? cs.grade1 : null,
+      grade2: cs ? cs.grade2 : null,
+      grade3: cs ? cs.grade3 : null
+    };
+  });
+}
+
 // 3. Week View (주별 캘린더 - 월~금 5열 및 금요 창체 카드)
 function renderCalendarWeekView(cal) {
   cal = cal || getAcademicCalendar();
-  const fridayList = cal.fridaySchedule || [];
-  const selectedDate = AppState.calendarWeekDate || (fridayList[0] ? fridayList[0].date : '2026-09-04');
-  const selectedFri = fridayList.find(f => f.date === selectedDate) || fridayList[0];
+  const weekList = getAllCalendarWeeks(cal);
+  const selectedDate = AppState.calendarWeekDate || '2026-09-04';
+  let selectedFri = weekList.find(f => f.date === selectedDate);
+  if (!selectedFri) {
+    selectedFri = weekList.find(f => f.date === '2026-09-04') || weekList[0];
+  }
 
   const friDate = new Date(selectedFri.date);
   const weekDays = [];
@@ -6672,21 +6705,26 @@ function renderCalendarWeekView(cal) {
       <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; max-width: 100%;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(-1)">◀ 이전 주</button>
         <select class="filter-select calendar-week-select" onchange="selectCalendarWeek(this.value)">
-          ${fridayList.map(f => `
-            <option value="${f.date}" ${f.date === selectedDate ? 'selected' : ''}>
+          ${weekList.map(f => `
+            <option value="${f.date}" ${f.date === selectedFri.date ? 'selected' : ''}>
               ${formatCalendarWeekRangeText(f)}
             </option>
           `).join('')}
         </select>
         <button type="button" class="btn btn-secondary btn-sm" onclick="stepCalendarWeek(1)">다음 주 ▶</button>
-        <button type="button" class="btn btn-sm ${selectedDate === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
+        <button type="button" class="btn btn-sm ${selectedFri.date === '2026-09-04' ? 'btn-primary' : 'btn-secondary'}" onclick="selectCalendarWeek('2026-09-04')">
           이번 주
         </button>
       </div>
 
       <div class="changche-summary-pill">
-        🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일) 금요일 창체: 
-        1학년 [${selectedFri.grade1.join('/')}] · 2학년 [${selectedFri.grade2.join('/')}] · 3학년 [${selectedFri.grade3.join('/')}]
+        ${selectedFri.hasChangche ? `
+          🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일) 금요일 창체: 
+          1학년 [${selectedFri.grade1.join('/')}] · 2학년 [${selectedFri.grade2.join('/')}] · 3학년 [${selectedFri.grade3.join('/')}]
+        ` : `
+          🎯 ${getFridaySemester(selectedFri)} ${getFridayWeekNumber(selectedFri)}주차 (${selectedFri.month}월 ${selectedFri.day}일): 
+          금요일 창체 일정 없음 (${selectedFri.event ? selectedFri.event.replace(/\n/g, ', ') : '휴업/고사'})
+        `}
       </div>
     </div>
 
@@ -6700,7 +6738,7 @@ function renderCalendarWeekView(cal) {
         const isFri = (wd.dayOfWeek === '금');
 
         return `
-          <div class="week-day-col ${isToday ? 'is-today' : ''}">
+          <div class="week-day-col ${isToday ? 'is-today' : ''}" data-date="${wd.date}">
             <div class="week-day-header">
               <div>
                 <span class="week-day-title">${wd.dayOfWeek}요일</span>
@@ -6736,7 +6774,7 @@ function renderCalendarWeekView(cal) {
               </div>
 
               <!-- Friday Changche Highlight -->
-              ${isFri && selectedFri ? `
+              ${isFri && selectedFri && selectedFri.hasChangche ? `
                 <div class="friday-changche-highlight-card">
                   <div style="font-weight:800; font-size:0.85rem; color:#065f46; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
                     <span>🎯</span>
@@ -6855,10 +6893,11 @@ function selectCalendarWeek(dateStr) {
 
 function stepCalendarWeek(step) {
   const cal = getAcademicCalendar();
-  if (!cal || !cal.fridaySchedule || cal.fridaySchedule.length === 0) return;
-  const list = cal.fridaySchedule;
-  const curIdx = list.findIndex(f => f.date === AppState.calendarWeekDate);
-  let newIdx = curIdx + step;
+  const list = getAllCalendarWeeks(cal);
+  if (!list || list.length === 0) return;
+  const curDate = AppState.calendarWeekDate || '2026-09-04';
+  const curIdx = list.findIndex(f => f.date === curDate);
+  let newIdx = (curIdx === -1 ? 0 : curIdx) + step;
   if (newIdx < 0) newIdx = 0;
   if (newIdx >= list.length) newIdx = list.length - 1;
   AppState.calendarWeekDate = list[newIdx].date;
