@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>2026학년도 2학기 부산동고등학교 학사일정 &amp; 시간표 시스템</title>
+  <title>부산동고등학교 학사정보 통합 서비스</title>
   
   <!-- Pretendard Korean Font -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   
   <!-- Application CSS -->
-  <link rel="stylesheet" href="app.css?v=10.2">
-  <link rel="icon" type="image/png" href="logo.png?v=10.2">
+  <link rel="stylesheet" href="app.css?v=10.3">
+  <link rel="icon" type="image/png" href="logo.png?v=10.3">
 </head>
 <body>
 
@@ -19,7 +19,7 @@
     <div class="header-inner">
       <div class="brand-section" onclick="switchTab('calendar')">
         <div class="brand-logo-container" title="부산동고등학교">
-          <img src="logo.png?v=10.2" alt="부산동고등학교" class="brand-logo" id="brandSchoolLogo" onerror="this.style.display='none'; document.getElementById('brandLogoFallback').style.display='flex';">
+          <img src="logo.png?v=10.3" alt="부산동고등학교" class="brand-logo" id="brandSchoolLogo" onerror="this.style.display='none'; document.getElementById('brandLogoFallback').style.display='flex';">
           <div class="brand-logo-fallback" id="brandLogoFallback" style="display: none;">
             <span class="fallback-emblem">동고</span>
           </div>
@@ -29,10 +29,10 @@
             <span class="brand-title-full">
               <span class="brand-school-name">부산동고등학교</span>
               <span class="brand-title-divider">·</span>
-              <span class="brand-system-name">학사일정 &amp; 시간표 시스템</span>
+              <span class="brand-system-name">학사정보 통합 서비스</span>
             </span>
-            <span class="brand-title-short">학사일정 &amp; 시간표</span>
-            <span class="brand-badge">2026학년도 2학기</span>
+            <span class="brand-title-short">학사정보 통합 서비스</span>
+            <span class="brand-badge" id="brandBadgeSemester">2026학년도 2학기</span>
           </h1>
           <p class="brand-subtext">학사일정 캘린더 / 교사별 · 학반별 · 학생별 시간표 / 회의 시간 추천</p>
         </div>
@@ -154,8 +154,8 @@
   </footer>
 
   <!-- Timetable Data Script (Rapid standalone load) -->
-  <script src="timetable_data.js?v=10.2"></script>
+  <script src="timetable_data.js?v=10.3"></script>
   <!-- Application Core Script -->
-  <script src="app.js?v=10.2"></script>
+  <script src="app.js?v=10.3"></script>
 </body>
 </html>

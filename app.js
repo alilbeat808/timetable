@@ -418,6 +418,7 @@ function getGradeFromHomeroom(homeroom) {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+  updateHeaderSemesterBadge();
   initTheme();
   setupEventListeners();
   
@@ -1332,7 +1333,76 @@ function switchTab(tab) {
   renderApp();
 }
 
+
+/**
+ * Calculates current school year and semester dynamically.
+ * Rule:
+ * - 3월 1일 ~ 2학기 개학식 전: N학년도 1학기
+ * - 2학기 개학식날 ~ 다음년도 2월 말일: N학년도 2학기
+ */
+function getSchoolYearAndSemester(targetDate = new Date()) {
+  const now = new Date(targetDate);
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1; // 1 ~ 12
+  const d = now.getDate();
+  const ymd = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+  // 학년도: 3월 1일 ~ 이듬해 2월 말일까지가 해당 학년도
+  const schoolYear = (m >= 3) ? y : y - 1;
+
+  // 2학기 개학일 탐색 (기본 fallback: 해당 학년도 8월 18일)
+  let secondSemesterStartDate = `${schoolYear}-08-18`;
+  const cal = typeof getAcademicCalendar === 'function' ? getAcademicCalendar() : null;
+  if (cal && cal.calendarDays) {
+    // 1) 8~9월 중 '개학'이 포함된 일정 탐색
+    const gaeghakDay = cal.calendarDays.find(cd => {
+      const parts = cd.date.split('-');
+      const cy = parseInt(parts[0], 10);
+      const cm = parseInt(parts[1], 10);
+      return cy === schoolYear && (cm === 8 || cm === 9) && cd.event && cd.event.includes('개학');
+    });
+
+    if (gaeghakDay) {
+      secondSemesterStartDate = gaeghakDay.date;
+    } else {
+      // 2) 2학기 1주차(week === 1)의 첫날 탐색
+      const week1Day = cal.calendarDays.find(cd => {
+        const parts = cd.date.split('-');
+        const cy = parseInt(parts[0], 10);
+        const cm = parseInt(parts[1], 10);
+        return cy === schoolYear && (cm === 8 || cm === 9) && cd.week === 1 && !cd.isHoliday;
+      });
+      if (week1Day) {
+        secondSemesterStartDate = week1Day.date;
+      }
+    }
+  }
+
+  // 학기: 3월 1일 ~ 2학기 개학식 전이면 1학기, 2학기 개학식날부터 다음년도 2월까지면 2학기
+  let semester = 1;
+  if (m < 3 || ymd >= secondSemesterStartDate) {
+    semester = 2;
+  } else {
+    semester = 1;
+  }
+
+  return {
+    schoolYear,
+    semester,
+    label: `${schoolYear}학년도 ${semester}학기`
+  };
+}
+
+function updateHeaderSemesterBadge() {
+  const badgeEl = document.getElementById('brandBadgeSemester');
+  if (badgeEl) {
+    const info = getSchoolYearAndSemester();
+    badgeEl.textContent = info.label;
+  }
+}
+
 function renderApp() {
+  updateHeaderSemesterBadge();
   const container = document.getElementById('mainContentArea');
   if (!container) return;
 
