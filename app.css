@@ -5195,12 +5195,13 @@ body {
   font-weight: 600;
 }
 
-/* Calendar Day Detail Modal & Meal Detail Modal (완전 불투명 배경 & 카드) */
+/* Calendar Day Detail Modal & Meal Detail Modal (창 바깥은 반투명 블러 롤백, 창 안쪽은 완전 불투명) */
 .calendar-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: #0f172a; /* 뒤 배경을 완전히 불투명하게 차단 */
-  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -5210,14 +5211,22 @@ body {
 }
 
 .calendar-modal-card {
-  background: var(--bg-surface, #ffffff);
+  background: var(--bg-surface, #ffffff) !important;
+  background-color: var(--bg-surface, #ffffff) !important;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   max-width: 480px;
   width: 100%;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
   animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .calendar-modal-card,
+[data-theme="dark"] .meal-modal-card,
+[data-theme="dark"] .meal-modal-body {
+  background: var(--bg-surface, #1e293b) !important;
+  background-color: var(--bg-surface, #1e293b) !important;
 }
 
 @keyframes modalBackdropFadeIn {
